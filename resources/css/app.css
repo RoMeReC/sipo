@@ -1,0 +1,8 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Este es un archivo CSS de ejemplo */
+body {
+    background-color: #f8fafc;
+}
