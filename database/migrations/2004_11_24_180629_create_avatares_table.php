@@ -11,10 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('gguus', function (Blueprint $table) {
-            $table->id('id_gguu');
-            $table->string('gguu');
-            $table->string('descripcion_gguu');
+        Schema::create('avatares', function (Blueprint $table) {
+            $table->id('id_avatar');
+            $table->string('name')->default('mavatar');
+            $table->string('picture')->default('mavatar.png');
+            $table->integer('auth_user');
             $table->timestamps();
             $table->softDeletes();
 
@@ -26,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('gguus');
+        Schema::dropIfExists('avatares');
     }
 };

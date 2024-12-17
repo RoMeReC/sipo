@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id('id_rol');
             $table->string('rol');
             $table->timestamps();
+            $table->softDeletes();
+
         });
     }
 

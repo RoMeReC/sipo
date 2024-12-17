@@ -16,6 +16,8 @@ return new class extends Migration
             $table->string('grado');
             $table->string('descripcion_grado');
             $table->timestamps();
+            $table->softDeletes();
+
         });
     }
 

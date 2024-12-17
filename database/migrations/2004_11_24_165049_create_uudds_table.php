@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('descripcion_uudd');
             $table->unsignedBigInteger('gguu_id');
             $table->timestamps();
+            $table->softDeletes();
 
             $table->foreign('gguu_id')->references('id_gguu')->on('gguus');
         });

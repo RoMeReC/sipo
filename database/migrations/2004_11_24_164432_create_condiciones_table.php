@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id('id_condicion');
             $table->string('condicion');
             $table->timestamps();
+            $table->softDeletes();
+
         });
     }
 

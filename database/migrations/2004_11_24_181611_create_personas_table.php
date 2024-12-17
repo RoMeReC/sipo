@@ -19,11 +19,15 @@ return new class extends Migration
             $table->string('carnet_identidad')->unique();
             $table->date('fecha_nacimiento');
             $table->integer('telefono');
+            $table->integer('auth_user');
+            $table->unsignedBigInteger('avatar_id');
             $table->unsignedBigInteger('condicion_id');
             $table->unsignedBigInteger('genero_id');
             $table->unsignedBigInteger('municipio_id');
             $table->timestamps();
+            $table->softDeletes();
 
+            $table->foreign('avatar_id')->references('id_avatar')->on('avatares');
             $table->foreign('condicion_id')->references('id_condicion')->on('condiciones');
             $table->foreign('genero_id')->references('id_genero')->on('generos');
             $table->foreign('municipio_id')->references('id_municipio')->on('municipios');

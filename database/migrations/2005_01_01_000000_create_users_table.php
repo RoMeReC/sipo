@@ -17,15 +17,19 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->unsignedBigInteger('persona_id')->default(1);
+            $table->unsignedBigInteger('persona_id');
             $table->unsignedBigInteger('rol_id');
+            $table->integer('auth_user');
             $table->rememberToken();
-            $table->foreignId('current_team_id')->nullable();
-            $table->string('profile_photo_path', 2048)->nullable();
             $table->timestamps();
-
+            $table->softDeletes();
+            // $table->foreignId('current_team_id')->nullable();
+            // $table->string('profile_photo_path', 2048)->nullable();
             $table->foreign('persona_id')->references('id_persona')->on('personas');
             $table->foreign('rol_id')->references('id_rol')->on('roles');
+            
+            
+
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {

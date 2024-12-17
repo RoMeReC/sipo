@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
             ProvinciaSeeder::class,
             MunicipioSeeder::class,
             RolSeeder::class,
+            AvatarSeeder::class,
             PersonaSeeder::class,
             ServidorSeeder::class,
             UserSeeder::class,

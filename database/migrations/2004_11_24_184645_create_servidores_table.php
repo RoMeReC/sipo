@@ -18,6 +18,7 @@ return new class extends Migration
             $table->unsignedBigInteger('especialidad_id');
             $table->unsignedBigInteger('uudd_id');
             $table->timestamps();
+            $table->softDeletes();
 
             $table->foreign('persona_id')->references('id_persona')->on('personas');
             $table->foreign('grado_id')->references('id_grado')->on('grados');

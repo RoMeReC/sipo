@@ -16,6 +16,8 @@ return new class extends Migration
             $table->string('departamento');
             $table->string('descripcion_departamento');
             $table->timestamps();
+            $table->softDeletes();
+
         });
     }
 
