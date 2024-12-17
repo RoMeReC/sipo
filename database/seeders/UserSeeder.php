@@ -16,9 +16,26 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         DB::table('users')->insert([
-            'name' => 'rheyzaguirrec',
+            'name' => 'romerec',
             'email' => 'nanreh87@hotmail.com',
             'password' => bcrypt('19021314'),
+            'rol_id' => 1,
+            'created_at'=>\Carbon\Carbon::now(),
+            'updated_at'=>\Carbon\Carbon::now(),
+        ]);
+        DB::table('users')->insert([
+            'name' => 'admromerec',
+            'email' => 'nanreh5123247@gmail.com',
+            'password' => bcrypt('19021314'),
+            'rol_id' => 2,
+            'created_at'=>\Carbon\Carbon::now(),
+            'updated_at'=>\Carbon\Carbon::now(),
+        ]);
+        DB::table('users')->insert([
+            'name' => 'rheyzaguirrec',
+            'email' => 'rheyzaguirrec@gmail.com',
+            'password' => bcrypt('19021314'),
+            'rol_id' => 3,
             'created_at'=>\Carbon\Carbon::now(),
             'updated_at'=>\Carbon\Carbon::now(),
         ]);

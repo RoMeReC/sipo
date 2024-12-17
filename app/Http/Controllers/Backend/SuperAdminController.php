@@ -3,11 +3,44 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
+use App\Models\Grado;
+use App\Models\Persona;
+use App\Models\Servidor;
+use Illuminate\Foundation\Auth\User as AuthUser;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Arr;
 
 class SuperAdminController extends Controller
 {
     public function dashboard(){
         return view('sadmin.dashboard');
+    }
+
+    public function listar_usuarios()
+    {
+        $users = User::all();
+        $info=[];
+        $cont = count($users);
+        for($i=0;$i<$cont;$i++)
+        {
+            $id = ['id' =>User::find($users[$i]->id)->id];
+            $id_persona = ['id_persona' => User::find($users[$i]->id)->persona_id];
+            $grado = ['grado' => DB::table('grados')->where('id_grado', DB::table('servidores')->where('persona_id',User::find($users[$i]->id)->persona_id)->first()->grado_id)->first()->grado];
+            $especialidad = ['especialidad' => DB::table('especialidades')->where('id_especialidad', DB::table('servidores')->where('persona_id',User::find($users[$i]->id)->persona_id)->first()->especialidad_id)->first()->especialidad];
+            $primer_apellido = DB::table('personas')->where('id_persona',User::find($users[$i]->id)->persona_id)->first()->primer_apellido;
+            $segundo_apellido = DB::table('personas')->where('id_persona',User::find($users[$i]->id)->persona_id)->first()->segundo_apellido;
+            $apellidos = ['apellidos' => $primer_apellido.' '.$segundo_apellido];
+            $nombres = ['nombres' => DB::table('personas')->where('id_persona',User::find($users[$i]->id)->persona_id)->first()->nombres];
+            $username = ['username' => User::find($users[$i]->id)->name];
+            $rol = ['rol' => DB::table('roles')->where('id_rol',User::find($users[$i]->id)->rol_id)->first()->rol];
+            $datos[$i] = Arr::collapse([$grado,$especialidad,$apellidos,$nombres,$username,$rol]);
+            $info[$i] = $datos[$i];
+
+        }
+        //return $info;
+        return view('sadmin.listar-usuarios', ['info' => $info]);
+        //return view('profile.perfil');
     }
 }

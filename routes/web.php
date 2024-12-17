@@ -28,6 +28,8 @@ Route::middleware(['auth'])->group(function () {
     // Rutas para usuarios con rol_id:1 (super administradores)
     Route::middleware(['rol_id:1'])->group(function () {
         Route::get('/sadmin/dashboard', [SuperAdminController::class, 'dashboard'])->name('sadmin.dashboard');
+        
+        Route::get('/sadmin/listar-usuarios', [SuperAdminController::class, 'listar_usuarios'])->name('sadmin.listar-usuarios');
     });
     // Rutas para usuarios con rol_id:2 (administradores)
     Route::middleware(['rol_id:2'])->group(function () {

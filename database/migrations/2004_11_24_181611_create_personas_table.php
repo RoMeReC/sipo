@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('nombres');
             $table->string('primer_apellido');
             $table->string('segundo_apellido');
-            $table->string('carnet_identidad');
+            $table->string('carnet_identidad')->unique();
             $table->date('fecha_nacimiento');
             $table->integer('telefono');
             $table->unsignedBigInteger('condicion_id');

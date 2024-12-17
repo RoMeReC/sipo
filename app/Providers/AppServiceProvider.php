@@ -30,8 +30,12 @@ class AppServiceProvider extends ServiceProvider
         $this->registerPolicies(); // Este método es válido dentro de esta clase
 
         // Define tus Gates aquí, si es necesario:
+        Gate::define('is-superadministrador', function ($user) {
+            return $user->rol_id === 1;
+        });
+
         Gate::define('is-administrador', function ($user) {
-            return $user->rol_id === 1 || $user->rol_id === 2;
+            return $user->rol_id === 2;
         });
 
         Gate::define('is-usuario', function ($user) {

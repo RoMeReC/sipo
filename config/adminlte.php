@@ -14,8 +14,8 @@ return [
     |
     */
 
-    'title' => 'BibliotecaVirtual',
-    'title_prefix' => '',
+    'title' => '',
+    'title_prefix' => 'BVirtual | ',
     'title_postfix' => '',
 
     /*
@@ -30,7 +30,7 @@ return [
     |
     */
 
-    'use_ico_only' => false,
+    'use_ico_only' => true,
     'use_full_favicon' => false,
 
     /*
@@ -327,11 +327,29 @@ return [
         //     'label' => 4,
         //     'label_color' => 'success',
         // ],
-        ['header' => 'GESTIÓN DE USUARIOS'],
+        ['header' => 'GESTIÓN DE USUARIO'],
+                [
+            'text' => 'profile',
+            'url' => 'profile/perfil',
+            'icon' => 'fas fa-fw fa-user',
+            'can' => 'is-superadministrador',
+        ],
+        [
+            'text' => 'Usuarios',
+            'url' => 'sadmin/listar-usuarios',
+            'icon' => 'fas fa-fw fa-users',
+            'can' => 'is-superadministrador',
+        ],
         [
             'text' => 'profile',
             'url' => 'profile/perfil',
             'icon' => 'fas fa-fw fa-user',
+            'can' => 'is-administrador',
+        ],
+        [
+            'text' => 'Usuarios',
+            'url' => 'admin/listar-usuarios',
+            'icon' => 'fas fa-fw fa-users',
             'can' => 'is-administrador',
         ],
         [
