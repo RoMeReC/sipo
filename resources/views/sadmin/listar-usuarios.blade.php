@@ -11,8 +11,9 @@
     <div class="card">
         {{-- <a href="{{ route('sadmin.users.create') }}" class="btn btn-primary">Nuevo Usuario</a> --}}
         <div class="container">
-            <a href="" class="btn btn-primary">Nuevo Usuario</a>
+            <a class="btn btn-primary" title="Agregar Usuario" data-toggle="modal" data-target="#nuevo-usuario"><i class="fa fa-user-plus"></i>&nbsp;&nbsp;Agregar Usuario</a>
         </div>
+        
 
         <table id="lista-usuarios" class="hover" style="width:100%">
             <thead>
@@ -51,6 +52,7 @@
             </tbody>
         </table>
     </div>
+    @include('sadmin.modal-nuevo-usuario')
 @stop
 
 @section('css')

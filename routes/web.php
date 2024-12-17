@@ -23,7 +23,7 @@ Route::get('/', function () {
 // Rutas protegidas por autenticación
 Route::middleware(['auth'])->group(function () {
     Route::get('/home', [HomeController::class, 'index'])->name('home');
-    Route::get('/profile/perfil', [HomeController::class, 'perfil'])->name('perfil');
+    Route::get('/perfil', [ProfileController::class, 'index'])->name('perfil');
     //Route::put('/profile/photo', [ProfileController::class, 'updatePhoto'])->name('profile.update-photo');
     // Rutas para usuarios con rol_id:1 (super administradores)
     Route::middleware(['rol_id:1'])->group(function () {

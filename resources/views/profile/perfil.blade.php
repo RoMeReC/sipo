@@ -7,8 +7,21 @@
 @stop
 
 @section('content')
-{{-- <p>Bienvenido a la Biblioteca Virtual del <b>Quinto Distrito Naval "SANTA CRUZ"</b>.</p>
-<img src="{{asset('images/Biblioteca.jpg')}}" alt="" width="100%"> --}}
+
+<div class="section-body">
+    <div class="row mt-sm-4">
+        <div class="col-12 col-md-12 col-lg-7">
+            <div class="card">
+                <form method="post" class="needs-validation" novalidate="">
+                    <div class="card-header">
+                        <h4>Datos del Usuario</h4>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 @stop
 
 @section('css')

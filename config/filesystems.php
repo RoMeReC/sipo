@@ -30,9 +30,9 @@ return [
 
     'disks' => [
 
-        'profiles' => [
+        'images' => [
             'driver' => 'local',
-            'root' => storage_path('app/public/profiles'),
+            'root' => storage_path('app/public/images'),
             'url' => env('APP_URL').'/images',
             'visibility' => 'public',
             'throw' => false,
@@ -80,7 +80,7 @@ return [
 
     'links' => [
         public_path('storage') => storage_path('app/public'),
-        public_path('profiles') => storage_path('app/public/profiles'),
+        public_path('images') => storage_path('app/public/images'),
     ],
 
 ];

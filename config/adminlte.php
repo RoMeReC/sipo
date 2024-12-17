@@ -328,9 +328,9 @@ return [
         //     'label_color' => 'success',
         // ],
         ['header' => 'GESTIÓN DE USUARIO'],
-                [
+        [
             'text' => 'profile',
-            'url' => 'profile/perfil',
+            'url' => 'perfil',
             'icon' => 'fas fa-fw fa-user',
             'can' => 'is-superadministrador',
         ],
@@ -342,7 +342,7 @@ return [
         ],
         [
             'text' => 'profile',
-            'url' => 'profile/perfil',
+            'url' => 'perfil',
             'icon' => 'fas fa-fw fa-user',
             'can' => 'is-administrador',
         ],
@@ -351,6 +351,12 @@ return [
             'url' => 'admin/listar-usuarios',
             'icon' => 'fas fa-fw fa-users',
             'can' => 'is-administrador',
+        ],
+        [
+            'text' => 'profile',
+            'url' => 'perfil',
+            'icon' => 'fas fa-fw fa-user',
+            'can' => 'is-usuario',
         ],
         [
             'text' => 'change_password',
