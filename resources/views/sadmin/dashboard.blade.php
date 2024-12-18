@@ -11,6 +11,12 @@
 <img src="{{asset('images/Biblioteca.jpg')}}" alt="" width="100%">
 @stop
 
+
+@section('footer')
+<footer style="text-align: right">Biblioteca Virtual del <b>Quinto Distrito Naval "SANTA CRUZ"</b> - @RoMeReC-2024</footer>
+@stop
+
+
 @section('css')
     <link rel="stylesheet" href="/css/admin_custom.css"> 
 @stop

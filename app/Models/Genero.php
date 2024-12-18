@@ -9,9 +9,8 @@ use Illuminate\Notifications\Notifiable;
 class Genero extends Model
 {
     use HasFactory, Notifiable;
-
+    protected $primaryKey = 'id_genero';
     protected $fillable = [
-        'id_genero',
         'genero',
         'descripcion_genero',
     ];

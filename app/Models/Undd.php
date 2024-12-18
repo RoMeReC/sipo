@@ -9,9 +9,8 @@ use Illuminate\Notifications\Notifiable;
 class Undd extends Model
 {
     use HasFactory, Notifiable;
-
+    protected $primaryKey = 'id_uudd';
     protected $fillable = [
-        'id_uudd',
         'uudd',
         'descripcion_uudd',
     ];

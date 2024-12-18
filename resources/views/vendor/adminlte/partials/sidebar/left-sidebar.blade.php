@@ -10,8 +10,13 @@
     {{-- Sidebar menu --}}
     <div class="sidebar">
         <nav style="text-align: center">
-            <img src="{{ Auth::user()->profile_photo ? asset('storage/' . Auth::user()->profile_photo) : asset('images/avatar/avatar-hombre.png') }}"
+            @if(\App\Models\Persona::find(Auth::user()->persona_id)->genero_id === 1)
+                <img src="{{ Auth::user()->profile_photo ? asset('storage/' . Auth::user()->profile_photo) : asset('images/avatar/avatar-hombre.png') }}"
                 class="user-image img-circle elevation-2"  width="70%">
+            @elseif(\App\Models\Persona::find(Auth::user()->persona_id)->genero_id === 2)
+                <img src="{{ Auth::user()->profile_photo ? asset('storage/' . Auth::user()->profile_photo) : asset('images/avatar/avatar-mujer.png') }}"
+                class="user-image img-circle elevation-2"  width="70%">
+            @endif
         </nav>
         <nav class="pt-2">
             <ul class="nav nav-pills nav-sidebar flex-column {{ config('adminlte.classes_sidebar_nav', '') }}"

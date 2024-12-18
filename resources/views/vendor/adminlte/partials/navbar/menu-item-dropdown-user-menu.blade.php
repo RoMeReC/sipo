@@ -18,11 +18,13 @@
     {{-- User menu toggler --}}
     <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
         @if(config('adminlte.usermenu_image'))
-            {{-- <img src="{{ Auth::user()->adminlte_image() }}" --}}
-            <img src="{{ Auth::user()->profile_photo ? asset('storage/' . Auth::user()->profile_photo) : asset('images/avatar/avatar-hombre.png') }}" 
-                 class="user-image img-circle elevation-2"
-                 {{-- alt="{{ Auth::user()->name }}"> --}}
-                 alt="User Image">
+            @if(\App\Models\Persona::find(Auth::user()->persona_id)->genero_id === 1)
+            <img src="{{ Auth::user()->profile_photo ? asset('storage/' . Auth::user()->profile_photo) : asset('images/avatar/avatar-hombre.png') }}"
+            class="user-image img-circle elevation-2"  width="70%">
+            @elseif(\App\Models\Persona::find(Auth::user()->persona_id)->genero_id === 2)
+                <img src="{{ Auth::user()->profile_photo ? asset('storage/' . Auth::user()->profile_photo) : asset('images/avatar/avatar-mujer.png') }}"
+                class="user-image img-circle elevation-2"  width="70%">
+            @endif
         @endif
         <span @if(config('adminlte.usermenu_image')) class="d-none d-md-inline" @endif>
             {{ Auth::user()->name }}

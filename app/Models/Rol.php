@@ -9,9 +9,8 @@ use Illuminate\Notifications\Notifiable;
 class Rol extends Model
 {
     use HasFactory, Notifiable;
-
+    protected $primaryKey = 'id_rol';
     protected $fillable = [
-        'id_rol',
         'rol',
     ];
 }

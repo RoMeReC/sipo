@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 USE App\Http\Requests\ProfileRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 
 class ProfileController extends Controller
 {
@@ -50,6 +51,40 @@ class ProfileController extends Controller
     // }
     public function index()
     {
-        return view('profile.perfil');
+        $grado = DB::table('grados')->where('id_grado', DB::table('servidores')->where('persona_id', Auth::user()->persona_id)->first()->grado_id)->first()->descripcion_grado;
+        $especialidad = DB::table('especialidades')->where('id_especialidad', DB::table('servidores')->where('persona_id', Auth::user()->persona_id)->first()->especialidad_id)->first()->descripcion_especialidad;
+        $nombres = DB::table('personas')->where('id_persona',Auth::user()->persona_id)->first()->nombres;
+        $primer_apellido = DB::table('personas')->where('id_persona',Auth::user()->persona_id)->first()->primer_apellido;
+        $segundo_apellido = DB::table('personas')->where('id_persona',Auth::user()->persona_id)->first()->segundo_apellido;
+        $carnet_identidad = DB::table('personas')->where('id_persona',Auth::user()->persona_id)->first()->carnet_identidad;
+        $fecha_nacimiento = DB::table('personas')->where('id_persona',Auth::user()->persona_id)->first()->fecha_nacimiento;
+        $telefono = DB::table('personas')->where('id_persona',Auth::user()->persona_id)->first()->telefono;
+        $lugar_nacimiento = DB::table('municipios')->where('id_municipio', DB::table('personas')->where('id_persona',Auth::user()->persona_id)->first()->municipio_id)->first()->municipio;
+        $genero = DB::table('generos')->where('id_genero', DB::table('personas')->where('id_persona',Auth::user()->persona_id)->first()->genero_id)->first()->descripcion_genero;
+        $condicion = DB::table('condiciones')->where('id_condicion', DB::table('personas')->where('id_persona',Auth::user()->persona_id)->first()->condicion_id)->first()->condicion;
+        $name = Auth::user()->name;
+        $email = Auth::user()->email;
+        //$grado = Auth::user()->persona_id;
+        $datos = [
+            'grado' => $grado,
+            'especialidad' => $especialidad,
+            'nombres' => $nombres,
+            'primer_apellido' => $primer_apellido,
+            'segundo_apellido' => $segundo_apellido,
+            'carnet_identidad' => $carnet_identidad,
+            'fecha_nacimiento' => $fecha_nacimiento,
+            'telefono' => $telefono,
+            'lugar_nacimiento' => $lugar_nacimiento,
+            'genero' => $genero,
+            'condicion' => $condicion,
+            'name' => $name,
+            'email' => $email,
+
+        ];
+       
+        return view('profile.perfil')->with('datos',$datos);
+        //dd($datos);
+        //return $nombres;
+        //return view('profile.perfil', ['datos' => $datos]);
     }
 }

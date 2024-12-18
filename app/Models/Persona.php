@@ -9,9 +9,8 @@ use Illuminate\Notifications\Notifiable;
 class Persona extends Model
 {
     use HasFactory, Notifiable;
-
+    protected $primaryKey = 'id_persona';
     protected $fillable = [
-        'id_persona',
         'nombres',
         'primer_apellido',
         'segundo_apellido',
