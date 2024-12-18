@@ -17,6 +17,7 @@ class Persona extends Model
         'carnet_identidad',
         'fecha_nacimiento',
         'telefono',
+        'avatar_id',
         'condicion_id',
         'genero_id',
         'usuario_id',

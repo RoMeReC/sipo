@@ -107,11 +107,17 @@ class ProfileController extends Controller
             $avatar->path_picture = '/images/avatar/'.$nombre_foto;
             $avatar->auth_user = $user->id;
             $avatar->save();
+            $lastAvatar = Avatar::latest('id_avatar')->first();
+            $persona->avatar_id = $lastAvatar->id_avatar;
+            $persona->save();
         }
-        //dd($foto);
-        $persona->telefono = $request->telefono;
-        $persona->save();
-        //return redirect()->back()->response()->json(['message' => 'Perfil actualizado correctamente']);
+        if($request->telefono !== null)
+        {
+            $persona->telefono = $request->telefono;
+            $persona->save();
+        }
+        
+
         return redirect()->back();
     }
 }

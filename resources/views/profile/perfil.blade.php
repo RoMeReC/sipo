@@ -7,12 +7,18 @@
 @stop
 
 @section('content')
+@if ($errors->any())
+@foreach ($errors->all() as $error)
+    <span class="alert alert-danger">{{ $error }}</span>
+@endforeach
+    
+@endif
 <form action="{{route('perfil.update')}}" method="post" class="needs-validation" enctype="multipart/form-data">
 @csrf
     <div class="container">
         <div class="row">
             <div class="col-4" style="text-align: center">
-                <img src="{{$datos['foto']}}">
+                <img src="{{$datos['foto']}}" width="100%">
                 <input id="image" type="file" class="filestyle" name="picture" accept="image/jpeg,image/png">
                 {{-- <label style="font-weight: bold">Cambiar Imagen</label> --}}
                 <ul>
@@ -135,14 +141,21 @@
     </div>
     <div class="container">
         <div class="row">
-            <x-adminlte-input name="new-password" label="NUEVA CONTRASEÑA" placeholder="Escriba aquí su nueva contraseña" label-class="text-olive" fgroup-class="col-md-6" disable-feedback>
+            <x-adminlte-input name="password-actual" type="password" label="CONTRASEÑA ACTUAL" placeholder="Escriba aquí su contraseña actual" label-class="text-olive" fgroup-class="col-md-4" disable-feedback>
                 <x-slot name="prependSlot">
                     <div class="input-group-text">
                         <i class="fas fa-key text-olive"></i>
                     </div>
                 </x-slot>
             </x-adminlte-input>
-            <x-adminlte-input name="rnew-password" label="REPITA LA CONTRASEÑA" placeholder="Escriba aquí la misma contraseña" label-class="text-olive" fgroup-class="col-md-6" disable-feedback>
+            <x-adminlte-input name="password-nuevo" type="password" label="NUEVA CONTRASEÑA" placeholder="Escriba aquí la nueva contraseña" label-class="text-olive" fgroup-class="col-md-4" disable-feedback>
+                <x-slot name="prependSlot">
+                    <div class="input-group-text">
+                        <i class="fas fa-key text-olive"></i>
+                    </div>
+                </x-slot>
+            </x-adminlte-input>
+            <x-adminlte-input name="password-confirmado" type="password" label="REPITA LA CONTRASEÑA" placeholder="Vuelva a escribir la nueva contraseña" label-class="text-olive" fgroup-class="col-md-4" disable-feedback>
                 <x-slot name="prependSlot">
                     <div class="input-group-text">
                         <i class="fas fa-key text-olive"></i>

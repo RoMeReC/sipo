@@ -18,13 +18,8 @@
     {{-- User menu toggler --}}
     <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
         @if(config('adminlte.usermenu_image'))
-            @if(\App\Models\Persona::find(Auth::user()->persona_id)->genero_id === 1)
-            <img src="{{ Auth::user()->profile_photo ? asset('storage/' . Auth::user()->profile_photo) : asset('images/avatar/avatar-hombre.png') }}"
+            <img src="{{ DB::table('avatares')->where('id_avatar', DB::table('personas')->where('id_persona',Auth::user()->persona_id)->first()->avatar_id)->first()->path_picture }}"
             class="user-image img-circle elevation-2"  width="70%">
-            @elseif(\App\Models\Persona::find(Auth::user()->persona_id)->genero_id === 2)
-                <img src="{{ Auth::user()->profile_photo ? asset('storage/' . Auth::user()->profile_photo) : asset('images/avatar/avatar-mujer.png') }}"
-                class="user-image img-circle elevation-2"  width="70%">
-            @endif
         @endif
         <span @if(config('adminlte.usermenu_image')) class="d-none d-md-inline" @endif>
             {{ Auth::user()->name }}
@@ -39,15 +34,8 @@
             <li class="user-header {{ config('adminlte.usermenu_header_class', 'bg-primary') }}
                 @if(!config('adminlte.usermenu_image')) h-auto @endif">
                 @if(config('adminlte.usermenu_image'))
-                    {{-- <img src="{{ Auth::user()->adminlte_image() }}" --}}
-                    @if(\App\Models\Persona::find(Auth::user()->persona_id)->genero_id === 1)
-                        <img src="{{ Auth::user()->profile_photo ? asset('storage/' . Auth::user()->profile_photo) : asset('images/avatar/avatar-hombre.png') }}"
-                        class="user-image img-circle elevation-2"  width="70%">
-                    @elseif(\App\Models\Persona::find(Auth::user()->persona_id)->genero_id === 2)
-                        <img src="{{ Auth::user()->profile_photo ? asset('storage/' . Auth::user()->profile_photo) : asset('images/avatar/avatar-mujer.png') }}"
-                        class="user-image img-circle elevation-2"  width="70%">
-                    @endif
-                {{-- alt="{{ Auth::user()->name }}"> --}}
+                    <img src="{{ DB::table('avatares')->where('id_avatar', DB::table('personas')->where('id_persona',Auth::user()->persona_id)->first()->avatar_id)->first()->path_picture }}"
+                    class="user-image img-circle elevation-2"  width="70%">
                 @endif
                 <p class="@if(!config('adminlte.usermenu_image')) mt-0 @endif">
                     {{ Auth::user()->name }}

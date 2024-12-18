@@ -9,10 +9,11 @@ use Illuminate\Notifications\Notifiable;
 class Avatar extends Model
 {
     use HasFactory, Notifiable;
+    protected $table = 'avatares';
     protected $primaryKey = 'id_avatar';
     protected $fillable = [
-        'name',
         'picture',
+        'path_picture',
         'auth_user',
 
     ];
