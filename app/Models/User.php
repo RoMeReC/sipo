@@ -36,11 +36,12 @@ class User extends Authenticatable
     
     public function adminlte_profile_url()
     {
-        return url('profile/perfil');
+        return url('perfil');
     }
     public function adminlte_desc()
     {
         $rol = DB::table('roles')->where('id_rol', $this->rol_id)->firstOrFail()->rol;
         return $rol; 
     }
+    
 }

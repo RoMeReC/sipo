@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('avatares', function (Blueprint $table) {
             $table->id('id_avatar');
-            $table->string('name')->default('mavatar');
-            $table->string('picture')->default('mavatar.png');
+            $table->string('picture');
+            $table->string('path_picture');
             $table->integer('auth_user');
             $table->timestamps();
             $table->softDeletes();

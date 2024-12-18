@@ -7,16 +7,12 @@
 @stop
 
 @section('content')
-<form action="{{route('perfil.update')}}" method="post" class="needs-validation">
+<form action="{{route('perfil.update')}}" method="post" class="needs-validation" enctype="multipart/form-data">
 @csrf
     <div class="container">
         <div class="row">
             <div class="col-4" style="text-align: center">
-                @if($datos['genero'] === 'Masculino')
-                    <img src="{{asset('images/avatar/avatar-hombre.png')}}">
-                @else
-                    <img src="{{asset('images/avatar/avatar-mujer.png')}}">
-                @endif
+                <img src="{{$datos['foto']}}">
                 <input id="image" type="file" class="filestyle" name="picture" accept="image/jpeg,image/png">
                 {{-- <label style="font-weight: bold">Cambiar Imagen</label> --}}
                 <ul>
