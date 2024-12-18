@@ -8,6 +8,8 @@ USE App\Http\Requests\ProfileRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
+use App\Models\User;
+use App\Models\Persona;
 
 class ProfileController extends Controller
 {
@@ -64,7 +66,6 @@ class ProfileController extends Controller
         $condicion = DB::table('condiciones')->where('id_condicion', DB::table('personas')->where('id_persona',Auth::user()->persona_id)->first()->condicion_id)->first()->condicion;
         $name = Auth::user()->name;
         $email = Auth::user()->email;
-        //$grado = Auth::user()->persona_id;
         $datos = [
             'grado' => $grado,
             'especialidad' => $especialidad,
@@ -81,10 +82,21 @@ class ProfileController extends Controller
             'email' => $email,
 
         ];
-       
         return view('profile.perfil')->with('datos',$datos);
-        //dd($datos);
-        //return $nombres;
-        //return view('profile.perfil', ['datos' => $datos]);
+    }
+
+    public function updateProfile(Request $request)
+    {
+        $user = Auth::user();
+        $persona = Persona::find(Auth::user()->persona_id);
+        
+        if (!$user) {
+            return response()->json(['error' => 'Usuario no autenticado'], 401);
+        }
+        
+        $persona->telefono = $request->telefono;
+        $persona->save();
+        //return redirect()->back()->response()->json(['message' => 'Perfil actualizado correctamente']);
+        return redirect()->back();
     }
 }
