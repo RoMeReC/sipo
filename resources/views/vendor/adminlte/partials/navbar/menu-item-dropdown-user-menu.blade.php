@@ -40,10 +40,14 @@
                 @if(!config('adminlte.usermenu_image')) h-auto @endif">
                 @if(config('adminlte.usermenu_image'))
                     {{-- <img src="{{ Auth::user()->adminlte_image() }}" --}}
-                <img src="{{ Auth::user()->profile_photo ? asset('storage/' . Auth::user()->profile_photo) : asset('images/avatar/avatar-hombre.png') }}" 
-                class="user-image img-circle elevation-2"
+                    @if(\App\Models\Persona::find(Auth::user()->persona_id)->genero_id === 1)
+                        <img src="{{ Auth::user()->profile_photo ? asset('storage/' . Auth::user()->profile_photo) : asset('images/avatar/avatar-hombre.png') }}"
+                        class="user-image img-circle elevation-2"  width="70%">
+                    @elseif(\App\Models\Persona::find(Auth::user()->persona_id)->genero_id === 2)
+                        <img src="{{ Auth::user()->profile_photo ? asset('storage/' . Auth::user()->profile_photo) : asset('images/avatar/avatar-mujer.png') }}"
+                        class="user-image img-circle elevation-2"  width="70%">
+                    @endif
                 {{-- alt="{{ Auth::user()->name }}"> --}}
-                alt="User Image">
                 @endif
                 <p class="@if(!config('adminlte.usermenu_image')) mt-0 @endif">
                     {{ Auth::user()->name }}
@@ -69,8 +73,8 @@
         {{-- User menu footer --}}
         <li class="user-footer">
             @if($profile_url)
-                <a href="{{ $profile_url }}" class="nav-link btn btn-default btn-flat d-inline-block">
-                    <i class="fa fa-fw fa-user text-dark"></i>
+                <a href="{{ $profile_url }}" class="nav-link btn btn-primary btn-flat d-inline-block text-white">
+                    <i class="fa fa-fw fa-user text-white"></i>
                     {{ __('adminlte::menu.profile') }}
                 </a>
             @endif

@@ -24,6 +24,7 @@ Route::get('/', function () {
 Route::middleware(['auth'])->group(function () {
     Route::get('/home', [HomeController::class, 'index'])->name('home');
     Route::get('/perfil', [ProfileController::class, 'index'])->name('perfil');
+    Route::post('/perfil/update', [ProfileController::class, 'updateProfile'])->name('perfil.update');
     //Route::put('/profile/photo', [ProfileController::class, 'updatePhoto'])->name('profile.update-photo');
     // Rutas para usuarios con rol_id:1 (super administradores)
     Route::middleware(['rol_id:1'])->group(function () {
