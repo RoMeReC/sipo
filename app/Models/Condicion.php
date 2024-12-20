@@ -10,6 +10,7 @@ use Illuminate\Notifications\Notifiable;
 class Condicion extends Model
 {
     use HasFactory, Notifiable;
+    protected $table = 'condiciones';
     protected $primaryKey = 'id_condicion';
     protected $fillable = [
         'condicion',

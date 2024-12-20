@@ -24,20 +24,28 @@
                     </div>
                     <div class="container">
                         <div class="row">
-                            <x-adminlte-input name="grado" label="GRADO:" placeholder="{{ ''}}" label-class="text-lightblue" fgroup-class="col-md-6" disable-feedback>
+                            <x-adminlte-select name="grado" label="GRADO:" label-class="text-lightblue" fgroup-class="col-md-6" disable-feedback>
                                 <x-slot name="prependSlot">
                                     <div class="input-group-text">
                                         <i class="fas fa-ship text-lightblue"></i>
                                     </div>
                                 </x-slot>
-                            </x-adminlte-input>
-                            <x-adminlte-input name="especialidad" label="ESPECIALIDAD:" placeholder="{{ '' }}" label-class="text-lightblue" fgroup-class="col-md-6" disable-feedback >
+                                <option value="">Seleccione un Grado</option>
+                                    @foreach($grados as $grado)
+                                        <option value="{{ $grado->id_grado }}">{{ $grado->descripcion_grado }}</option>
+                                    @endforeach
+                            </x-adminlte-select>
+                            <x-adminlte-select name="especialidad" label="ESPECIALIDAD:" label-class="text-lightblue" fgroup-class="col-md-6" disable-feedback>
                                 <x-slot name="prependSlot">
                                     <div class="input-group-text">
                                         <i class="fas fa-cubes text-lightblue"></i>
                                     </div>
                                 </x-slot>
-                            </x-adminlte-input>
+                                <option value="">Seleccione una Especialidad</option>
+                                    @foreach($especialidades as $especialidad)
+                                        <option value="{{ $especialidad->id_especialidad }}">{{ $especialidad->descripcion_especialidad }}</option>
+                                    @endforeach
+                            </x-adminlte-select>
                         </div>
                     </div>
                     <div class="container">
@@ -67,13 +75,17 @@
                                     </div>
                                 </x-slot>
                             </x-adminlte-input>
-                            <x-adminlte-input name="condicion" label="ESTADO CIVIL:" placeholder="{{ '' }}" label-class="text-lightblue" fgroup-class="col-md-6" disable-feedback>
+                            <x-adminlte-select name="condicion" label="ESTADO CIVIL:" label-class="text-lightblue" fgroup-class="col-md-6" disable-feedback>
                                 <x-slot name="prependSlot">
                                     <div class="input-group-text">
                                         <i class="fas fa-check text-lightblue"></i>
                                     </div>
                                 </x-slot>
-                            </x-adminlte-input>
+                                <option value="">Seleccione una Opción</option>
+                                    @foreach($condiciones as $condicion)
+                                        <option value="{{ $condicion->id_condicion }}">{{ $condicion->condicion }}</option>
+                                    @endforeach
+                            </x-adminlte-select>
                         </div>
                     </div>
                     <div class="container">
@@ -108,7 +120,7 @@
                                         <i class="fas fa-map-marked-alt text-lightblue"></i>
                                     </div>
                                 </x-slot>
-                                <option value="">Seleccione una provincia</option>
+                                <option value="">Seleccione un Municipio</option>
                             </x-adminlte-select>
                             <x-adminlte-input name="fecha_nacimiento" label="FECHA DE NACIMIENTO:" placeholder="{{ '' }}" label-class="text-lightblue" fgroup-class="col-md-6" disable-feedback>
                                 <x-slot name="prependSlot">
@@ -128,13 +140,16 @@
                                     </div>
                                 </x-slot>
                             </x-adminlte-input>
-                            <x-adminlte-input name="genero" label="GENERO:" placeholder="{{ '' }}" label-class="text-lightblue" fgroup-class="col-md-6" disable-feedback>
+                            <x-adminlte-select name="genero" label="GENERO:" label-class="text-lightblue" fgroup-class="col-md-6" disable-feedback>
                                 <x-slot name="prependSlot">
                                     <div class="input-group-text">
-                                        <i class="fas fa-male text-lightblue"></i><i class="fas fa-female text-lightblue"></i>
-                                    </div>
+                                        <i class="fas fa-male text-lightblue"></i><i class="fas fa-female text-lightblue"></i>                                    </div>
                                 </x-slot>
-                            </x-adminlte-input>
+                                <option value="">Seleccione una Opción</option>
+                                    @foreach($generos as $genero)
+                                        <option value="{{ $genero->id_genero }}">{{ $genero->descripcion_genero }}</option>
+                                    @endforeach
+                            </x-adminlte-select>
                         </div>
                     </div>
                     <div class="container">

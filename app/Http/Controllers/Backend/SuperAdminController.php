@@ -5,6 +5,9 @@ namespace App\Http\Controllers\Backend;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\Grado;
+use App\Models\Especialidad;
+use App\Models\Condicion;
+use App\Models\Genero;
 use App\Models\Persona;
 use App\Models\Servidor;
 use App\Models\Provincia;
@@ -55,8 +58,10 @@ class SuperAdminController extends Controller
 
         }
         $departamentos = Departamento::all();
-        //return $info;
-        return view('sadmin.listar-usuarios', ['info' => $info, 'departamentos' => $departamentos]);
-        //return view('profile.perfil');
+        $grados = Grado::all();
+        $especialidades = Especialidad::all();
+        $condiciones = Condicion::all();
+        $generos = Genero::all();
+        return view('sadmin.listar-usuarios', ['info' => $info, 'departamentos' => $departamentos, 'grados' => $grados, 'especialidades' => $especialidades, 'condiciones' => $condiciones, 'generos' => $generos]);
     }
 }

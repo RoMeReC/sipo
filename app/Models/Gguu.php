@@ -9,6 +9,8 @@ use Illuminate\Notifications\Notifiable;
 class Gguu extends Model
 {
     use HasFactory, Notifiable;
+    protected $table = 'gguus';
+    
     protected $primaryKey = 'id_gguu';
     protected $fillable = [
         'gguu',

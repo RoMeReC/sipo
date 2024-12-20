@@ -9,6 +9,7 @@ use Illuminate\Notifications\Notifiable;
 class Rol extends Model
 {
     use HasFactory, Notifiable;
+    protected $table = 'roles';
     protected $primaryKey = 'id_rol';
     protected $fillable = [
         'rol',

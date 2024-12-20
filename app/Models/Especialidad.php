@@ -9,6 +9,7 @@ use Illuminate\Notifications\Notifiable;
 class Especialidad extends Model
 {
     use HasFactory, Notifiable;
+    protected $table = 'especialidades';
     protected $primaryKey = 'id_especialidad';
     protected $fillable = [
         'especialidad',

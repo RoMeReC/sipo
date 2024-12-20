@@ -10,6 +10,7 @@ use Illuminate\Notifications\Notifiable;
 class Servidor extends Model
 {
     use HasFactory, Notifiable;
+    protected $table = 'servidores';
     protected $primaryKey = 'id_servidor';
     protected $fillable = [
         'persona_id',
