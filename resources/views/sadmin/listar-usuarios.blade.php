@@ -61,6 +61,7 @@
 @stop
 
 @section('css')
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
     <!-- Bootstrap 5 CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css">
     <!-- AdminLTE CSS -->
@@ -80,10 +81,20 @@
     <script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
     <script src="/scripts/cambiar-idioma-datatable.js"></script>
     <script src="/scripts/seleccionar-municipio.js"></script>
-    <script type="text/javascript">
-        $(function () {
-            $('#datetimepicker1').datetimepicker();
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.es.min.js"></script>
+    <script>
+        $(document).ready(function() {
+        $('#datepicker').datepicker({
+            format: 'dd-mm-yyyy', // Formato de la fecha
+            autoclose: true,
+            todayHighlight: true,
+            orientation: 'bottom auto',
+            language: 'es', // Establece el idioma a español
         });
-    </script>
+    });
+
+</script>
+
 @stop
 

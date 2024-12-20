@@ -2,7 +2,7 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header" style="tex">
-                <h4 class="modal-title" id="staticBackdropLabel">Nuevo Usuario</h4>
+                <h4 class="modal-title" id="staticBackdropLabel">NUEVO USUARIO</h4>
                 <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -50,14 +50,14 @@
                     </div>
                     <div class="container">
                         <div class="row">
-                            <x-adminlte-input name="nombres" label="NOMBRES:" placeholder="{{ '' }}" label-class="text-lightblue" fgroup-class="col-md-6" disable-feedback>
+                            <x-adminlte-input name="nombres" label="NOMBRES:" placeholder="{{ 'Registre los Nombres' }}" label-class="text-lightblue" fgroup-class="col-md-6" disable-feedback>
                                 <x-slot name="prependSlot">
                                     <div class="input-group-text">
                                         <i class="fas fa-user text-lightblue"></i>
                                     </div>
                                 </x-slot>
                             </x-adminlte-input>
-                            <x-adminlte-input name="apellidos" label="APELLIDOS:" placeholder="{{ '' }}" label-class="text-lightblue" fgroup-class="col-md-6" disable-feedback>
+                            <x-adminlte-input name="primer_apellido" label="PRIMER APELLIDO:" placeholder="{{ 'Registre el Primer Apellido' }}" label-class="text-lightblue" fgroup-class="col-md-6" disable-feedback>
                                 <x-slot name="prependSlot">
                                     <div class="input-group-text">
                                         <i class="fas fa-users text-lightblue"></i>
@@ -68,7 +68,28 @@
                     </div>
                     <div class="container">
                         <div class="row">
-                            <x-adminlte-input name="carnet_identidad" label="CARNET DE IDENTIDAD:" placeholder="{{ '' }}" label-class="text-lightblue" fgroup-class="col-md-6" disable-feedback>
+                            <x-adminlte-input name="segundo_apellido" label="SEGUNDO APELLIDO:" placeholder="{{ 'Registre el Segundo Apellido' }}" label-class="text-lightblue" fgroup-class="col-md-6" disable-feedback>
+                                <x-slot name="prependSlot">
+                                    <div class="input-group-text">
+                                        <i class="fas fa-user text-lightblue"></i>
+                                    </div>
+                                </x-slot>
+                            </x-adminlte-input>
+                            <x-adminlte-select name="genero" label="GENERO:" label-class="text-lightblue" fgroup-class="col-md-6" disable-feedback>
+                                <x-slot name="prependSlot">
+                                    <div class="input-group-text">
+                                        <i class="fas fa-male text-lightblue"></i><i class="fas fa-female text-lightblue"></i>                                    </div>
+                                </x-slot>
+                                <option value="">Seleccione una Opción</option>
+                                    @foreach($generos as $genero)
+                                        <option value="{{ $genero->id_genero }}">{{ $genero->descripcion_genero }}</option>
+                                    @endforeach
+                            </x-adminlte-select>
+                        </div>
+                    </div>
+                    <div class="container">
+                        <div class="row">
+                            <x-adminlte-input name="carnet_identidad" label="CARNET DE IDENTIDAD:" placeholder="{{ 'Registre el Carnet sin lugar de Expedición' }}" label-class="text-lightblue" fgroup-class="col-md-6" disable-feedback>
                                 <x-slot name="prependSlot">
                                     <div class="input-group-text">
                                         <i class="fas fa-address-card text-lightblue"></i>
@@ -122,7 +143,7 @@
                                 </x-slot>
                                 <option value="">Seleccione un Municipio</option>
                             </x-adminlte-select>
-                            <x-adminlte-input name="fecha_nacimiento" label="FECHA DE NACIMIENTO:" placeholder="{{ '' }}" label-class="text-lightblue" fgroup-class="col-md-6" disable-feedback>
+                            <x-adminlte-input id="datepicker" name="fecha_nacimiento" label="FECHA DE NACIMIENTO:" placeholder="{{ 'Seleccione una fecha del Calendario' }}" label-class="text-lightblue" fgroup-class="col-md-6" disable-feedback>
                                 <x-slot name="prependSlot">
                                     <div class="input-group-text">
                                         <i class="fas fa-calendar text-lightblue"></i>
@@ -140,20 +161,6 @@
                                     </div>
                                 </x-slot>
                             </x-adminlte-input>
-                            <x-adminlte-select name="genero" label="GENERO:" label-class="text-lightblue" fgroup-class="col-md-6" disable-feedback>
-                                <x-slot name="prependSlot">
-                                    <div class="input-group-text">
-                                        <i class="fas fa-male text-lightblue"></i><i class="fas fa-female text-lightblue"></i>                                    </div>
-                                </x-slot>
-                                <option value="">Seleccione una Opción</option>
-                                    @foreach($generos as $genero)
-                                        <option value="{{ $genero->id_genero }}">{{ $genero->descripcion_genero }}</option>
-                                    @endforeach
-                            </x-adminlte-select>
-                        </div>
-                    </div>
-                    <div class="container">
-                        <div class="row">
                             <x-adminlte-input name="email" label="CORREO ELECTRÓNICO" placeholder="{{ '' }}" label-class="text-lightblue" fgroup-class="col-md-6" disable-feedback>
                                 <x-slot name="prependSlot">
                                     <div class="input-group-text">
