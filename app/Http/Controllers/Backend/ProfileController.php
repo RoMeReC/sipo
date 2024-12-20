@@ -11,47 +11,14 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
 use App\Models\User;
 use App\Models\Persona;
+use Illuminate\Support\Facades\Hash;
 
 class ProfileController extends Controller
 {
-    // public function updatePhoto(Request $request)
-    // {
-    //     $request->validate([
-    //         'profile_photo_path' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', // Validación de imagen
-    //     ]);
-
-    //     $user = Auth::user();
-
-    //     // Eliminar la foto anterior si existe
-    //     if ($user->profile_photo_path) {
-    //         Storage::delete('public/' . $user->profile_photo_path);
-    //     }
-
-    //     // Subir la nueva foto
-    //     $path = $request->file('profile_photo_path')->store('profile_photo_path', 'public');
-
-    //     // Guardar la nueva ruta en la base de datos
-    //     $user->profile_photo = $path;
-    //     //$user->save();
-
-    //     return redirect()->back()->with('success', 'Foto de perfil actualizada con éxito.');
-    // }
-    // public function __construct()
-    // {
-    //     $this->middleware('auth');
-    // }
-
-    // public function edit(Request $request)
-    // {
-    //     return view('profile.edit')->with([
-    //         'user' => $request->user(),
-    //     ]);
-    // }
-
-    // public function update(ProfileRequest $request)
-    // {
-    //     $user = $request->user();
-    // }
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     public function index()
     {
         $grado = DB::table('grados')->where('id_grado', DB::table('servidores')->where('persona_id', Auth::user()->persona_id)->first()->grado_id)->first()->descripcion_grado;
@@ -61,7 +28,7 @@ class ProfileController extends Controller
         $segundo_apellido = DB::table('personas')->where('id_persona',Auth::user()->persona_id)->first()->segundo_apellido;
         $carnet_identidad = DB::table('personas')->where('id_persona',Auth::user()->persona_id)->first()->carnet_identidad;
         $fecha_nacimiento = DB::table('personas')->where('id_persona',Auth::user()->persona_id)->first()->fecha_nacimiento;
-        $telefono = DB::table('personas')->where('id_persona',Auth::user()->persona_id)->first()->telefono;
+        $celular = DB::table('personas')->where('id_persona',Auth::user()->persona_id)->first()->celular;
         $lugar_nacimiento = DB::table('municipios')->where('id_municipio', DB::table('personas')->where('id_persona',Auth::user()->persona_id)->first()->municipio_id)->first()->municipio;
         $genero = DB::table('generos')->where('id_genero', DB::table('personas')->where('id_persona',Auth::user()->persona_id)->first()->genero_id)->first()->descripcion_genero;
         $condicion = DB::table('condiciones')->where('id_condicion', DB::table('personas')->where('id_persona',Auth::user()->persona_id)->first()->condicion_id)->first()->condicion;
@@ -77,7 +44,7 @@ class ProfileController extends Controller
             'segundo_apellido' => $segundo_apellido,
             'carnet_identidad' => $carnet_identidad,
             'fecha_nacimiento' => $fecha_nacimiento,
-            'telefono' => $telefono,
+            'celular' => $celular,
             'lugar_nacimiento' => $lugar_nacimiento,
             'genero' => $genero,
             'condicion' => $condicion,
@@ -92,32 +59,82 @@ class ProfileController extends Controller
     {
         $user = Auth::user();
         $persona = Persona::find(Auth::user()->persona_id);
-        //dd($request);
+
         if (!$user) 
         {
             return response()->json(['error' => 'Usuario no autenticado'], 401);
         }
-        if($request->hasFile('picture'))
+
+        // Inicializa una bandera para detectar cambios
+        $cambios = false;
+        //dd($persona->celular);
+        // Comparar el número de teléfono
+        if ((int) $request->celular !== $persona->celular) 
+        {
+            $request->validate([
+                'celular' => ['required', 'celular'],
+            ]);
+            $persona->celular = $request->celular;
+            $cambios = true;
+        }
+        // Comparar la imagen (si fue actualizada)
+        if ($request->hasFile('picture')) 
         {
             $avatar = new Avatar();
-            $foto = $request->picture;
-            $nombre_foto = rand().'_'.$foto->getClientOriginalName();
+            $foto = $request->file('picture');
+            $nombre_foto = rand() . '_' . $foto->getClientOriginalName();
             $foto->move(public_path('images/avatar'), $nombre_foto);
             $avatar->picture = $nombre_foto;
-            $avatar->path_picture = '/images/avatar/'.$nombre_foto;
+            $avatar->path_picture = '/images/avatar/' . $nombre_foto;
             $avatar->auth_user = $user->id;
             $avatar->save();
+
             $lastAvatar = Avatar::latest('id_avatar')->first();
             $persona->avatar_id = $lastAvatar->id_avatar;
-            $persona->save();
-        }
-        if($request->telefono !== null)
-        {
-            $persona->telefono = $request->telefono;
-            $persona->save();
+            $cambios = true;
         }
         
+        // Guardar solo si hubo cambios
+        if ($cambios) 
+        {
+            $persona->save();
+            return redirect()->back()->with('success', 'Perfil actualizado correctamente.');
+        }
 
-        return redirect()->back();
+        // Si no hubo cambios
+        return redirect()->back()->with('info', 'No se realizaron cambios en su perfil.');
     }
+
+    public function password()
+    {
+        return view('profile.password');
+    }
+
+    public function updatePassword(Request $request)
+    {
+        $request->validate([
+            'password_actual' => ['required', 'password_actual'],
+            'password' => ['required', 'confirmed', 'min:8'],
+            'password_confirmation' => ['required','confirmed','min:8'],
+        ]);
+    
+        $user = Auth::user();
+        
+        if (!$request->filled('password_actual') || !Hash::check($request->password_actual, Auth::user()->password)) 
+        {
+            return redirect()->back()->withErrors(['password_actual' => 'La contraseña actual es incorrecta.']);
+        }
+    
+        if (Hash::check($request->password, $user->password)) 
+        {
+            return redirect()->back()->withErrors(['repeatPassword' => 'La nueva contraseña no puede ser igual a la contraseña actual.']);
+        }
+    
+        $user->update([
+            'password' => bcrypt($request->password),
+        ]);
+
+        return redirect()->back()->with('success', 'Contraseña actualizada correctamente.');
+    }
+    
 }

@@ -21,7 +21,7 @@ class PersonaSeeder extends Seeder
             'segundo_apellido' => 'Calla',
             'carnet_identidad' => '5123247',
             'fecha_nacimiento' => '1986-08-07',
-            'telefono' => 73999857,
+            'celular' => 73999857,
             'auth_user' => 1,
             'avatar_id' => 1,
             'condicion_id' => 2,

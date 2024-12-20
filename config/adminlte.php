@@ -335,6 +335,12 @@ return [
             'can' => 'is-superadministrador',
         ],
         [
+            'text' => 'change_password',
+            'url' => 'password',
+            'icon' => 'fas fa-fw fa-lock',
+            'can' => 'is-superadministrador',
+        ],
+        [
             'text' => 'Usuarios',
             'url' => 'sadmin/listar-usuarios',
             'icon' => 'fas fa-fw fa-users',
@@ -344,6 +350,12 @@ return [
             'text' => 'profile',
             'url' => 'perfil',
             'icon' => 'fas fa-fw fa-user',
+            'can' => 'is-administrador',
+        ],
+        [
+            'text' => 'change_password',
+            'url' => 'password',
+            'icon' => 'fas fa-fw fa-lock',
             'can' => 'is-administrador',
         ],
         [
@@ -360,8 +372,9 @@ return [
         ],
         [
             'text' => 'change_password',
-            'url' => 'admin/settings',
+            'url' => 'password',
             'icon' => 'fas fa-fw fa-lock',
+            'can' => 'is-usuario',
         ],
         // [
         //     'text' => 'multilevel',
