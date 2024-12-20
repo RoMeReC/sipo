@@ -11,7 +11,7 @@
     <div class="card">
         {{-- <a href="{{ route('sadmin.users.create') }}" class="btn btn-primary">Nuevo Usuario</a> --}}
         <div class="container">
-            <a class="btn btn-primary" title="Agregar Usuario" data-toggle="modal" data-target="#nuevo-usuario"><i class="fa fa-user-plus"></i>&nbsp;&nbsp;Agregar Usuario</a>
+            <button class="btn btn-primary" title="Agregar Usuario" data-toggle="modal" data-target="#nuevo-usuario"><i class="fa fa-user-plus"></i>&nbsp;&nbsp;Agregar Usuario</button>
         </div>
         
 
@@ -63,7 +63,6 @@
 @section('js')
     <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
     <script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
-
     <script>
         $(document).ready(function(){
             $('#lista-usuarios').DataTable({
