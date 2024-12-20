@@ -8,6 +8,11 @@
 @stop
 
 @section('content')
+    @if(session('success'))
+        <div class="alert alert-success">{{ session('success') }}</div>
+    @elseif(session('info'))
+        <div class="alert alert-info">{{ session('info') }}</div>
+    @endif
     <div class="card">
         {{-- <a href="{{ route('sadmin.users.create') }}" class="btn btn-primary">Nuevo Usuario</a> --}}
         <div class="container">
@@ -56,11 +61,21 @@
 @stop
 
 @section('css')
+    <!-- Bootstrap 5 CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css">
+    <!-- AdminLTE CSS -->
+    <link rel="stylesheet" href="{{ asset('vendor/adminlte/dist/css/adminlte.min.css') }}">
     <link rel="stylesheet" href="/css/admin_custom.css"> 
     <link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.dataTables.css">
+
+
 @stop
 
 @section('js')
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- AdminLTE JS -->
+    <script src="{{ asset('vendor/adminlte/dist/js/adminlte.min.js') }}"></script>
     <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
     <script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
     <script>
@@ -78,6 +93,51 @@
                     }
                 },
                 "sScrollX": '100%',
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+            // Cargar provincias al seleccionar un departamento
+            $('#departamento').on('change', function () {
+                let departamentoId = $(this).val();
+                $('#provincia').empty().append('<option value="">Seleccione una provincia</option>').prop('disabled', true);
+                $('#municipio').empty().append('<option value="">Seleccione un municipio</option>').prop('disabled', true);
+    
+                if (departamentoId) {
+                    $.ajax({
+                        url: `/sadmin/provincias/${departamentoId}`,
+                        type: 'GET',
+                        
+                        success: function (data) {
+                            console.log(data);
+                            
+                            $('#provincia').prop('disabled', false);
+                            data.forEach(function (provincia) {
+                                $('#provincia').append(`<option value="${provincia.id_provincia}">${provincia.provincia}</option>`);
+                            });
+                        }
+                    });
+                }
+            });
+    
+            // Cargar municipios al seleccionar una provincia
+            $('#provincia').on('change', function () {
+                let provinciaId = $(this).val();
+                $('#municipio').empty().append('<option value="">Seleccione un municipio</option>').prop('disabled', true);
+    
+                if (provinciaId) {
+                    $.ajax({
+                        url: `/sadmin/municipios/${provinciaId}`,
+                        type: 'GET',
+                        success: function (data) {
+                            $('#municipio').prop('disabled', false);
+                            data.forEach(function (municipio) {
+                                $('#municipio').append(`<option value="${municipio.id_municipio}">${municipio.municipio}</option>`);
+                            });
+                        }
+                    });
+                }
             });
         });
     </script>

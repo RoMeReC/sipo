@@ -7,6 +7,9 @@ use App\Models\User;
 use App\Models\Grado;
 use App\Models\Persona;
 use App\Models\Servidor;
+use App\Models\Provincia;
+use App\Models\Municipio;
+use App\Models\Departamento;
 use Illuminate\Foundation\Auth\User as AuthUser;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -16,6 +19,18 @@ class SuperAdminController extends Controller
 {
     public function dashboard(){
         return view('sadmin.dashboard');
+    }
+
+    public function getProvincias($departamentoId)
+    {
+        $provincias = Provincia::where('departamento_id', $departamentoId)->get();
+        return response()->json($provincias);
+    }
+
+    public function getMunicipios($provinciaId)
+    {
+        $municipios = Municipio::where('provincia_id', $provinciaId)->get();
+        return response()->json($municipios);
     }
 
     public function listar_usuarios()
@@ -39,8 +54,9 @@ class SuperAdminController extends Controller
             $info[$i] = $datos[$i];
 
         }
+        $departamentos = Departamento::all();
         //return $info;
-        return view('sadmin.listar-usuarios', ['info' => $info]);
+        return view('sadmin.listar-usuarios', ['info' => $info, 'departamentos' => $departamentos]);
         //return view('profile.perfil');
     }
 }
