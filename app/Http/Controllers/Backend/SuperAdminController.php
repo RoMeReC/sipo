@@ -13,6 +13,7 @@ use App\Models\Servidor;
 use App\Models\Provincia;
 use App\Models\Municipio;
 use App\Models\Departamento;
+use App\Models\Rol;
 use Illuminate\Foundation\Auth\User as AuthUser;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
@@ -63,7 +64,8 @@ class SuperAdminController extends Controller
         $especialidades = Especialidad::all();
         $condiciones = Condicion::all();
         $generos = Genero::all();
-        return view('sadmin.listar-usuarios', ['info' => $info, 'departamentos' => $departamentos, 'grados' => $grados, 'especialidades' => $especialidades, 'condiciones' => $condiciones, 'generos' => $generos]);
+        $roles = Rol::all();
+        return view('sadmin.listar-usuarios', ['info' => $info, 'departamentos' => $departamentos, 'grados' => $grados, 'especialidades' => $especialidades, 'condiciones' => $condiciones, 'generos' => $generos, 'roles' => $roles]);
     }
 
     public function agregar_usuario(Request $request)
@@ -75,9 +77,16 @@ class SuperAdminController extends Controller
         {
             return response()->json(['error' => 'Usuario no autenticado'], 401);
         }
-        
+        //dd($request);
+
         $request->validate([
+            'nombres' => ['required','nombres', 'max:30'],
+            'primer_apellido' => ['required','nombres', 'max:25'],
+            'segundo_apellido' => ['required','nombres', 'max:25'],
+            'carnet_identidad' => ['required','alpha_dash:ascii','max:15'],
             'celular' => ['required', 'celular'],
+            'fecha_nacimiento' => ['required', 'date'],
+            'email' => ['required', 'email'],
         ]);
         
         dd($request);

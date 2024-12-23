@@ -73,7 +73,15 @@
     <link rel="stylesheet" href="{{ asset('vendor/adminlte/dist/css/adminlte.min.css') }}">
     <link rel="stylesheet" href="/css/admin_custom.css"> 
     <link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.dataTables.css">
-
+    <style>
+        .has-error input {
+            border: 2px solid red;
+        }
+    
+        .text-danger {
+            color: red;
+        }
+    </style>
 
 @stop
 

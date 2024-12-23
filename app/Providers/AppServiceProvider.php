@@ -45,10 +45,26 @@ class AppServiceProvider extends ServiceProvider
             return $user->rol_id === 3;
         });
 
+        Validator::extend('nombres', function ($attribute, $value, $parameters, $validator) {
+            return preg_match('/^[\pL\s]+$/u', $value); // Valida que no acepta números ni caracteres especiales.
+        });
+
+        Validator::replacer('nombres', function ($message, $attribute, $rule, $parameters) {
+            return 'El campo ' . $attribute . ' debe contener solo letras';
+        });
+
+        Validator::extend('carnet_identidad', function ($attribute, $value, $parameters, $validator) {
+            return preg_match('/^(?=.*[0-9])(?=.*\W)$/', $value); // Valida que no acepta números ni caracteres especiales.
+        });
+    
+        Validator::replacer('carnet_identidad', function ($message, $attribute, $rule, $parameters) {
+            return 'El campo ' . $attribute . ' debe contener solo letras.';
+        });        
+
         Validator::extend('celular', function ($attribute, $value, $parameters, $validator) {
             return preg_match('/^\d{8}$/', $value); // Valida que sea un número de 8 dígitos.
         });
-    
+
         Validator::replacer('celular', function ($message, $attribute, $rule, $parameters) {
             return 'El campo ' . $attribute . ' debe ser un número de celular válido con 8 dígitos.';
         });
