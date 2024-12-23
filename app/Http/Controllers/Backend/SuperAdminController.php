@@ -14,6 +14,7 @@ use App\Models\Provincia;
 use App\Models\Municipio;
 use App\Models\Departamento;
 use Illuminate\Foundation\Auth\User as AuthUser;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Arr;
@@ -63,5 +64,22 @@ class SuperAdminController extends Controller
         $condiciones = Condicion::all();
         $generos = Genero::all();
         return view('sadmin.listar-usuarios', ['info' => $info, 'departamentos' => $departamentos, 'grados' => $grados, 'especialidades' => $especialidades, 'condiciones' => $condiciones, 'generos' => $generos]);
+    }
+
+    public function agregar_usuario(Request $request)
+    {
+        $user = Auth::user();
+        $persona = Persona::find(Auth::user()->persona_id);
+
+        if (!$user) 
+        {
+            return response()->json(['error' => 'Usuario no autenticado'], 401);
+        }
+        
+        $request->validate([
+            'celular' => ['required', 'celular'],
+        ]);
+        
+        dd($request);
     }
 }

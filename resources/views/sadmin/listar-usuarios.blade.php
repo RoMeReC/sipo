@@ -13,6 +13,11 @@
     @elseif(session('info'))
         <div class="alert alert-info">{{ session('info') }}</div>
     @endif
+    @if ($errors->any())
+        @foreach ($errors->all() as $error)
+            <ul class="alert alert-danger">{{ $error }}</ul>
+        @endforeach
+    @endif
     <div class="card">
         {{-- <a href="{{ route('sadmin.users.create') }}" class="btn btn-primary">Nuevo Usuario</a> --}}
         <div class="container">

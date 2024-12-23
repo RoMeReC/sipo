@@ -12,7 +12,7 @@
                     @endforeach
                 @endif
                 <br><br>
-                <form action="" method="post" class="needs-validation" enctype="multipart/form-data">
+                <form action="{{route('sadmin.agregar-usuario')}}" method="post" class="needs-validation" enctype="multipart/form-data">
                 @csrf
                     <div class="container">
                         <div class="row">
@@ -24,7 +24,7 @@
                     </div>
                     <div class="container">
                         <div class="row">
-                            <x-adminlte-select name="grado" label="GRADO:" label-class="text-lightblue" fgroup-class="col-md-6" disable-feedback>
+                            <x-adminlte-select name="grado" label="GRADO:" label-class="text-lightblue" fgroup-class="col-md-6 {{ $errors->has('grado') ? 'has-error' : '' }}" disable-feedback required>
                                 <x-slot name="prependSlot">
                                     <div class="input-group-text">
                                         <i class="fas fa-ship text-lightblue"></i>
@@ -35,7 +35,7 @@
                                         <option value="{{ $grado->id_grado }}">{{ $grado->descripcion_grado }}</option>
                                     @endforeach
                             </x-adminlte-select>
-                            <x-adminlte-select name="especialidad" label="ESPECIALIDAD:" label-class="text-lightblue" fgroup-class="col-md-6" disable-feedback>
+                            <x-adminlte-select name="especialidad" label="ESPECIALIDAD:" label-class="text-lightblue" fgroup-class="col-md-6 {{ $errors->has('especialidad') ? 'has-error' : '' }}" disable-feedback required>
                                 <x-slot name="prependSlot">
                                     <div class="input-group-text">
                                         <i class="fas fa-cubes text-lightblue"></i>
@@ -50,14 +50,14 @@
                     </div>
                     <div class="container">
                         <div class="row">
-                            <x-adminlte-input name="nombres" label="NOMBRES:" placeholder="{{ 'Registre los Nombres' }}" label-class="text-lightblue" fgroup-class="col-md-6" disable-feedback>
+                            <x-adminlte-input name="nombres" label="NOMBRES:" placeholder="{{ 'Registre los Nombres' }}" label-class="text-lightblue" fgroup-class="col-md-6 {{ $errors->has('nombres') ? 'has-error' : '' }}" disable-feedback required>
                                 <x-slot name="prependSlot">
                                     <div class="input-group-text">
                                         <i class="fas fa-user text-lightblue"></i>
                                     </div>
                                 </x-slot>
                             </x-adminlte-input>
-                            <x-adminlte-input name="primer_apellido" label="PRIMER APELLIDO:" placeholder="{{ 'Registre el Primer Apellido' }}" label-class="text-lightblue" fgroup-class="col-md-6" disable-feedback>
+                            <x-adminlte-input name="primer_apellido" label="PRIMER APELLIDO:" placeholder="{{ 'Registre el Primer Apellido' }}" label-class="text-lightblue" fgroup-class="col-md-6 {{ $errors->has('primer_apellido') ? 'has-error' : '' }}" disable-feedback required>
                                 <x-slot name="prependSlot">
                                     <div class="input-group-text">
                                         <i class="fas fa-users text-lightblue"></i>
@@ -68,17 +68,18 @@
                     </div>
                     <div class="container">
                         <div class="row">
-                            <x-adminlte-input name="segundo_apellido" label="SEGUNDO APELLIDO:" placeholder="{{ 'Registre el Segundo Apellido' }}" label-class="text-lightblue" fgroup-class="col-md-6" disable-feedback>
+                            <x-adminlte-input name="segundo_apellido" label="SEGUNDO APELLIDO:" placeholder="{{ 'Registre el Segundo Apellido' }}" label-class="text-lightblue" fgroup-class="col-md-6 {{ $errors->has('segundo_apellido') ? 'has-error' : '' }}" disable-feedback required>
                                 <x-slot name="prependSlot">
                                     <div class="input-group-text">
                                         <i class="fas fa-user text-lightblue"></i>
                                     </div>
                                 </x-slot>
                             </x-adminlte-input>
-                            <x-adminlte-select name="genero" label="GENERO:" label-class="text-lightblue" fgroup-class="col-md-6" disable-feedback>
+                            <x-adminlte-select name="genero" label="GENERO:" label-class="text-lightblue" fgroup-class="col-md-6 {{ $errors->has('genero') ? 'has-error' : '' }}" disable-feedback required>
                                 <x-slot name="prependSlot">
                                     <div class="input-group-text">
-                                        <i class="fas fa-male text-lightblue"></i><i class="fas fa-female text-lightblue"></i>                                    </div>
+                                        <i class="fas fa-male text-lightblue"></i><i class="fas fa-female text-lightblue"></i>                                    
+                                    </div>
                                 </x-slot>
                                 <option value="">Seleccione una Opción</option>
                                     @foreach($generos as $genero)
@@ -89,14 +90,14 @@
                     </div>
                     <div class="container">
                         <div class="row">
-                            <x-adminlte-input name="carnet_identidad" label="CARNET DE IDENTIDAD:" placeholder="{{ 'Registre el Carnet sin lugar de Expedición' }}" label-class="text-lightblue" fgroup-class="col-md-6" disable-feedback>
+                            <x-adminlte-input name="carnet_identidad" label="CARNET DE IDENTIDAD:" placeholder="{{ 'Registre el Carnet sin lugar de Expedición' }}" label-class="text-lightblue" fgroup-class="col-md-6 {{ $errors->has('carnet_identidad') ? 'has-error' : '' }}" disable-feedback required>
                                 <x-slot name="prependSlot">
                                     <div class="input-group-text">
                                         <i class="fas fa-address-card text-lightblue"></i>
                                     </div>
                                 </x-slot>
                             </x-adminlte-input>
-                            <x-adminlte-select name="condicion" label="ESTADO CIVIL:" label-class="text-lightblue" fgroup-class="col-md-6" disable-feedback>
+                            <x-adminlte-select name="condicion" label="ESTADO CIVIL:" label-class="text-lightblue" fgroup-class="col-md-6 {{ $errors->has('condicion') ? 'has-error' : '' }}" disable-feedback required>
                                 <x-slot name="prependSlot">
                                     <div class="input-group-text">
                                         <i class="fas fa-check text-lightblue"></i>
@@ -112,7 +113,7 @@
                     <div class="container">
                         <p><strong>LUGAR DE NACIMIENTO</strong></p>
                         <div class="row">
-                            <x-adminlte-select name="departamento" label="DEPARTAMENTO:" label-class="text-lightblue" fgroup-class="col-md-6" disable-feedback>
+                            <x-adminlte-select name="departamento" label="DEPARTAMENTO:" label-class="text-lightblue" fgroup-class="col-md-6 {{ $errors->has('departamento') ? 'has-error' : '' }}" disable-feedback required>
                                 <x-slot name="prependSlot">
                                     <div class="input-group-text">
                                         <i class="fas fa-map-marked-alt text-lightblue"></i>
@@ -123,7 +124,7 @@
                                         <option value="{{ $departamento->id_departamento }}">{{ $departamento->descripcion_departamento }}</option>
                                     @endforeach
                             </x-adminlte-select>
-                            <x-adminlte-select id="provincia" name="provincia" label="PROVINCIA:" label-class="text-lightblue" fgroup-class="col-md-6" disable-feedback>
+                            <x-adminlte-select id="provincia" name="provincia" label="PROVINCIA:" label-class="text-lightblue" fgroup-class="col-md-6 {{ $errors->has('provincia') ? 'has-error' : '' }}" disable-feedback required>
                                 <x-slot name="prependSlot">
                                     <div class="input-group-text">
                                         <i class="fas fa-map-marked-alt text-lightblue"></i>
@@ -135,7 +136,7 @@
                     </div>
                     <div class="container">
                         <div class="row">
-                            <x-adminlte-select id="municipio" name="municipio" label="MUNICIPIO:" label-class="text-lightblue" fgroup-class="col-md-6" disable-feedback>
+                            <x-adminlte-select id="municipio" name="municipio" label="MUNICIPIO:" label-class="text-lightblue" fgroup-class="col-md-6 {{ $errors->has('municipio') ? 'has-error' : '' }}" disable-feedback required>
                                 <x-slot name="prependSlot">
                                     <div class="input-group-text">
                                         <i class="fas fa-map-marked-alt text-lightblue"></i>
@@ -143,7 +144,7 @@
                                 </x-slot>
                                 <option value="">Seleccione un Municipio</option>
                             </x-adminlte-select>
-                            <x-adminlte-input id="datepicker" name="fecha_nacimiento" label="FECHA DE NACIMIENTO:" placeholder="{{ 'Seleccione una fecha del Calendario' }}" label-class="text-lightblue" fgroup-class="col-md-6" disable-feedback>
+                            <x-adminlte-input id="datepicker" name="fecha_nacimiento" label="FECHA DE NACIMIENTO:" placeholder="{{ 'Seleccione una fecha del Calendario' }}" label-class="text-lightblue" fgroup-class="col-md-6 {{ $errors->has('fecha_nacimiento') ? 'has-error' : '' }}" disable-feedback required>
                                 <x-slot name="prependSlot">
                                     <div class="input-group-text">
                                         <i class="fas fa-calendar text-lightblue"></i>
@@ -154,14 +155,14 @@
                     </div>
                     <div class="container">
                         <div class="row">
-                            <x-adminlte-input name="celular" label="CELULAR:" placeholder="{{ '' }}" label-class="text-lightblue" fgroup-class="col-md-6 {{ $errors->has('celular') ? 'has-error' : '' }}" disable-feedback>
+                            <x-adminlte-input name="celular" label="CELULAR:" placeholder="{{ 'Registre el número de Celular' }}" label-class="text-lightblue" fgroup-class="col-md-6 {{ $errors->has('celular') ? 'has-error' : '' }}" disable-feedback required>
                                 <x-slot name="prependSlot">
                                     <div class="input-group-text">
                                         <i class="fas fa-phone text-lightblue"></i>
                                     </div>
                                 </x-slot>
                             </x-adminlte-input>
-                            <x-adminlte-input name="email" label="CORREO ELECTRÓNICO" placeholder="{{ '' }}" label-class="text-lightblue" fgroup-class="col-md-6" disable-feedback>
+                            <x-adminlte-input name="email" label="CORREO ELECTRÓNICO" placeholder="{{ 'Registre su correo electrónico' }}" label-class="text-lightblue" fgroup-class="col-md-6 {{ $errors->has('email') ? 'has-error' : '' }}" disable-feedback required>
                                 <x-slot name="prependSlot">
                                     <div class="input-group-text">
                                         <i class="fas fa-envelope text-lightblue"></i>
