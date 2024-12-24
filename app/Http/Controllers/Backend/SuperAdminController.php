@@ -23,8 +23,13 @@ use Illuminate\Support\Arr;
 
 class SuperAdminController extends Controller
 {
-    public function dashboard(){
-        return view('sadmin.dashboard');
+    public function dashboard()
+    {
+        $user = Auth::user();
+        $avatarPath = DB::table('avatares')
+        ->where('id_avatar', DB::table('personas')->where('id_persona', $user->persona_id)->first()->avatar_id)
+        ->value('path_picture');
+       return view('sadmin.dashboard',['avatarPath' => $avatarPath]);
     }
 
     public function getProvincias($departamentoId)
@@ -41,6 +46,10 @@ class SuperAdminController extends Controller
 
     public function listar_usuarios()
     {
+        $user = Auth::user();
+        $avatarPath = DB::table('avatares')
+        ->where('id_avatar', DB::table('personas')->where('id_persona', $user->persona_id)->first()->avatar_id)
+        ->value('path_picture');
         $users = User::all();
         $info=[];
         $cont = count($users);
@@ -67,11 +76,12 @@ class SuperAdminController extends Controller
         $generos = Genero::all();
         $roles = Rol::all();
         $permisos = Permiso::all();
-        return view('sadmin.listar-usuarios', ['info' => $info, 'departamentos' => $departamentos, 'grados' => $grados, 'especialidades' => $especialidades, 'condiciones' => $condiciones, 'generos' => $generos, 'roles' => $roles, 'permisos' => $permisos]);
+        return view('sadmin.listar-usuarios', ['avatarPath' => $avatarPath, 'info' => $info, 'departamentos' => $departamentos, 'grados' => $grados, 'especialidades' => $especialidades, 'condiciones' => $condiciones, 'generos' => $generos, 'roles' => $roles, 'permisos' => $permisos]);
     }
 
     public function agregar_usuario(Request $request)
     {
+        dd($request);
         $user = Auth::user();
         $persona = Persona::find(Auth::user()->persona_id);
 
@@ -79,7 +89,7 @@ class SuperAdminController extends Controller
         {
             return response()->json(['error' => 'Usuario no autenticado'], 401);
         }
-        //dd($request);
+        //
 
         $request->validate([
             'nombres' => ['required','nombres', 'max:30'],

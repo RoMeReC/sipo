@@ -21,6 +21,10 @@ class ProfileController extends Controller
     }
     public function index()
     {
+        $user = Auth::user();
+        $avatarPath = DB::table('avatares')
+        ->where('id_avatar', DB::table('personas')->where('id_persona', $user->persona_id)->first()->avatar_id)
+        ->value('path_picture');
         $grado = DB::table('grados')->where('id_grado', DB::table('servidores')->where('persona_id', Auth::user()->persona_id)->first()->grado_id)->first()->descripcion_grado;
         $especialidad = DB::table('especialidades')->where('id_especialidad', DB::table('servidores')->where('persona_id', Auth::user()->persona_id)->first()->especialidad_id)->first()->descripcion_especialidad;
         $nombres = DB::table('personas')->where('id_persona',Auth::user()->persona_id)->first()->nombres;
@@ -52,7 +56,7 @@ class ProfileController extends Controller
             'email' => $email,
             'foto' => $foto,
         ];
-        return view('profile.perfil')->with('datos',$datos);
+        return view('profile.perfil')->with('datos',$datos)->with('avatarPath',$avatarPath);
     }
 
     public function updateProfile(Request $request)
@@ -107,20 +111,25 @@ class ProfileController extends Controller
 
     public function password()
     {
-        return view('profile.password');
+        $user = Auth::user();
+        $avatarPath = DB::table('avatares')
+        ->where('id_avatar', DB::table('personas')->where('id_persona', $user->persona_id)->first()->avatar_id)
+        ->value('path_picture');
+        return view('profile.password')->with('avatarPath',$avatarPath);
     }
 
     public function updatePassword(Request $request)
     {
+        //dd($request);
         $request->validate([
             'password_actual' => ['required', 'password_actual'],
-            'password' => ['required', 'confirmed', 'min:8'],
-            'password_confirmation' => ['required','confirmed','min:8'],
+            'password' => ['required', 'min:8'],
+            'password_confirmation' => ['required', 'min:8'],
         ]);
     
         $user = Auth::user();
         
-        if (!$request->filled('password_actual') || !Hash::check($request->password_actual, Auth::user()->password)) 
+        if (!$request->filled('password_actual') || !Hash::check($request->password_actual, $user->password)) 
         {
             return redirect()->back()->withErrors(['password_actual' => 'La contraseña actual es incorrecta.']);
         }
@@ -129,7 +138,12 @@ class ProfileController extends Controller
         {
             return redirect()->back()->withErrors(['repeatPassword' => 'La nueva contraseña no puede ser igual a la contraseña actual.']);
         }
-    
+
+        if ($request->password !== $request->password_confirmation) 
+        {
+            return redirect()->back()->withErrors(['repeatPassword' => 'La contraseña nueva debe coincidir con el campo de confirmación.']);
+        }
+
         $user->update([
             'password' => bcrypt($request->password),
         ]);

@@ -90,7 +90,8 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
     <!-- AdminLTE JS -->
     <script src="{{ asset('vendor/adminlte/dist/js/adminlte.min.js') }}"></script>
-    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+    {{-- <script src="https://code.jquery.com/jquery-3.7.1.js"></script> --}}
+    
     <script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
     <script src="/scripts/cambiar-idioma-datatable.js"></script>
     <script src="/scripts/seleccionar-municipio.js"></script>
@@ -98,16 +99,14 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.es.min.js"></script>
     <script>
         $(document).ready(function() {
-        $('#datepicker').datepicker({
-            format: 'dd-mm-yyyy', // Formato de la fecha
-            autoclose: true,
-            todayHighlight: true,
-            orientation: 'bottom auto',
-            language: 'es', // Establece el idioma a español
+            $('#datepicker').datepicker({
+                format: 'dd-mm-yyyy', // Formato de la fecha
+                autoclose: true,
+                todayHighlight: true,
+                orientation: 'bottom auto',
+                language: 'es', // Establece el idioma a español
+            });
         });
-    });
-
-</script>
-
+    </script>
 @stop
 

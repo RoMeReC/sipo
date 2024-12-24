@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+
 
 class HomeController extends Controller
 {
@@ -25,6 +27,7 @@ class HomeController extends Controller
      */
     public function index()
     {
+        
         // Redirigir según el rol del usuario
         if (Auth::user()->rol_id === 1) {
             return redirect()->route('sadmin.dashboard');
@@ -35,7 +38,7 @@ class HomeController extends Controller
         if (Auth::user()->rol_id === 3) {
             return redirect()->route('user.dashboard');
         }
-
+        
         return view('home');
     }
 
