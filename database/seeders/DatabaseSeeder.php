@@ -23,10 +23,12 @@ class DatabaseSeeder extends Seeder
             ProvinciaSeeder::class,
             MunicipioSeeder::class,
             RolSeeder::class,
+            PermisoSeeder::class,
             AvatarSeeder::class,
             PersonaSeeder::class,
             ServidorSeeder::class,
             UserSeeder::class,
+            PUsuarioSeeder::class,
         ]);
     }
 }

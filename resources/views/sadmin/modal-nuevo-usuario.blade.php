@@ -1,12 +1,7 @@
-<div class="modal fade" id="nuevo-usuario" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header" style="tex">
-                <h4 class="modal-title" id="staticBackdropLabel">NUEVO USUARIO</h4>
-                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                @if ($errors->any())
+<x-adminlte-modal id="nuevo-usuario" title="NUEVO USUARIO" size="lg" theme="teal"
+    icon="fas fa-user" v-centered static-backdrop scrollable>
+
+    @if ($errors->any())
                     @foreach ($errors->all() as $error)
                         <ul class="alert alert-danger">{{ $error }}</ul>
                     @endforeach
@@ -191,22 +186,28 @@
                     </div>
                     <div class="container">
                         <div class="row">
-                            <x-adminlte-select id="permiso" value="{{ old('permiso') }}" name="permiso" label="PERMISOS:" label-class="text-lightblue" fgroup-class="col-md-6 {{ $errors->has('permiso') ? 'has-error' : '' }}" disable-feedback required>
+                            <x-adminlte-select-bs id="permiso" name="permiso[]" label="PERMISOS:" label-class="text-lightblue" fgroup-class="col-md-6 {{ $errors->has('permiso') ? 'has-error' : '' }}" igroup-size="lg" :config="['liveSearch' => true, 'liveSearchPlaceholder' => 'Buscar permisos...', 'showTick' => true]" multiple>
                                 <x-slot name="prependSlot">
-                                    <div class="input-group-text">
-                                        <i class="fas fa-user text-lightblue"></i>
+                                    <div class="input-group-text bg-gradient-info">
+                                        <i class="fas fa-lock text-lightblue"></i>
                                     </div>
                                 </x-slot>
-                                <option value="">Seleccione un Permiso</option>
-                            </x-adminlte-select>
+                                @foreach($permisos as $permiso)
+                                    <option value="{{ $permiso->id_permiso }}">{{ $permiso->permiso }}</option>
+                                @endforeach
+                            </x-adminlte-select-bs>                            
                         </div>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                        <button type="submit" class="btn btn-success btn-lg"><i class="fa fa-save"></i> Registrar</button>
-                    </div>
+                    
+
+                    <x-slot name="footerSlot">
+                        <x-adminlte-button type="submit" class="mr-auto btn btn-lg" theme="success" label="Registrar"/>
+                        <x-adminlte-button class="btn btn-lg" theme="danger" label="Cerrar" data-dismiss="modal"/>
+                    </x-slot>
                 </form>
-            </div>
-        </div>
-    </div>
-</div>
+
+    
+</x-adminlte-modal>
+
+
+

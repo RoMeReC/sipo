@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('password');
             $table->unsignedBigInteger('persona_id');
             $table->unsignedBigInteger('rol_id');
+            $table->boolean('activo');
             $table->integer('auth_user');
             $table->rememberToken();
             $table->timestamps();

@@ -14,6 +14,7 @@ use App\Models\Provincia;
 use App\Models\Municipio;
 use App\Models\Departamento;
 use App\Models\Rol;
+use App\Models\Permiso;
 use Illuminate\Foundation\Auth\User as AuthUser;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
@@ -65,7 +66,8 @@ class SuperAdminController extends Controller
         $condiciones = Condicion::all();
         $generos = Genero::all();
         $roles = Rol::all();
-        return view('sadmin.listar-usuarios', ['info' => $info, 'departamentos' => $departamentos, 'grados' => $grados, 'especialidades' => $especialidades, 'condiciones' => $condiciones, 'generos' => $generos, 'roles' => $roles]);
+        $permisos = Permiso::all();
+        return view('sadmin.listar-usuarios', ['info' => $info, 'departamentos' => $departamentos, 'grados' => $grados, 'especialidades' => $especialidades, 'condiciones' => $condiciones, 'generos' => $generos, 'roles' => $roles, 'permisos' => $permisos]);
     }
 
     public function agregar_usuario(Request $request)

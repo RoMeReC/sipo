@@ -15,12 +15,14 @@ class User extends Authenticatable
     use HasFactory, Notifiable;
 
     protected $table = 'users';
+    protected $primary = 'id';
     protected $fillable = [
         'name',
         'email',
         'password',
         'persona_id',
         'rol_id',
+        'activo',
         'auth_id',
         'profile_photo_path',
     ];
