@@ -63,6 +63,14 @@
         </table>
     </div>
     @include('sadmin.modal-nuevo-usuario')
+    <!-- Abre la ventana modal, si hay errores -->
+    @if(session('danger') || $errors->any())
+    <script>
+        $(document).ready(function() {
+            $('#nuevo-usuario').modal('show');
+        });
+    </script>
+@endif
 @stop
 
 @section('css')
@@ -109,4 +117,5 @@
         });
     </script>
 @stop
+
 

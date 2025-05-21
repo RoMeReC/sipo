@@ -15,6 +15,8 @@ use App\Models\Municipio;
 use App\Models\Departamento;
 use App\Models\Rol;
 use App\Models\Permiso;
+use App\Models\Avatar;
+use Faker\Provider\ar_EG\Person;
 use Illuminate\Foundation\Auth\User as AuthUser;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
@@ -83,24 +85,85 @@ class SuperAdminController extends Controller
     {
         dd($request);
         $user = Auth::user();
+        //dd($user);
         $persona = Persona::find(Auth::user()->persona_id);
-
+        //dd($persona);
         if (!$user) 
         {
             return response()->json(['error' => 'Usuario no autenticado'], 401);
         }
         //
-
-        $request->validate([
+        /*$request->validate([
+            'grado' => ['required'],
+            'especialidad' => ['required'],
             'nombres' => ['required','nombres', 'max:30'],
             'primer_apellido' => ['required','nombres', 'max:25'],
             'segundo_apellido' => ['required','nombres', 'max:25'],
+            'genero' => ['required'],
             'carnet_identidad' => ['required','alpha_dash:ascii','max:15'],
-            'celular' => ['required', 'celular'],
+            'condicion' => ['required'],
+            'celular' => ['required', 'celular','max:8'],
+            'departamento' => ['required'],
+            'provincia' => ['required'],
+            'municipio' => ['required'],
             'fecha_nacimiento' => ['required', 'date'],
             'email' => ['required', 'email'],
-        ]);
+            'rol' => ['required'],
+        ]);*/
+        //dd($request);
+        //Verifica que la persona ya fue registrada
+        $identidad=Persona::where('carnet_identidad',$request->carnet_identidad)->get();
+        //dd($identidad);
+        if(!$identidad->isEmpty())
+        {
+            return redirect()->back()->withInput()->with('danger', 'Persona ya registrada.');
+        }
+        $nuevo_avatar = false;
+        if ($request->hasFile('picture')) 
+        {
+            $avatar = new Avatar();
+            $foto = $request->file('picture');
+            $nombre_foto = $request->carnet_identidad . '_' . $foto->getClientOriginalName();
+            $foto->move(public_path('images/avatar'), $nombre_foto);
+            $avatar->picture = $nombre_foto;
+            $avatar->path_picture = '/images/avatar/' . $nombre_foto;
+            $avatar->auth_user = $user->id;
+            dd($avatar);
+            $avatar->save();
+            $nuevo_avatar = true;
+        }
+        $nueva_persona = new Persona();
+        $nueva_persona->nombres = $request->nombres;
+        $nueva_persona->primer_apellido = $request->primer_apellido;
+        $nueva_persona->segundo_apellido = $request->segundo_apellido;
+        $nueva_persona->carnet_identidad = $request->carnet_identidad;
+        $nueva_persona->primer_apellido = $request->primer_apellido;
+        $nueva_persona->fecha_nacimiento = $request->fecha_nacimiento;
+        $nueva_persona->celular = intval($request->celular);
+        $nueva_persona->auth_user = $user->id;
+        if($nuevo_avatar == true)
+        {
+            $lastAvatar = Avatar::latest('id_avatar')->first();
+            $nueva_persona->avatar_id = $lastAvatar->id_avatar;
+        }
+        else
+        {
+            if(intval($request->genero) == 1)
+            {
+                $nueva_persona->avatar_id = 1;
+            }
+            elseif(intval($request->genero) == 2)
+            {
+                $nueva_persona->avatar_id = 2;
+            }
+        }
+        $nueva_persona->condicion_id = intval($request->condicion);
+        $nueva_persona->genero_id = intval($request->genero);
+        $nueva_persona->municipio_id = intval($request->municipio);
+        $nueva_persona->save();
+        $nuevo_usuario = new User();
+        $nuevo_usuario->name = 
         
-        dd($request);
+        dd("no existe");
     }
 }

@@ -1,6 +1,17 @@
 <x-adminlte-modal id="nuevo-usuario" title="NUEVO USUARIO" size="lg" theme="teal"
     icon="fas fa-user" v-centered scrollable>
 
+    {{-- MENSAJE DE ERROR --}}
+    @if(session('danger'))
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <strong><i class="fas fa-exclamation-triangle"></i> Atención:</strong> {{ session('danger') }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Cerrar">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    @endif
+
+    {{-- ERRORES DE VALIDACIÓN --}}
     @if ($errors->any())
         <div class="alert alert-danger">
             <ul>
@@ -11,9 +22,9 @@
         </div>
     @endif
     <br><br>
-    <form action="{{route('sadmin.agregar-usuario')}}" method="post" class="needs-validation" enctype="multipart/form-data">
+    <form id="formAgregarUsuario" action="{{route('sadmin.agregar-usuario')}}" method="post" class="needs-validation" enctype="multipart/form-data" novalidate>
     @csrf
-    <p><strong>DATOS PERSONALES</strong></p>
+    <h3><strong class="text-lightblue">DATOS PERSONALES</strong></h3>
         <div class="container">
             <div class="row">
                 <div class="col-4" style="text-align: center">
@@ -83,7 +94,7 @@
                     </x-slot>
                     <option value="">Seleccione una Opción</option>
                         @foreach($generos as $genero)
-                            <option value="{{ $genero->id_genero }}">{{ $genero->descripcion_genero }}</option>
+                            <option value={{ $genero->id_genero }}>{{ $genero->descripcion_genero }}</option>
                         @endforeach
                 </x-adminlte-select>
             </div>
@@ -167,7 +178,7 @@
         <p><strong>DATOS DEL USUARIO</strong></p>
         <div class="container">
             <div class="row">
-                <x-adminlte-input name="email" value="{{ old('email') }}" label="CORREO ELECTRÓNICO" placeholder="{{ 'Registre su correo electrónico' }}" label-class="text-lightblue" fgroup-class="col-md-6 {{ $errors->has('email') ? 'has-error' : '' }}" disable-feedback required>
+                <x-adminlte-input name="email" value="{{ old('email') }}" label="CORREO ELECTRÓNICO:" placeholder="{{ 'Registre su correo electrónico' }}" label-class="text-lightblue" fgroup-class="col-md-6 {{ $errors->has('email') ? 'has-error' : '' }}" disable-feedback required>
                     <x-slot name="prependSlot">
                         <div class="input-group-text">
                             <i class="fas fa-envelope text-lightblue"></i>
@@ -177,7 +188,7 @@
                 <x-adminlte-select name="rol" value="{{ old('rol') }}" label="ROL:" label-class="text-lightblue" fgroup-class="col-md-6 {{ $errors->has('rol') ? 'has-error' : '' }}" disable-feedback required>
                     <x-slot name="prependSlot">
                         <div class="input-group-text">
-                            <i class="fas fa-map-marked-alt text-lightblue"></i>
+                            <i class="fas fa-user-tie text-lightblue"></i>
                         </div>
                     </x-slot>
                     <option value="">Seleccione un Rol</option>
@@ -189,21 +200,29 @@
         </div>
         <div class="container">
             <div class="row">
-                {{-- <x-adminlte-select-bs id="permiso" name="permiso[]" label="PERMISOS:" label-class="text-lightblue" fgroup-class="col-md-6 {{ $errors->has('permiso') ? 'has-error' : '' }}" igroup-size="lg" :config="['liveSearch' => true, 'liveSearchPlaceholder' => 'Buscar permisos...', 'showTick' => true]" multiple>
-                    <x-slot name="prependSlot">
-                        <div class="input-group-text bg-gradient-info">
-                            <i class="fas fa-lock text-lightblue"></i>
+                <p><strong class="text-lightblue">PERMISOS:</strong></p>
+                @foreach($permisos as $permiso)
+                    <div class="col-md-3">
+                        <div class="form-check">
+                            <input 
+                                class="form-check-input" 
+                                type="checkbox" 
+                                name="permisos[]" 
+                                id="permiso{{ $permiso->id_permiso }}" 
+                                value="{{ $permiso->id_permiso }}"
+                                {{ in_array($permiso->id_permiso, old('permisos', [])) ? 'checked' : '' }}
+                            >
+                            <label class="form-check-label text-lightblue" for="permiso{{ $permiso->id_permiso }}">
+                                {{ $permiso->permiso }}
+                            </label>
                         </div>
-                    </x-slot>
-                    @foreach($permisos as $permiso)
-                        <option value="{{ $permiso->id_permiso }}">{{ $permiso->permiso }}</option>
-                    @endforeach
-                </x-adminlte-select-bs>                             --}}
+                    </div>
+                @endforeach
             </div>
         </div>   
     </form>
     <x-slot name="footerSlot">
-        <x-adminlte-button type="submit" class="mr-auto btn btn-lg" theme="success" label="Registrar"/>
+        <x-adminlte-button type="submit" form="formAgregarUsuario" class="mr-auto btn btn-lg" theme="success" label="Registrar"/>
         <x-adminlte-button class="btn btn-lg" theme="danger" label="Cerrar" data-dismiss="modal"/>
     </x-slot>
     

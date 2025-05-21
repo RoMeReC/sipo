@@ -86,7 +86,7 @@ class ProfileController extends Controller
         {
             $avatar = new Avatar();
             $foto = $request->file('picture');
-            $nombre_foto = rand() . '_' . $foto->getClientOriginalName();
+            $nombre_foto = $persona->carnet_identidad . '_' . $foto->getClientOriginalName();
             $foto->move(public_path('images/avatar'), $nombre_foto);
             $avatar->picture = $nombre_foto;
             $avatar->path_picture = '/images/avatar/' . $nombre_foto;
