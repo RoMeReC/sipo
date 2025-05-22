@@ -1,7 +1,8 @@
 <?php
 
 namespace App\Http\Controllers\Backend;
-
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\Grado;
@@ -161,8 +162,20 @@ class SuperAdminController extends Controller
         $nueva_persona->genero_id = intval($request->genero);
         $nueva_persona->municipio_id = intval($request->municipio);
         $nueva_persona->save();
+        $lastPersona = Persona::latest('id_persona')->first();
         $nuevo_usuario = new User();
-        $nuevo_usuario->name = 
+        $texto = explode(" ", $request->nombres);
+        $nombres = "";
+        foreach($texto as $palabra)
+        {
+            $letra = str_split($palabra, 1);
+            $nombres = $nombres . $letra['0'];
+        } 
+        $nuevo_usuario->name = strtolower($nombres).strtolower(str_replace(" ", "", $request->primer_apellido)).strtolower(Str::substr($request->segundo_apellido,0,1));        
+        $nuevo_usuario->email = $request->email;
+        $nuevo_usuario->password = Hash::make($request->password);
+        $nuevo_usuario->persona_id = $lastPersona;
+        $nuevo_usuario->rol = intval($request->rol);
         
         dd("no existe");
     }
