@@ -1,4 +1,4 @@
-<x-adminlte-modal id="nuevo-usuario" title="NUEVO USUARIO" size="lg" theme="teal"
+<x-adminlte-modal id="nueva-persona" title="NUEVA PERSONA" size="lg" theme="teal"
     icon="fas fa-user" v-centered scrollable>
 
     {{-- MENSAJE DE ERROR --}}

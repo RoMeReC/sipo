@@ -21,7 +21,7 @@
     <div class="card">
         {{-- <a href="{{ route('sadmin.users.create') }}" class="btn btn-primary">Nuevo Usuario</a> --}}
         <div class="container">
-            <button class="btn btn-primary" title="Agregar Usuario" data-toggle="modal" data-target="#nuevo-usuario"><i class="fa fa-user-plus"></i>&nbsp;&nbsp;Agregar Usuario</button>
+            <button class="btn btn-primary" title="Agregar Persona" data-toggle="modal" data-target="#nueva-persona"><i class="fa fa-user-plus"></i>&nbsp;&nbsp;Agregar Persona</button>
         </div>
         
 
@@ -30,12 +30,12 @@
                 <tr>
                     <th>Nro</th>
                     <th>Grado</th>
-                    <th>Especialidad</th>
                     <th>Apellidos</th>
                     <th>Nombres</th>
                     <th>UUDD</th>
                     <th>Usuario</th>
                     <th>Rol</th>
+                    <th>Estado</th>
                     <th>Opciones</th>
                 </tr>
             </thead>
@@ -45,17 +45,26 @@
                     <tr>
                         <td>{{ $n }}</td>
                         <td>{{ $inf['grado'] }}</td>
-                        <td>{{ $inf['especialidad'] }}</td>
                         <td>{{ $inf['apellidos'] }}</td>
                         <td>{{ $inf['nombres'] }}</td>
                         <td>{{ $inf['uudd'] }}</td>
                         <td>{{ $inf['username'] }}</td>
                         <td>{{ $inf['rol'] }}</td>
                         <td>
-                            <a href="" class="btn btn-warning"><i class="fa fa-edit"></i></a>
-                            <a href="" class="btn btn-dark"><i class="fa fa-lock"></i></a>
-                            <a href="" class="btn btn-danger"><i class="fa fa-trash"></i></a>
-                            <a href="" class="btn btn-info"><i class="fa fa-unlock"></i></a>
+                            @if($inf['activo'])
+                                <span class="badge bg-primary">Activo</span>
+                            @else
+                                <span class="badge bg-danger">Inactivo</span>
+                            @endif
+                        </td>
+                        <td>
+                            @if($inf['activo'])
+                                <a href="#" class="btn btn-success" title="Agregar un nuevo usuario"><i class="fa fa-user-plus"></i></a>
+                                <a href="#" class="btn btn-warning" title="Editar"><i class="fa fa-edit"></i></a>
+                                <a href="{{ route('sadmin.desactivar', $inf['id']) }}" class="btn btn-danger" title="Desactivar"><i class="fa fa-lock"></i></a>
+                            @else
+                                <a href="{{ route('sadmin.activar', $inf['id']) }}" class="btn btn-info" title="Activar"><i class="fa fa-unlock"></i></a>
+                            @endif
                         </td>
                     </tr>
                     <?php $n = $n+1;?>
@@ -64,12 +73,12 @@
             </tbody>
         </table>
     </div>
-    @include('sadmin.modal-nuevo-usuario')
+    @include('sadmin.modal-nueva-persona')
     <!-- Abre la ventana modal, si hay errores -->
     @if(session('danger') || $errors->any())
     <script>
         $(document).ready(function() {
-            $('#nuevo-usuario').modal('show');
+            $('#nueva-persona').modal('show');
         });
     </script>
 @endif

@@ -79,7 +79,8 @@ class SuperAdminController extends Controller
             $uudd = ['uudd' => DB::table('uudds')->where('id_uudd',DB::table('servidores')->where('persona_id',User::find($users[$i]->id)->persona_id)->first()->uudd_id)->first()->uudd];
             $username = ['username' => User::find($users[$i]->id)->name];
             $rol = ['rol' => DB::table('roles')->where('id_rol',User::find($users[$i]->id)->rol_id)->first()->rol];
-            $datos[$i] = Arr::collapse([$grado,$especialidad,$apellidos,$nombres,$uudd,$username,$rol]);
+            $activo = ['activo' => User::find($users[$i]->id)->activo];
+            $datos[$i] = Arr::collapse([$id,$grado,$especialidad,$apellidos,$nombres,$uudd,$username,$rol,$activo]);
             $info[$i] = $datos[$i];
 
         }
@@ -207,5 +208,23 @@ class SuperAdminController extends Controller
         $nuevo_servidor->uudd_id = $request->uudd;
         $nuevo_servidor->save();
         return redirect()->back()->with('success', 'Usuario creado correctamente.');
+    }
+
+    public function activar($id)
+    {
+        $user = User::findOrFail($id);
+        $user->activo = true;
+        $user->save();
+
+        return redirect()->back()->with('success', 'Usuario activado correctamente.');
+    }
+
+    public function desactivar($id)
+    {
+        $user = User::findOrFail($id);
+        $user->activo = false;
+        $user->save();
+
+        return redirect()->back()->with('success', 'Usuario desactivado correctamente.');
     }
 }
