@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id('id_p_usuario');
             $table->unsignedBigInteger('usuario_id');
             $table->unsignedBigInteger('permiso_id');
+            $table->integer('auth_user');
             $table->boolean('activo');
             $table->timestamps();
             $table->softDeletes();

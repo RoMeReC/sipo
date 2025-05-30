@@ -18,6 +18,7 @@ class PUsuarioSeeder extends Seeder
         DB::table('p_usuarios')->insert([
             'usuario_id' => 1,
             'permiso_id' => 1,
+            'auth_user' => 1,
             'activo' => true,
             'created_at'=>\Carbon\Carbon::now(),
             'updated_at'=>\Carbon\Carbon::now(),
@@ -25,6 +26,7 @@ class PUsuarioSeeder extends Seeder
         DB::table('p_usuarios')->insert([
             'usuario_id' => 1,
             'permiso_id' => 2,
+            'auth_user' => 1,
             'activo' => true,
             'created_at'=>\Carbon\Carbon::now(),
             'updated_at'=>\Carbon\Carbon::now(),
@@ -32,6 +34,7 @@ class PUsuarioSeeder extends Seeder
         DB::table('p_usuarios')->insert([
             'usuario_id' => 1,
             'permiso_id' => 3,
+            'auth_user' => 1,
             'activo' => true,
             'created_at'=>\Carbon\Carbon::now(),
             'updated_at'=>\Carbon\Carbon::now(),
@@ -39,6 +42,7 @@ class PUsuarioSeeder extends Seeder
         DB::table('p_usuarios')->insert([
             'usuario_id' => 1,
             'permiso_id' => 4,
+            'auth_user' => 1,
             'activo' => true,
             'created_at'=>\Carbon\Carbon::now(),
             'updated_at'=>\Carbon\Carbon::now(),
@@ -46,6 +50,7 @@ class PUsuarioSeeder extends Seeder
         DB::table('p_usuarios')->insert([
             'usuario_id' => 1,
             'permiso_id' => 5,
+            'auth_user' => 1,
             'activo' => true,
             'created_at'=>\Carbon\Carbon::now(),
             'updated_at'=>\Carbon\Carbon::now(),

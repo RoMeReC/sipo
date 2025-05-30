@@ -43,5 +43,61 @@ class UUDDSeeder extends Seeder
             'created_at'=>\Carbon\Carbon::now(),
             'updated_at'=>\Carbon\Carbon::now(),
         ]);
+        DB::table('uudds')->insert([
+            'uudd' => 'UOIN',
+            'descripcion_uudd' => 'Unidad Operativa de Industria Naval "PUERTO QUIJARRO"',
+            'gguu_id' => 2,
+            'created_at'=>\Carbon\Carbon::now(),
+            'updated_at'=>\Carbon\Carbon::now(),
+        ]);
+        DB::table('uudds')->insert([
+            'uudd' => 'UOSP',
+            'descripcion_uudd' => 'Unidad Operativa de Servicios Portuarios "HIDROVÍA PARAGUAY - PARANÁ"',
+            'gguu_id' => 2,
+            'created_at'=>\Carbon\Carbon::now(),
+            'updated_at'=>\Carbon\Carbon::now(),
+        ]);
+        DB::table('uudds')->insert([
+            'uudd' => 'UOSPG',
+            'descripcion_uudd' => 'Unidad Operativa de Servicios y Producción Ganadera "TAMARINERO"',
+            'gguu_id' => 2,
+            'created_at'=>\Carbon\Carbon::now(),
+            'updated_at'=>\Carbon\Carbon::now(),
+        ]);
+        DB::table('uudds')->insert([
+            'uudd' => 'UEPES',
+            'descripcion_uudd' => 'Unidad Ejecutora del Proyecto de la Escuela de Sargentos',
+            'gguu_id' => 3,
+            'created_at'=>\Carbon\Carbon::now(),
+            'updated_at'=>\Carbon\Carbon::now(),
+        ]);
+        DB::table('uudds')->insert([
+            'uudd' => 'SNHN "PUERTO SUAREZ"',
+            'descripcion_uudd' => 'Servicio Nacional de Hidrografía Naval "PUERTO SUAREZ"',
+            'gguu_id' => 4,
+            'created_at'=>\Carbon\Carbon::now(),
+            'updated_at'=>\Carbon\Carbon::now(),
+        ]);
+        DB::table('uudds')->insert([
+            'uudd' => 'REG. COSSMIL "PUERTO SUAREZ"',
+            'descripcion_uudd' => 'Regional de la Corporación del Seguro Social Militar "PUERTO SUAREZ"',
+            'gguu_id' => 5,
+            'created_at'=>\Carbon\Carbon::now(),
+            'updated_at'=>\Carbon\Carbon::now(),
+        ]);
+        DB::table('uudds')->insert([
+            'uudd' => 'RIBB "PUERTO QUIJARRO"',
+            'descripcion_uudd' => 'Agencia Regional del Registro Internacional Boliviano de Buques "PUERTO QUIJARRO"',
+            'gguu_id' => 6,
+            'created_at'=>\Carbon\Carbon::now(),
+            'updated_at'=>\Carbon\Carbon::now(),
+        ]);
+        DB::table('uudds')->insert([
+            'uudd' => 'ENABOL "PUERTO QUIJARRO"',
+            'descripcion_uudd' => 'Agencia Regional de la Empresa Naviera Boliviana "PUERTO QUIJARRO"',
+            'gguu_id' => 6,
+            'created_at'=>\Carbon\Carbon::now(),
+            'updated_at'=>\Carbon\Carbon::now(),
+        ]);
     }
 }

@@ -22,7 +22,7 @@
         </div>
     @endif
     <br><br>
-    <form id="formAgregarUsuario" action="{{route('sadmin.agregar-usuario')}}" method="post" class="needs-validation" enctype="multipart/form-data" novalidate>
+    <form id="formAgregarUsuario" action="{{route('sadmin.agregar-usuario')}}" method="post" class="needs-validation" enctype="multipart/form-data">
     @csrf
     <h3><strong class="text-lightblue">DATOS PERSONALES</strong></h3>
         <div class="container">
@@ -31,6 +31,29 @@
                     <img src="{{'/images/avatar/avatar-hombre.png'}}" width="100%">
                     <input id="image" type="file" class="filestyle" name="picture" accept="image/jpeg,image/png">
                 </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="row">
+                <x-adminlte-select name="gguu" value="{{ old('gguu') }}" label="GRAN UNIDAD:" label-class="text-lightblue" fgroup-class="col-md-6 {{ $errors->has('gguu') ? 'has-error' : '' }}" disable-feedback required>
+                    <x-slot name="prependSlot">
+                        <div class="input-group-text">
+                            <i class="fas fa-map-marked-alt text-lightblue"></i>
+                        </div>
+                    </x-slot>
+                    <option value="">Seleccione una Gran Unidad</option>
+                        @foreach($gguus as $gguu)
+                            <option value="{{ $gguu->id_gguu }}">{{ $gguu->descripcion_gguu }}</option>
+                        @endforeach
+                </x-adminlte-select>
+                <x-adminlte-select id="uudd" value="{{ old('uudd') }}" name="uudd" label="UNIDAD DEPENDIENTE:" label-class="text-lightblue" fgroup-class="col-md-6 {{ $errors->has('uudd') ? 'has-error' : '' }}" disable-feedback required>
+                    <x-slot name="prependSlot">
+                        <div class="input-group-text">
+                            <i class="fas fa-map-marked-alt text-lightblue"></i>
+                        </div>
+                    </x-slot>
+                    <option value="">Seleccione una Unidad Dependiente</option>
+                </x-adminlte-select>
             </div>
         </div>
         <div class="container">

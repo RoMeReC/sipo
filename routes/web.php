@@ -35,6 +35,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/sadmin/listar-usuarios', [SuperAdminController::class, 'listar_usuarios'])->name('sadmin.listar-usuarios');
         Route::get('/sadmin/provincias/{departamentoId}', [SuperAdminController::class, 'getProvincias']);
         Route::get('/sadmin/municipios/{provinciaId}', [SuperAdminController::class, 'getMunicipios']);
+        Route::get('/sadmin/uudds/{gguuId}', [SuperAdminController::class, 'getUUDD']);
         Route::post('/sadmin/agregar-usuario', [SuperAdminController::class, 'agregar_usuario'])->name('sadmin.agregar-usuario');
 
 

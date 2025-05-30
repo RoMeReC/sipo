@@ -16,13 +16,17 @@ use App\Models\Municipio;
 use App\Models\Departamento;
 use App\Models\Rol;
 use App\Models\Permiso;
+use App\Models\Gguu;
 use App\Models\Avatar;
+use App\Models\PUsuario;
+use App\Models\Undd;
 use Faker\Provider\ar_EG\Person;
 use Illuminate\Foundation\Auth\User as AuthUser;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Arr;
+use PhpParser\Node\Expr\New_;
 
 class SuperAdminController extends Controller
 {
@@ -47,6 +51,12 @@ class SuperAdminController extends Controller
         return response()->json($municipios);
     }
 
+    public function getUUDD($gguuId)
+    {
+        $uudd = Undd::where('gguu_id', $gguuId)->get();
+        return response()->json($uudd);
+    }
+
     public function listar_usuarios()
     {
         $user = Auth::user();
@@ -66,9 +76,10 @@ class SuperAdminController extends Controller
             $segundo_apellido = DB::table('personas')->where('id_persona',User::find($users[$i]->id)->persona_id)->first()->segundo_apellido;
             $apellidos = ['apellidos' => $primer_apellido.' '.$segundo_apellido];
             $nombres = ['nombres' => DB::table('personas')->where('id_persona',User::find($users[$i]->id)->persona_id)->first()->nombres];
+            $uudd = ['uudd' => DB::table('uudds')->where('id_uudd',DB::table('servidores')->where('persona_id',User::find($users[$i]->id)->persona_id)->first()->uudd_id)->first()->uudd];
             $username = ['username' => User::find($users[$i]->id)->name];
             $rol = ['rol' => DB::table('roles')->where('id_rol',User::find($users[$i]->id)->rol_id)->first()->rol];
-            $datos[$i] = Arr::collapse([$grado,$especialidad,$apellidos,$nombres,$username,$rol]);
+            $datos[$i] = Arr::collapse([$grado,$especialidad,$apellidos,$nombres,$uudd,$username,$rol]);
             $info[$i] = $datos[$i];
 
         }
@@ -79,22 +90,22 @@ class SuperAdminController extends Controller
         $generos = Genero::all();
         $roles = Rol::all();
         $permisos = Permiso::all();
-        return view('sadmin.listar-usuarios', ['avatarPath' => $avatarPath, 'info' => $info, 'departamentos' => $departamentos, 'grados' => $grados, 'especialidades' => $especialidades, 'condiciones' => $condiciones, 'generos' => $generos, 'roles' => $roles, 'permisos' => $permisos]);
+        $gguus = Gguu::all();
+        return view('sadmin.listar-usuarios', ['avatarPath' => $avatarPath, 'info' => $info, 'departamentos' => $departamentos, 'grados' => $grados, 'especialidades' => $especialidades, 'condiciones' => $condiciones, 'generos' => $generos, 'roles' => $roles, 'permisos' => $permisos, 'gguus' => $gguus]);
     }
 
     public function agregar_usuario(Request $request)
     {
-        dd($request);
+        //dd($request);
         $user = Auth::user();
-        //dd($user);
         $persona = Persona::find(Auth::user()->persona_id);
-        //dd($persona);
         if (!$user) 
         {
             return response()->json(['error' => 'Usuario no autenticado'], 401);
         }
-        //
-        /*$request->validate([
+        $request->validate([
+            'gguu' => ['required'],
+            'uudd' => ['required'],
             'grado' => ['required'],
             'especialidad' => ['required'],
             'nombres' => ['required','nombres', 'max:30'],
@@ -110,11 +121,8 @@ class SuperAdminController extends Controller
             'fecha_nacimiento' => ['required', 'date'],
             'email' => ['required', 'email'],
             'rol' => ['required'],
-        ]);*/
-        //dd($request);
-        //Verifica que la persona ya fue registrada
+        ]);
         $identidad=Persona::where('carnet_identidad',$request->carnet_identidad)->get();
-        //dd($identidad);
         if(!$identidad->isEmpty())
         {
             return redirect()->back()->withInput()->with('danger', 'Persona ya registrada.');
@@ -129,7 +137,6 @@ class SuperAdminController extends Controller
             $avatar->picture = $nombre_foto;
             $avatar->path_picture = '/images/avatar/' . $nombre_foto;
             $avatar->auth_user = $user->id;
-            dd($avatar);
             $avatar->save();
             $nuevo_avatar = true;
         }
@@ -173,10 +180,32 @@ class SuperAdminController extends Controller
         } 
         $nuevo_usuario->name = strtolower($nombres).strtolower(str_replace(" ", "", $request->primer_apellido)).strtolower(Str::substr($request->segundo_apellido,0,1));        
         $nuevo_usuario->email = $request->email;
-        $nuevo_usuario->password = Hash::make($request->password);
-        $nuevo_usuario->persona_id = $lastPersona;
-        $nuevo_usuario->rol = intval($request->rol);
-        
-        dd("no existe");
+        $nuevo_usuario->password = Hash::make('AB'.$nuevo_usuario->name);
+        $nuevo_usuario->persona_id = $lastPersona->id_persona;
+        $nuevo_usuario->rol_id = intval($request->rol);
+        $nuevo_usuario->activo = true;
+        $nuevo_usuario->auth_user = $user->id;
+        $nuevo_usuario->save();
+        $lastUser = User::latest('id')->first();
+        if(!empty($request->permisos))
+        {
+            $permisos = $request->permisos;
+            for ($i = 0; $i < count($permisos); $i++) 
+            {
+                $permiso = new PUsuario();
+                $permiso->usuario_id = $lastUser->id;
+                $permiso->permiso_id = intval($permisos[$i]);
+                $permiso->auth_user = $user->id;
+                $permiso->activo = true;
+                $permiso->save();
+            }
+        }
+        $nuevo_servidor = new Servidor();
+        $nuevo_servidor->persona_id = $lastPersona->id_persona;
+        $nuevo_servidor->grado_id = $request->grado;
+        $nuevo_servidor->especialidad_id = $request->especialidad;
+        $nuevo_servidor->uudd_id = $request->uudd;
+        $nuevo_servidor->save();
+        return redirect()->back()->with('success', 'Usuario creado correctamente.');
     }
 }

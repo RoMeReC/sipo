@@ -24,4 +24,9 @@ class Persona extends Model
         'usuario_id',
         'municipio_id',
     ];
+
+    public function avatar()
+    {
+        return $this->belongsTo(Avatar::class, 'avatar_id', 'id_avatar');
+    }
 }

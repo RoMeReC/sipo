@@ -10,7 +10,7 @@
     {{-- Sidebar menu --}}
     <div class="sidebar">
         <nav style="text-align: center">
-            <img src="{{ asset($avatarPath) }}" class="user-image img-circle elevation-2" width="70%">
+            <img src="{{ auth()->user()->avatar_path }}" class="user-image img-circle elevation-2" width="70%">
         </nav>
         <nav class="pt-2">
             <ul class="nav nav-pills nav-sidebar flex-column {{ config('adminlte.classes_sidebar_nav', '') }}"

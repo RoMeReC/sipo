@@ -1,1 +1,4 @@
-/* admin_custom.css vacío para evitar error 404 */
+/* Forzar que el contenido siempre tenga al menos el alto de la ventana */
+.content-wrapper {
+    min-height: calc(100vh - 4rem); /* Ajusta si tu header/footer son más grandes */
+}

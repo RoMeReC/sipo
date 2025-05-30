@@ -33,6 +33,7 @@
                     <th>Especialidad</th>
                     <th>Apellidos</th>
                     <th>Nombres</th>
+                    <th>UUDD</th>
                     <th>Usuario</th>
                     <th>Rol</th>
                     <th>Opciones</th>
@@ -47,6 +48,7 @@
                         <td>{{ $inf['especialidad'] }}</td>
                         <td>{{ $inf['apellidos'] }}</td>
                         <td>{{ $inf['nombres'] }}</td>
+                        <td>{{ $inf['uudd'] }}</td>
                         <td>{{ $inf['username'] }}</td>
                         <td>{{ $inf['rol'] }}</td>
                         <td>
@@ -103,6 +105,7 @@
     <script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
     <script src="/scripts/cambiar-idioma-datatable.js"></script>
     <script src="/scripts/seleccionar-municipio.js"></script>
+    <script src="/scripts/seleccionar-uudd.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.es.min.js"></script>
     <script>
