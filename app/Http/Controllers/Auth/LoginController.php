@@ -1,7 +1,8 @@
 <?php
 
 namespace App\Http\Controllers\Auth;
-
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
@@ -36,5 +37,22 @@ class LoginController extends Controller
     {
         $this->middleware('guest')->except('logout');
         $this->middleware('auth')->only('logout');
+    }
+
+    /**
+     * Sobrescribe el método llamado automáticamente después del login.
+     */
+    protected function authenticated(Request $request, $user)
+    {
+        if (!$user->activo) {
+            Auth::logout();
+
+            return redirect()->route('login')->withErrors([
+                'email' => 'Tu cuenta está inactiva. Contacta al administrador.',
+            ]);
+        }
+
+        // Si está activo, continúa al home
+        return redirect()->intended($this->redirectTo);
     }
 }
