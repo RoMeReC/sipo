@@ -22,7 +22,7 @@
         </div>
     @endif
     <br><br>
-    <form id="formNuevoUsuario" action="{{route('sadmin.agregar-usuario')}}" method="post" class="needs-validation" enctype="multipart/form-data">
+    <form id="formNuevoUsuario" action="{{route('sadmin.nuevo-usuario')}}" method="post" class="needs-validation" enctype="multipart/form-data">
     @csrf
     <h3><strong class="text-lightblue">DATOS PERSONALES</strong></h3>
         <div class="container">
@@ -224,6 +224,7 @@
         <div class="container">
             <div class="row">
                 <p><strong class="text-lightblue">PERMISOS:</strong></p>
+                <br>
                 @foreach($permisos as $permiso)
                     <div class="col-md-3">
                         <div class="form-check">
@@ -245,7 +246,7 @@
         </div>   
     </form>
     <x-slot name="footerSlot">
-        <x-adminlte-button type="submit" form="formAgregarUsuario" class="mr-auto btn btn-lg" theme="success" label="Registrar"/>
+        <x-adminlte-button type="submit" form="formNuevoUsuario" class="mr-auto btn btn-lg" theme="success" label="Registrar"/>
         <x-adminlte-button class="btn btn-lg" theme="danger" label="Cerrar" data-dismiss="modal"/>
     </x-slot>
     

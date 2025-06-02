@@ -80,7 +80,7 @@
     @if(session('danger') || $errors->any())
     <script>
         $(document).ready(function() {
-            $('#agregar-usuario').modal('show');
+            $('#nuevo-usuario').modal('show');
         });
     </script>
     @endif
@@ -89,8 +89,8 @@
 
 @section('css')
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
-    <!-- Bootstrap 5 CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css">
+    <!-- Bootstrap 4.6 CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
     <!-- AdminLTE CSS -->
     <link rel="stylesheet" href="{{ asset('vendor/adminlte/dist/css/adminlte.min.css') }}">
     <link rel="stylesheet" href="/css/admin_custom.css"> 
@@ -108,8 +108,8 @@
 @stop
 
 @section('js')
-    <!-- Bootstrap 5 JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Bootstrap 4.6 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
     <!-- AdminLTE JS -->
     <script src="{{ asset('vendor/adminlte/dist/js/adminlte.min.js') }}"></script>
     {{-- <script src="https://code.jquery.com/jquery-3.7.1.js"></script> --}}
@@ -133,28 +133,23 @@
     </script>
     <script>
         $(document).ready(function() {
+            $('#nuevo-usuario').modal('hide');
             $('.btn-crear-usuario').click(function() {
                 let usuarioId = $(this).data('id');
                 $('#usuario_id').val(usuarioId);
                 $('#agregar-usuario').modal('show');
             });
+            $('#agregar-usuario').on('shown.bs.modal', function () {
+                $(this).removeAttr('aria-hidden');
+            });
         });
     </script>
-    
-    <script>
-        function abrirMNuevoUsuario() {
-            $('#nuevo-usuario').click(function() {
-                // Mueve el foco a otro botón fuera del modal (por accesibilidad)
-                $('#agregar-usuario').modal('hide');
-                $('#nuevo-usuario').modal('show');
-                $('#nuevo-usuario').focus();
-            });
-        }
-    </script>
-
     <script>
         function cerrarMAgregarUsuario() {
-            $('#agregar-usuario').modal('hide');
+            
+            $('#agregar-usuario').on('hidden.bs.modal', function () {
+                $(this).attr('aria-hidden', 'true');
+            });
         }
     </script>
 @stop

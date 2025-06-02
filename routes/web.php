@@ -36,9 +36,11 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/sadmin/provincias/{departamentoId}', [SuperAdminController::class, 'getProvincias']);
         Route::get('/sadmin/municipios/{provinciaId}', [SuperAdminController::class, 'getMunicipios']);
         Route::get('/sadmin/uudds/{gguuId}', [SuperAdminController::class, 'getUUDD']);
+        Route::post('/sadmin/nuevo-usuario', [SuperAdminController::class, 'nuevo_usuario'])->name('sadmin.nuevo-usuario');
         Route::post('/sadmin/agregar-usuario', [SuperAdminController::class, 'agregar_usuario'])->name('sadmin.agregar-usuario');
         Route::get('/sadmin/{id}/activar', [SuperAdminController::class, 'activar'])->name('sadmin.activar');
         Route::get('/sadmin/{id}/desactivar', [SuperAdminController::class, 'desactivar'])->name('sadmin.desactivar');
+        
     });
     // Rutas para usuarios con rol_id:2 (administradores)
     Route::middleware(['rol_id:2'])->group(function () {

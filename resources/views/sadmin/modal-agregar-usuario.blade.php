@@ -1,5 +1,5 @@
-<x-adminlte-modal id="agregar-usuario" title="NUEVA PERSONA" size="sg" theme="teal"
-    icon="fas fa-user" v-centered scrollable>
+<x-adminlte-modal id="agregar-usuario" title="AGREGAR USUARIO" size="sg" theme="teal"
+    icon="fas fa-user-plus" v-centered scrollable>
 
     {{-- MENSAJE DE ERROR --}}
     @if(session('danger'))
@@ -22,9 +22,9 @@
         </div>
     @endif
     <br><br>
-    <form id="formAgregarUsuario" action="#" method="post" class="needs-validation" enctype="multipart/form-data">
+    <form id="formAgregarUsuario" action="{{route('sadmin.agregar-usuario')}}" method="post" class="needs-validation">
         @csrf
-        <h3><strong class="text-lightblue">AGREGAR USUARIO</strong></h3>
+        <p><strong class="text-lightblue">TIPO DE USUARIO</strong></p>
         <input type="hidden" name="persona_id" id="usuario_id">
       
     </form>

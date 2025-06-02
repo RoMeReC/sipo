@@ -66,6 +66,7 @@ class SuperAdminController extends Controller
         $users = User::all();
         $info=[];
         $cont = count($users);
+        
         for($i=0;$i<$cont;$i++)
         {
             $id = ['id' =>User::find($users[$i]->id)->id];
@@ -79,8 +80,15 @@ class SuperAdminController extends Controller
             $uudd = ['uudd' => DB::table('uudds')->where('id_uudd',DB::table('servidores')->where('persona_id',User::find($users[$i]->id)->persona_id)->first()->uudd_id)->first()->uudd];
             $username = ['username' => User::find($users[$i]->id)->name];
             $rol = ['rol' => DB::table('roles')->where('id_rol',User::find($users[$i]->id)->rol_id)->first()->rol];
+            //$useremail = DB::table('users')->where('email',User::find($users[$i]->id)->email)->get('rol_id');
+            //$rol_disp = [];
+            //for ($j=0;$j<count($useremail);$j++)
+            //{
+            //    $rol_disp[$j] = Arr::collapse($useremail);
+            //}
+            //dd($useremail);
             $activo = ['activo' => User::find($users[$i]->id)->activo];
-            $datos[$i] = Arr::collapse([$id,$grado,$especialidad,$apellidos,$nombres,$uudd,$username,$rol,$activo]);
+            $datos[$i] = Arr::collapse([$id,$grado,$especialidad,$apellidos,$nombres,$uudd,$username,$rol,$activo,$id_persona]);
             $info[$i] = $datos[$i];
 
         }
@@ -95,7 +103,7 @@ class SuperAdminController extends Controller
         return view('sadmin.listar-usuarios', ['avatarPath' => $avatarPath, 'info' => $info, 'departamentos' => $departamentos, 'grados' => $grados, 'especialidades' => $especialidades, 'condiciones' => $condiciones, 'generos' => $generos, 'roles' => $roles, 'permisos' => $permisos, 'gguus' => $gguus]);
     }
 
-    public function agregar_usuario(Request $request)
+    public function nuevo_usuario(Request $request)
     {
         //dd($request);
         $user = Auth::user();
@@ -226,5 +234,10 @@ class SuperAdminController extends Controller
         $user->save();
 
         return redirect()->back()->with('success', 'Usuario desactivado correctamente.');
+    }
+
+    public function agregar_usuario(Request $request)
+    {
+        dd($request);
     }
 }
