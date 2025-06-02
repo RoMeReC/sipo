@@ -1,4 +1,4 @@
-<x-adminlte-modal id="nueva-persona" title="NUEVA PERSONA" size="lg" theme="teal"
+<x-adminlte-modal id="nuevo-usuario" title="NUEVO USUARIO" size="lg" theme="teal"
     icon="fas fa-user" v-centered scrollable>
 
     {{-- MENSAJE DE ERROR --}}
@@ -22,7 +22,7 @@
         </div>
     @endif
     <br><br>
-    <form id="formAgregarUsuario" action="{{route('sadmin.agregar-usuario')}}" method="post" class="needs-validation" enctype="multipart/form-data">
+    <form id="formNuevoUsuario" action="{{route('sadmin.agregar-usuario')}}" method="post" class="needs-validation" enctype="multipart/form-data">
     @csrf
     <h3><strong class="text-lightblue">DATOS PERSONALES</strong></h3>
         <div class="container">

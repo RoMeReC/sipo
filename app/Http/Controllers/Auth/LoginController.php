@@ -21,18 +21,8 @@ class LoginController extends Controller
 
     use AuthenticatesUsers;
 
-    /**
-     * Where to redirect users after login.
-     *
-     * @var string
-     */
     protected $redirectTo = '/home';
 
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
@@ -40,19 +30,41 @@ class LoginController extends Controller
     }
 
     /**
-     * Sobrescribe el método llamado automáticamente después del login.
+     * Cambiamos el identificador del login de email a name
+     */
+    public function username()
+    {
+        return 'name';
+    }
+
+    /**
+     * Modificamos las credenciales para incluir que esté activo
+     */
+    protected function credentials(Request $request)
+    {
+        return [
+            'name' => $request->get('name'),
+            'password' => $request->get('password'),
+            'activo' => true, // solo permite usuarios activos
+        ];
+    }
+
+    /**
+     * Si quieres hacer algo después de autenticación, puedes usar esto.
      */
     protected function authenticated(Request $request, $user)
     {
-        if (!$user->activo) {
-            Auth::logout();
+        // Aquí puedes poner acciones después del login si lo deseas.
+        // Por ejemplo: loguear el acceso, enviar notificaciones, etc.
+    }
 
-            return redirect()->route('login')->withErrors([
-                'email' => 'Tu cuenta está inactiva. Contacta al administrador.',
-            ]);
-        }
-
-        // Si está activo, continúa al home
-        return redirect()->intended($this->redirectTo);
+    /**
+     * Personaliza el mensaje cuando falla el login
+     */
+    protected function sendFailedLoginResponse(Request $request)
+    {
+        throw \Illuminate\Validation\ValidationException::withMessages([
+            'name' => [trans('auth.failed')],
+        ]);
     }
 }

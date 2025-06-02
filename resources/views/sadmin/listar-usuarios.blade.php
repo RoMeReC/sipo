@@ -21,7 +21,7 @@
     <div class="card">
         {{-- <a href="{{ route('sadmin.users.create') }}" class="btn btn-primary">Nuevo Usuario</a> --}}
         <div class="container">
-            <button class="btn btn-primary" title="Agregar Persona" data-toggle="modal" data-target="#nueva-persona"><i class="fa fa-user-plus"></i>&nbsp;&nbsp;Agregar Persona</button>
+            <button class="btn btn-primary" title="Nuevo Usuario" data-toggle="modal" data-target="#nuevo-usuario"><i class="fa fa-user-plus"></i>&nbsp;&nbsp;Nuevo Usuario</button>
         </div>
         
 
@@ -59,7 +59,9 @@
                         </td>
                         <td>
                             @if($inf['activo'])
-                                <a href="#" class="btn btn-success" title="Agregar un nuevo usuario"><i class="fa fa-user-plus"></i></a>
+                                <a href="#" class="btn btn-success btn-crear-usuario" data-id="{{ $inf['id'] }}" title="Agregar un nuevo usuario">
+                                <i class="fa fa-user-plus"></i>
+                            </a>
                                 <a href="#" class="btn btn-warning" title="Editar"><i class="fa fa-edit"></i></a>
                                 <a href="{{ route('sadmin.desactivar', $inf['id']) }}" class="btn btn-danger" title="Desactivar"><i class="fa fa-lock"></i></a>
                             @else
@@ -73,15 +75,16 @@
             </tbody>
         </table>
     </div>
-    @include('sadmin.modal-nueva-persona')
+    @include('sadmin.modal-nuevo-usuario')
     <!-- Abre la ventana modal, si hay errores -->
     @if(session('danger') || $errors->any())
     <script>
         $(document).ready(function() {
-            $('#nueva-persona').modal('show');
+            $('#agregar-usuario').modal('show');
         });
     </script>
-@endif
+    @endif
+    @include('sadmin.modal-agregar-usuario')
 @stop
 
 @section('css')
@@ -127,6 +130,32 @@
                 language: 'es', // Establece el idioma a español
             });
         });
+    </script>
+    <script>
+        $(document).ready(function() {
+            $('.btn-crear-usuario').click(function() {
+                let usuarioId = $(this).data('id');
+                $('#usuario_id').val(usuarioId);
+                $('#agregar-usuario').modal('show');
+            });
+        });
+    </script>
+    
+    <script>
+        function abrirMNuevoUsuario() {
+            $('#nuevo-usuario').click(function() {
+                // Mueve el foco a otro botón fuera del modal (por accesibilidad)
+                $('#agregar-usuario').modal('hide');
+                $('#nuevo-usuario').modal('show');
+                $('#nuevo-usuario').focus();
+            });
+        }
+    </script>
+
+    <script>
+        function cerrarMAgregarUsuario() {
+            $('#agregar-usuario').modal('hide');
+        }
     </script>
 @stop
 
