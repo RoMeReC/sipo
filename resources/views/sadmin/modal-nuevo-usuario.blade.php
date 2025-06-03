@@ -222,11 +222,10 @@
             </div>
         </div>
         <div class="container">
-            <div class="row">
-                <p><strong class="text-lightblue">PERMISOS:</strong></p>
-                <br>
+            <p><strong class="text-lightblue">PERMISOS:</strong></p>
+            <div class="row">    
                 @foreach($permisos as $permiso)
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                         <div class="form-check">
                             <input 
                                 class="form-check-input" 

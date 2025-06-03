@@ -59,10 +59,21 @@
                         </td>
                         <td>
                             @if($inf['activo'])
-                                <a href="#" class="btn btn-success btn-crear-usuario" data-id="{{ $inf['id'] }}" title="Agregar un nuevo usuario">
-                                <i class="fa fa-user-plus"></i>
-                            </a>
-                                <a href="#" class="btn btn-warning" title="Editar"><i class="fa fa-edit"></i></a>
+                                @if(count($inf['roles_disponibles']) > 0)
+                                    <a href="#" class="btn btn-success btn-crear-usuario" 
+                                        data-id_persona="{{ $inf['id_persona'] }}" 
+                                        data-id="{{ $inf['id'] }}" 
+                                        data-email="{{ $inf['email'] }}" 
+                                        @isset($inf["roles_disponibles"])
+                                            data-roles='@json($inf["roles_disponibles"])'
+                                        @endisset
+                                        title="Agregar un nuevo usuario">
+                                        <i class="fa fa-user-plus"></i>
+                                    </a>
+                                @endif
+                                <a href="#" class="btn btn-warning" 
+                                data-id="{{ $inf['id'] }}"
+                                title="Editar"><i class="fa fa-edit"></i></a>
                                 <a href="{{ route('sadmin.desactivar', $inf['id']) }}" class="btn btn-danger" title="Desactivar"><i class="fa fa-lock"></i></a>
                             @else
                                 <a href="{{ route('sadmin.activar', $inf['id']) }}" class="btn btn-info" title="Activar"><i class="fa fa-unlock"></i></a>
@@ -134,11 +145,28 @@
     <script>
         $(document).ready(function() {
             $('#nuevo-usuario').modal('hide');
+
             $('.btn-crear-usuario').click(function() {
                 let usuarioId = $(this).data('id');
-                $('#usuario_id').val(usuarioId);
+                let rolesDisponibles = $(this).data('roles'); // Extrae los roles del botón
+                $('#id').val(usuarioId); // Asigna el ID a tu input oculto
+                let personaId = $(this).data('id_persona');
+                $('#id_persona').val(personaId); // Asigna el ID a tu input oculto
+                let emailID = $(this).data('email');
+                $('#email').val(emailID); // Asigna el ID a tu input oculto
+                // Limpia el select antes de llenarlo
+                let select = $('#tipo_usuario');
+                select.empty();
+                select.append('<option value="">Seleccione un tipo de usuario</option>');
+
+                // Llenar dinámicamente el select con los roles disponibles
+                $.each(rolesDisponibles, function(id, nombre) {
+                    select.append('<option value="' + id + '">' + nombre + '</option>');
+                });
+
                 $('#agregar-usuario').modal('show');
             });
+
             $('#agregar-usuario').on('shown.bs.modal', function () {
                 $(this).removeAttr('aria-hidden');
             });

@@ -66,10 +66,10 @@ class SuperAdminController extends Controller
         $users = User::all();
         $info=[];
         $cont = count($users);
-        
         for($i=0;$i<$cont;$i++)
         {
             $id = ['id' =>User::find($users[$i]->id)->id];
+            $email = ['email' =>User::find($users[$i]->id)->email];
             $id_persona = ['id_persona' => User::find($users[$i]->id)->persona_id];
             $grado = ['grado' => DB::table('grados')->where('id_grado', DB::table('servidores')->where('persona_id',User::find($users[$i]->id)->persona_id)->first()->grado_id)->first()->grado];
             $especialidad = ['especialidad' => DB::table('especialidades')->where('id_especialidad', DB::table('servidores')->where('persona_id',User::find($users[$i]->id)->persona_id)->first()->especialidad_id)->first()->especialidad];
@@ -80,18 +80,21 @@ class SuperAdminController extends Controller
             $uudd = ['uudd' => DB::table('uudds')->where('id_uudd',DB::table('servidores')->where('persona_id',User::find($users[$i]->id)->persona_id)->first()->uudd_id)->first()->uudd];
             $username = ['username' => User::find($users[$i]->id)->name];
             $rol = ['rol' => DB::table('roles')->where('id_rol',User::find($users[$i]->id)->rol_id)->first()->rol];
-            //$useremail = DB::table('users')->where('email',User::find($users[$i]->id)->email)->get('rol_id');
-            //$rol_disp = [];
-            //for ($j=0;$j<count($useremail);$j++)
-            //{
-            //    $rol_disp[$j] = Arr::collapse($useremail);
-            //}
-            //dd($useremail);
+            $personaId = User::find($users[$i]->id)->persona_id;
+            // Obtener todos los roles disponibles en el sistema
+            $rolesTotales = Rol::pluck('id_rol')->toArray(); // Ej: [1,2,3]
+            // Obtener los roles que ya tiene la persona mediante sus usuarios
+            $rolesAsignados = User::where('persona_id', $personaId)->pluck('rol_id')->toArray(); // Ej: [1,2]
+            // Calcular roles disponibles (los que aún no tiene)
+            $rolesDisponiblesIds = array_values(array_diff($rolesTotales, $rolesAsignados)); // Ej: [3]
+            // Opcional: Obtener los nombres de los roles disponibles
+            $rolesDisponibles = Rol::whereIn('id_rol', $rolesDisponiblesIds)->get()->pluck('rol', 'id_rol'); // Ej: [3 => 'usuario']
             $activo = ['activo' => User::find($users[$i]->id)->activo];
-            $datos[$i] = Arr::collapse([$id,$grado,$especialidad,$apellidos,$nombres,$uudd,$username,$rol,$activo,$id_persona]);
+            $datos[$i] = Arr::collapse([$id,$email,$grado,$especialidad,$apellidos,$nombres,$uudd,$username,$rol,$activo,$id_persona,['roles_disponibles' => $rolesDisponibles]]);
             $info[$i] = $datos[$i];
-
+            
         }
+        //dd($info);
         $departamentos = Departamento::all();
         $grados = Grado::all();
         $especialidades = Especialidad::all();
