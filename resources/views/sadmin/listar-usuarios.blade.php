@@ -63,7 +63,6 @@
                                     <a href="#" class="btn btn-success btn-crear-usuario" 
                                         data-id_persona="{{ $inf['id_persona'] }}" 
                                         data-id="{{ $inf['id'] }}" 
-                                        data-email="{{ $inf['email'] }}" 
                                         @isset($inf["roles_disponibles"])
                                             data-roles='@json($inf["roles_disponibles"])'
                                         @endisset
@@ -71,8 +70,10 @@
                                         <i class="fa fa-user-plus"></i>
                                     </a>
                                 @endif
-                                <a href="#" class="btn btn-warning" 
+                                <a href="#" class="btn btn-warning btn-editar-usuario" 
+                                data-id_persona="{{ $inf['id_persona'] }}" 
                                 data-id="{{ $inf['id'] }}"
+                                data-gguu="{{ $inf['gguu'] }}"
                                 title="Editar"><i class="fa fa-edit"></i></a>
                                 <a href="{{ route('sadmin.desactivar', $inf['id']) }}" class="btn btn-danger" title="Desactivar"><i class="fa fa-lock"></i></a>
                             @else
@@ -96,6 +97,7 @@
     </script>
     @endif
     @include('sadmin.modal-agregar-usuario')
+    @include('sadmin.modal-editar-usuario')
 @stop
 
 @section('css')
@@ -115,7 +117,7 @@
             color: red;
         }
     </style>
-
+    
 @stop
 
 @section('js')
@@ -152,12 +154,10 @@
                 $('#id').val(usuarioId); // Asigna el ID a tu input oculto
                 let personaId = $(this).data('id_persona');
                 $('#id_persona').val(personaId); // Asigna el ID a tu input oculto
-                let emailID = $(this).data('email');
-                $('#email').val(emailID); // Asigna el ID a tu input oculto
                 // Limpia el select antes de llenarlo
-                let select = $('#tipo_usuario');
+                let select = $('#rol_usuario');
                 select.empty();
-                select.append('<option value="">Seleccione un tipo de usuario</option>');
+                select.append('<option value="">Seleccione el rol de usuario</option>');
 
                 // Llenar dinámicamente el select con los roles disponibles
                 $.each(rolesDisponibles, function(id, nombre) {
@@ -165,6 +165,27 @@
                 });
 
                 $('#agregar-usuario').modal('show');
+            });
+            $('.btn-editar-usuario').click(function() {
+                let usuarioId = $(this).data('id');
+                //let rolesDisponibles = $(this).data('roles'); // Extrae los roles del botón
+                $('#id').val(usuarioId); // Asigna el ID a tu input oculto
+                let personaId = $(this).data('id_persona');
+                $('#id_persona').val(personaId); // Asigna el ID a tu input oculto
+                //let gguuD = $(this).data('gguu');
+                //$('#gguu').val(gguuD);
+                modal.find('select[name="gguu"]').val($(this).data('gguu')).trigger('change');
+                // Limpia el select antes de llenarlo
+                //let select = $('#rol_usuario');
+                //select.empty();
+                //select.append('<option value="">Seleccione el rol de usuario</option>');
+
+                // Llenar dinámicamente el select con los roles disponibles
+                //$.each(rolesDisponibles, function(id, nombre) {
+                //    select.append('<option value="' + id + '">' + nombre + '</option>');
+                //});
+
+                $('#editar-usuario').modal('show');
             });
 
             $('#agregar-usuario').on('shown.bs.modal', function () {

@@ -17,7 +17,7 @@ class GGUUSeeder extends Seeder
     {
         DB::table('gguus')->insert([
             'gguu' => 'DN-5',
-            'descripcion_gguu' => 'Quinto Distrito Naval "SANTA CRUZ',
+            'descripcion_gguu' => 'Quinto Distrito Naval "SANTA CRUZ"',
             'created_at'=>\Carbon\Carbon::now(),
             'updated_at'=>\Carbon\Carbon::now(),
         ]);

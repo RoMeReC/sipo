@@ -69,7 +69,6 @@ class SuperAdminController extends Controller
         for($i=0;$i<$cont;$i++)
         {
             $id = ['id' =>User::find($users[$i]->id)->id];
-            $email = ['email' =>User::find($users[$i]->id)->email];
             $id_persona = ['id_persona' => User::find($users[$i]->id)->persona_id];
             $grado = ['grado' => DB::table('grados')->where('id_grado', DB::table('servidores')->where('persona_id',User::find($users[$i]->id)->persona_id)->first()->grado_id)->first()->grado];
             $especialidad = ['especialidad' => DB::table('especialidades')->where('id_especialidad', DB::table('servidores')->where('persona_id',User::find($users[$i]->id)->persona_id)->first()->especialidad_id)->first()->especialidad];
@@ -82,15 +81,17 @@ class SuperAdminController extends Controller
             $rol = ['rol' => DB::table('roles')->where('id_rol',User::find($users[$i]->id)->rol_id)->first()->rol];
             $personaId = User::find($users[$i]->id)->persona_id;
             // Obtener todos los roles disponibles en el sistema
-            $rolesTotales = Rol::pluck('id_rol')->toArray(); // Ej: [1,2,3]
+            $rolesTotales = Rol::pluck('id_rol')->toArray(); // [1,2,3]
             // Obtener los roles que ya tiene la persona mediante sus usuarios
-            $rolesAsignados = User::where('persona_id', $personaId)->pluck('rol_id')->toArray(); // Ej: [1,2]
+            $rolesAsignados = User::where('persona_id', $personaId)->pluck('rol_id')->toArray(); // [1,2]
             // Calcular roles disponibles (los que aún no tiene)
-            $rolesDisponiblesIds = array_values(array_diff($rolesTotales, $rolesAsignados)); // Ej: [3]
+            $rolesDisponiblesIds = array_values(array_diff($rolesTotales, $rolesAsignados)); // [3]
             // Opcional: Obtener los nombres de los roles disponibles
-            $rolesDisponibles = Rol::whereIn('id_rol', $rolesDisponiblesIds)->get()->pluck('rol', 'id_rol'); // Ej: [3 => 'usuario']
+            $rolesDisponibles = Rol::whereIn('id_rol', $rolesDisponiblesIds)->get()->pluck('rol', 'id_rol'); // [3 => 'usuario']
+            $gguu = ['gguu' => DB::table('gguus')->where('id_gguu',DB::table('uudds')->where('id_uudd', DB::table('servidores')->where('persona_id', DB::table('personas')->where('id_persona',User::find($users[$i]->id)->persona_id)->first()->id_persona)->first()->uudd_id)->first()->gguu_id)->first()->id_gguu];
+            $uudd = ['uudd' => DB::table('uudds')->where('id_uudd', DB::table('servidores')->where('persona_id', DB::table('personas')->where('id_persona',User::find($users[$i]->id)->persona_id)->first()->id_persona)->first()->uudd_id)->first()->id_uudd];
             $activo = ['activo' => User::find($users[$i]->id)->activo];
-            $datos[$i] = Arr::collapse([$id,$email,$grado,$especialidad,$apellidos,$nombres,$uudd,$username,$rol,$activo,$id_persona,['roles_disponibles' => $rolesDisponibles]]);
+            $datos[$i] = Arr::collapse([$id,$grado,$especialidad,$apellidos,$nombres,$uudd,$username,$rol,$activo,$id_persona,['roles_disponibles' => $rolesDisponibles],$uudd,$gguu]);
             $info[$i] = $datos[$i];
             
         }
@@ -190,7 +191,20 @@ class SuperAdminController extends Controller
             $letra = str_split($palabra, 1);
             $nombres = $nombres . $letra['0'];
         } 
-        $nuevo_usuario->name = strtolower($nombres).strtolower(str_replace(" ", "", $request->primer_apellido)).strtolower(Str::substr($request->segundo_apellido,0,1));        
+        if(intval($request->rol)==1)
+        {
+            $nuevo_usuario->name = "sa".strtolower($nombres).strtolower(str_replace(" ", "", $request->primer_apellido)).strtolower(Str::substr($request->segundo_apellido,0,1));        
+        }
+        elseif(intval($request->rol)==2)
+        {
+            $nuevo_usuario->name = "adm".strtolower($nombres).strtolower(str_replace(" ", "", $request->primer_apellido)).strtolower(Str::substr($request->segundo_apellido,0,1));        
+
+        }
+        elseif(intval($request->rol)==3)
+        {
+            $nuevo_usuario->name = strtolower($nombres).strtolower(str_replace(" ", "", $request->primer_apellido)).strtolower(Str::substr($request->segundo_apellido,0,1));        
+
+        }
         $nuevo_usuario->email = $request->email;
         $nuevo_usuario->password = Hash::make('AB'.$nuevo_usuario->name);
         $nuevo_usuario->persona_id = $lastPersona->id_persona;
@@ -241,6 +255,50 @@ class SuperAdminController extends Controller
 
     public function agregar_usuario(Request $request)
     {
-        dd($request);
+        $usuario = User::findOrFail($request->id);
+        $persona = Persona::findOrFail($request->id_persona);
+        $user = Auth::user();
+        $nuevo_usuario = new User();
+        $texto = explode(" ", $persona->nombres);
+        $nombres = "";
+        foreach($texto as $palabra)
+        {
+            $letra = str_split($palabra, 1);
+            $nombres = $nombres . $letra['0'];
+        }
+        if(intval($request->rol_usuario)==1)
+        {
+            $nuevo_usuario->name = "sa".strtolower($nombres).strtolower(str_replace(" ", "", $persona->primer_apellido)).strtolower(Str::substr($persona->segundo_apellido,0,1));        
+        }
+        elseif(intval($request->rol_usuario)==2)
+        {
+            $nuevo_usuario->name = "adm".strtolower($nombres).strtolower(str_replace(" ", "", $persona->primer_apellido)).strtolower(Str::substr($persona->segundo_apellido,0,1));        
+        }
+        elseif(intval($request->rol_usuario)==3)
+        {
+            $nuevo_usuario->name = strtolower($nombres).strtolower(str_replace(" ", "", $persona->primer_apellido)).strtolower(Str::substr($persona->segundo_apellido,0,1));        
+        }
+        $nuevo_usuario->email = $usuario->email;
+        $nuevo_usuario->password = Hash::make('AB'.$nuevo_usuario->name);
+        $nuevo_usuario->persona_id = intval($request->id_persona);
+        $nuevo_usuario->rol_id = intval($request->rol_usuario);
+        $nuevo_usuario->activo = true;
+        $nuevo_usuario->auth_user = $user->id;
+        $nuevo_usuario->save();
+        $lastUser = User::latest('id')->first();
+        if(!empty($request->permisos))
+        {
+            $permisos = $request->permisos;
+            for ($i = 0; $i < count($permisos); $i++) 
+            {
+                $permiso = new PUsuario();
+                $permiso->usuario_id = $lastUser->id;
+                $permiso->permiso_id = intval($permisos[$i]);
+                $permiso->auth_user = $user->id;
+                $permiso->activo = true;
+                $permiso->save();
+            }
+        }
+        return redirect()->back()->with('success', 'Usuario agregado correctamente.');
     }
 }

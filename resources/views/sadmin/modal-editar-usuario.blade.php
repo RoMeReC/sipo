@@ -1,4 +1,4 @@
-<x-adminlte-modal id="nuevo-usuario" title="NUEVO USUARIO" size="lg" theme="primary"
+<x-adminlte-modal id="editar-usuario" title="EDITAR USUARIO" size="lg" theme="warning"
     icon="fas fa-user" v-centered scrollable>
 
     {{-- MENSAJE DE ERROR --}}
@@ -22,20 +22,20 @@
         </div>
     @endif
     <br><br>
-    <form id="formNuevoUsuario" action="{{route('sadmin.nuevo-usuario')}}" method="post" class="needs-validation" enctype="multipart/form-data">
+    <form id="formEditarUsuario" action="{{route('sadmin.editar-usuario')}}" method="post" class="needs-validation" enctype="multipart/form-data">
     @csrf
     <h3><strong class="text-lightblue">DATOS PERSONALES</strong></h3>
         <div class="container">
             <div class="row">
                 <div class="col-4" style="text-align: center">
-                    <img src="{{'/images/avatar/avatar-hombre.png'}}" width="100%">
+                    <img src="{{ auth()->user()->avatar_path }}" width="100%">
                     <input id="image" type="file" class="filestyle" name="picture" accept="image/jpeg,image/png">
                 </div>
             </div>
         </div>
         <div class="container">
             <div class="row">
-                <x-adminlte-select name="gguu" value="{{ old('gguu') }}" label="GRAN UNIDAD:" label-class="text-lightblue" fgroup-class="col-md-6 {{ $errors->has('gguu') ? 'has-error' : '' }}" disable-feedback required>
+                <x-adminlte-select name="gguu" value="{{ old('gguu',) }}" label="GRAN UNIDAD:" label-class="text-lightblue" fgroup-class="col-md-6 {{ $errors->has('gguu') ? 'has-error' : '' }}" disable-feedback required>
                     <x-slot name="prependSlot">
                         <div class="input-group-text">
                             <i class="fas fa-map-marked-alt text-lightblue"></i>
@@ -245,11 +245,8 @@
         </div>   
     </form>
     <x-slot name="footerSlot">
-        <x-adminlte-button type="submit" form="formNuevoUsuario" class="mr-auto btn btn-lg" theme="success" label="Registrar"/>
+        <x-adminlte-button type="submit" form="formEditarUsuario" class="mr-auto btn btn-lg" theme="success" label="Guardar"/>
         <x-adminlte-button class="btn btn-lg" theme="danger" label="Cerrar" data-dismiss="modal"/>
     </x-slot>
     
 </x-adminlte-modal>
-
-
-

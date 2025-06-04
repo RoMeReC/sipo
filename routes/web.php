@@ -38,6 +38,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/sadmin/uudds/{gguuId}', [SuperAdminController::class, 'getUUDD']);
         Route::post('/sadmin/nuevo-usuario', [SuperAdminController::class, 'nuevo_usuario'])->name('sadmin.nuevo-usuario');
         Route::post('/sadmin/agregar-usuario', [SuperAdminController::class, 'agregar_usuario'])->name('sadmin.agregar-usuario');
+        Route::post('/sadmin/editar-usuario', [SuperAdminController::class, 'editar_usuario'])->name('sadmin.editar-usuario');
         Route::get('/sadmin/{id}/activar', [SuperAdminController::class, 'activar'])->name('sadmin.activar');
         Route::get('/sadmin/{id}/desactivar', [SuperAdminController::class, 'desactivar'])->name('sadmin.desactivar');
         
