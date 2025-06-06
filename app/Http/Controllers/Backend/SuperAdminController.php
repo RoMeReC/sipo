@@ -51,10 +51,16 @@ class SuperAdminController extends Controller
         return response()->json($municipios);
     }
 
+    //public function getUUDD($gguuId)
+    //{
+    //    $uudd = Undd::where('gguu_id', $gguuId)->get();
+    //    return response()->json($uudd);
+    //}
+
     public function getUUDD($gguuId)
     {
-        $uudd = Undd::where('gguu_id', $gguuId)->get();
-        return response()->json($uudd);
+        $uudds = Undd::where('gguu_id', $gguuId)->get(['id_uudd', 'descripcion_uudd']);
+        return response()->json($uudds);
     }
 
     public function listar_usuarios()
@@ -70,13 +76,19 @@ class SuperAdminController extends Controller
         {
             $id = ['id' =>User::find($users[$i]->id)->id];
             $id_persona = ['id_persona' => User::find($users[$i]->id)->persona_id];
+            $avatar = ['avatar' => DB::table('avatares')->where('id_avatar',DB::table('personas')->where('id_persona',User::find($users[$i]->id)->persona_id)->first()->avatar_id)->first()->path_picture];
             $grado = ['grado' => DB::table('grados')->where('id_grado', DB::table('servidores')->where('persona_id',User::find($users[$i]->id)->persona_id)->first()->grado_id)->first()->grado];
+            $id_grado = ['id_grado' => DB::table('servidores')->where('persona_id',User::find($users[$i]->id)->persona_id)->first()->grado_id];
+            $id_especialidad = ['id_especialidad' => DB::table('servidores')->where('persona_id',User::find($users[$i]->id)->persona_id)->first()->especialidad_id];
+            
             $especialidad = ['especialidad' => DB::table('especialidades')->where('id_especialidad', DB::table('servidores')->where('persona_id',User::find($users[$i]->id)->persona_id)->first()->especialidad_id)->first()->especialidad];
+            $p_apellido = ['primer_apellido' => DB::table('personas')->where('id_persona',User::find($users[$i]->id)->persona_id)->first()->primer_apellido];
+            $s_apellido = ['segundo_apellido' => DB::table('personas')->where('id_persona',User::find($users[$i]->id)->persona_id)->first()->segundo_apellido];
             $primer_apellido = DB::table('personas')->where('id_persona',User::find($users[$i]->id)->persona_id)->first()->primer_apellido;
             $segundo_apellido = DB::table('personas')->where('id_persona',User::find($users[$i]->id)->persona_id)->first()->segundo_apellido;
             $apellidos = ['apellidos' => $primer_apellido.' '.$segundo_apellido];
             $nombres = ['nombres' => DB::table('personas')->where('id_persona',User::find($users[$i]->id)->persona_id)->first()->nombres];
-            $uudd = ['uudd' => DB::table('uudds')->where('id_uudd',DB::table('servidores')->where('persona_id',User::find($users[$i]->id)->persona_id)->first()->uudd_id)->first()->uudd];
+            $nuudd = ['nuudd' => DB::table('uudds')->where('id_uudd',DB::table('servidores')->where('persona_id',User::find($users[$i]->id)->persona_id)->first()->uudd_id)->first()->uudd];
             $username = ['username' => User::find($users[$i]->id)->name];
             $rol = ['rol' => DB::table('roles')->where('id_rol',User::find($users[$i]->id)->rol_id)->first()->rol];
             $personaId = User::find($users[$i]->id)->persona_id;
@@ -91,7 +103,7 @@ class SuperAdminController extends Controller
             $gguu = ['gguu' => DB::table('gguus')->where('id_gguu',DB::table('uudds')->where('id_uudd', DB::table('servidores')->where('persona_id', DB::table('personas')->where('id_persona',User::find($users[$i]->id)->persona_id)->first()->id_persona)->first()->uudd_id)->first()->gguu_id)->first()->id_gguu];
             $uudd = ['uudd' => DB::table('uudds')->where('id_uudd', DB::table('servidores')->where('persona_id', DB::table('personas')->where('id_persona',User::find($users[$i]->id)->persona_id)->first()->id_persona)->first()->uudd_id)->first()->id_uudd];
             $activo = ['activo' => User::find($users[$i]->id)->activo];
-            $datos[$i] = Arr::collapse([$id,$grado,$especialidad,$apellidos,$nombres,$uudd,$username,$rol,$activo,$id_persona,['roles_disponibles' => $rolesDisponibles],$uudd,$gguu]);
+            $datos[$i] = Arr::collapse([$id,$avatar,$id_grado,$id_especialidad,$grado,$especialidad,$p_apellido,$s_apellido,$apellidos,$nombres,$nuudd,$username,$rol,$activo,$id_persona,['roles_disponibles' => $rolesDisponibles],$uudd,$gguu]);
             $info[$i] = $datos[$i];
             
         }
@@ -300,5 +312,13 @@ class SuperAdminController extends Controller
             }
         }
         return redirect()->back()->with('success', 'Usuario agregado correctamente.');
+    }
+    public function editar_usuario(Request $request)
+    {
+        dd($request);
+        $request->validate([
+            'gguu' => 'required|exists:gguus,id_gguu',
+            'uudd' => 'required|exists:uudds,id_uudd',
+        ]);
     }
 }

@@ -47,7 +47,7 @@
                         <td>{{ $inf['grado'] }}</td>
                         <td>{{ $inf['apellidos'] }}</td>
                         <td>{{ $inf['nombres'] }}</td>
-                        <td>{{ $inf['uudd'] }}</td>
+                        <td>{{ $inf['nuudd'] }}</td>
                         <td>{{ $inf['username'] }}</td>
                         <td>{{ $inf['rol'] }}</td>
                         <td>
@@ -73,7 +73,14 @@
                                 <a href="#" class="btn btn-warning btn-editar-usuario" 
                                 data-id_persona="{{ $inf['id_persona'] }}" 
                                 data-id="{{ $inf['id'] }}"
+                                data-avatar="{{ $inf['avatar'] }}"
                                 data-gguu="{{ $inf['gguu'] }}"
+                                data-uudd="{{ $inf['uudd'] }}"
+                                data-id_grado="{{ $inf['id_grado']}}"    
+                                data-id_especialidad="{{ $inf['id_especialidad']}}"
+                                data-nombres="{{ $inf['nombres']}}"
+                                data-primer_apellido="{{ $inf['primer_apellido']}}"
+                                data-segundo_apellido="{{ $inf['segundo_apellido']}}"
                                 title="Editar"><i class="fa fa-edit"></i></a>
                                 <a href="{{ route('sadmin.desactivar', $inf['id']) }}" class="btn btn-danger" title="Desactivar"><i class="fa fa-lock"></i></a>
                             @else
@@ -168,23 +175,44 @@
             });
             $('.btn-editar-usuario').click(function() {
                 let usuarioId = $(this).data('id');
-                //let rolesDisponibles = $(this).data('roles'); // Extrae los roles del botón
-                $('#id').val(usuarioId); // Asigna el ID a tu input oculto
                 let personaId = $(this).data('id_persona');
-                $('#id_persona').val(personaId); // Asigna el ID a tu input oculto
-                //let gguuD = $(this).data('gguu');
-                //$('#gguu').val(gguuD);
-                modal.find('select[name="gguu"]').val($(this).data('gguu')).trigger('change');
-                // Limpia el select antes de llenarlo
-                //let select = $('#rol_usuario');
-                //select.empty();
-                //select.append('<option value="">Seleccione el rol de usuario</option>');
+                let avatar = $(this).data('avatar');
+                let gguuId = $(this).data('gguu');
+                let uuddId = $(this).data('uudd');
+                let gradoId = $(this).data('id_grado');
+                let especialidadId = $(this).data('id_especialidad');
+                let nombres = $(this).data('nombres')
+                let primer_apellido = $(this).data('primer_apellido')
+                let segundo_apellido = $(this).data('segundo_apellido')
+                console.log('Datos:', { usuarioId, personaId, gguuId, uuddId, gradoId, especialidadId, nombres });
+                $('#id').val(usuarioId); 
+                $('#id_persona').val(personaId);
+                $('#avatar-preview').attr('src', avatar);
+                $('#gguu').val(gguuId);
+                // Vaciar y deshabilitar el select de UUDD
+                $('#uudd').empty().append('<option value="">Cargando unidades...</option>').prop('disabled', true);
+                if (gguuId) {
+                    // Cargar las UUDD correspondientes a la GGUU seleccionada
+                    $.ajax({
+                        url: `/sadmin/uudds/${gguuId}`,
+                        type: 'GET',
+                        success: function (data) {
+                            $('#uudd').empty().append('<option value="">Seleccione una Unidad Dependiente</option>');
 
-                // Llenar dinámicamente el select con los roles disponibles
-                //$.each(rolesDisponibles, function(id, nombre) {
-                //    select.append('<option value="' + id + '">' + nombre + '</option>');
-                //});
+                            data.forEach(function (uudd) {
+                                let selected = uudd.id_uudd == uuddId ? 'selected' : '';
+                                $('#uudd').append(`<option value="${uudd.id_uudd}" ${selected}>${uudd.descripcion_uudd}</option>`);
+                            });
 
+                            $('#uudd').prop('disabled', false);
+                        }
+                    });
+                }
+                $('#id_grado').val(gradoId);
+                $('#id_especialidad').val(especialidadId);
+                $('#id_nombres').val(nombres);
+                $('#id_primer_apellido').val(primer_apellido);
+                $('#id_segundo_apellido').val(segundo_apellido);
                 $('#editar-usuario').modal('show');
             });
 
@@ -193,6 +221,34 @@
             });
         });
     </script>
+    <script>
+        $(document).ready(function () {
+            $('#gguu').on('change', function () {
+                let gguuId = $(this).val();
+                $('#uudd').empty().append('<option value="">Cargando unidades...</option>').prop('disabled', true);
+
+                if (gguuId) {
+                    $.ajax({
+                        url: `/sadmin/uudds/${gguuId}`,
+                        type: 'GET',
+                        success: function (data) {
+                            $('#uudd').empty().append('<option value="">Seleccione una Unidad Dependiente</option>');
+                            data.forEach(function (uudd) {
+                                $('#uudd').append(`<option value="${uudd.id_uudd}">${uudd.descripcion_uudd}</option>`);
+                            });
+                            $('#uudd').prop('disabled', false);
+                        },
+                        error: function () {
+                            $('#uudd').empty().append('<option value="">Error al cargar</option>').prop('disabled', true);
+                        }
+                    });
+                } else {
+                    $('#uudd').empty().append('<option value="">Seleccione una Unidad Dependiente</option>').prop('disabled', true);
+                }
+            });
+        });
+        </script>
+
     <script>
         function cerrarMAgregarUsuario() {
             

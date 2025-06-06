@@ -28,14 +28,14 @@
         <div class="container">
             <div class="row">
                 <div class="col-4" style="text-align: center">
-                    <img src="{{ auth()->user()->avatar_path }}" width="100%">
+                    <img id="avatar-preview" width="100%">
                     <input id="image" type="file" class="filestyle" name="picture" accept="image/jpeg,image/png">
                 </div>
             </div>
         </div>
         <div class="container">
             <div class="row">
-                <x-adminlte-select name="gguu" value="{{ old('gguu',) }}" label="GRAN UNIDAD:" label-class="text-lightblue" fgroup-class="col-md-6 {{ $errors->has('gguu') ? 'has-error' : '' }}" disable-feedback required>
+                <x-adminlte-select id="gguu" name="gguu" value="{{ old('gguu',) }}" label="GRAN UNIDAD:" label-class="text-lightblue" fgroup-class="col-md-6 {{ $errors->has('gguu') ? 'has-error' : '' }}" disable-feedback required>
                     <x-slot name="prependSlot">
                         <div class="input-group-text">
                             <i class="fas fa-map-marked-alt text-lightblue"></i>
@@ -58,7 +58,7 @@
         </div>
         <div class="container">
             <div class="row">
-                <x-adminlte-select name="grado" label="GRADO:" value="{{ old('grado') }}" label-class="text-lightblue" fgroup-class="col-md-6 {{ $errors->has('grado') ? 'has-error' : '' }}" disable-feedback required>
+                <x-adminlte-select id="id_grado" name="grado" label="GRADO:" value="{{ old('grado') }}" label-class="text-lightblue" fgroup-class="col-md-6 {{ $errors->has('grado') ? 'has-error' : '' }}" disable-feedback required>
                     <x-slot name="prependSlot">
                         <div class="input-group-text">
                             <i class="fas fa-ship text-lightblue"></i>
@@ -69,7 +69,7 @@
                             <option value="{{ $grado->id_grado }}">{{ $grado->descripcion_grado }}</option>
                         @endforeach
                 </x-adminlte-select>
-                <x-adminlte-select name="especialidad" value="{{ old('especialidad') }}" label="ESPECIALIDAD:" label-class="text-lightblue" fgroup-class="col-md-6 {{ $errors->has('especialidad') ? 'has-error' : '' }}" disable-feedback required>
+                <x-adminlte-select id="id_especialidad" name="especialidad" value="{{ old('especialidad') }}" label="ESPECIALIDAD:" label-class="text-lightblue" fgroup-class="col-md-6 {{ $errors->has('especialidad') ? 'has-error' : '' }}" disable-feedback required>
                     <x-slot name="prependSlot">
                         <div class="input-group-text">
                             <i class="fas fa-cubes text-lightblue"></i>
@@ -84,14 +84,14 @@
         </div>
         <div class="container">
             <div class="row">
-                <x-adminlte-input name="nombres" value="{{ old('nombres') }}" label="NOMBRES:" placeholder="{{ 'Registre los Nombres' }}" label-class="text-lightblue" fgroup-class="col-md-6 {{ $errors->has('nombres') ? 'has-error' : '' }}" disable-feedback required>
+                <x-adminlte-input id="id_nombres" name="nombres" value="{{ old('nombres') }}" label="NOMBRES:" placeholder="{{ 'Registre los Nombres' }}" label-class="text-lightblue" fgroup-class="col-md-6 {{ $errors->has('nombres') ? 'has-error' : '' }}" disable-feedback required>
                     <x-slot name="prependSlot">
                         <div class="input-group-text">
                             <i class="fas fa-user text-lightblue"></i>
                         </div>
                     </x-slot>
                 </x-adminlte-input>
-                <x-adminlte-input name="primer_apellido" value="{{ old('primer_apellido') }}" label="PRIMER APELLIDO:" placeholder="{{ 'Registre el Primer Apellido' }}" label-class="text-lightblue" fgroup-class="col-md-6 {{ $errors->has('primer_apellido') ? 'has-error' : '' }}" disable-feedback required>
+                <x-adminlte-input id="id_primer_apellido" name="primer_apellido" value="{{ old('primer_apellido') }}" label="PRIMER APELLIDO:" placeholder="{{ 'Registre el Primer Apellido' }}" label-class="text-lightblue" fgroup-class="col-md-6 {{ $errors->has('primer_apellido') ? 'has-error' : '' }}" disable-feedback required>
                     <x-slot name="prependSlot">
                         <div class="input-group-text">
                             <i class="fas fa-users text-lightblue"></i>
@@ -102,7 +102,7 @@
         </div>
         <div class="container">
             <div class="row">
-                <x-adminlte-input name="segundo_apellido" value="{{ old('segundo_apellido') }}" label="SEGUNDO APELLIDO:" placeholder="{{ 'Registre el Segundo Apellido' }}" label-class="text-lightblue" fgroup-class="col-md-6 {{ $errors->has('segundo_apellido') ? 'has-error' : '' }}" disable-feedback required>
+                <x-adminlte-input id="id_segundo_apellido" name="segundo_apellido" value="{{ old('segundo_apellido') }}" label="SEGUNDO APELLIDO:" placeholder="{{ 'Registre el Segundo Apellido' }}" label-class="text-lightblue" fgroup-class="col-md-6 {{ $errors->has('segundo_apellido') ? 'has-error' : '' }}" disable-feedback required>
                     <x-slot name="prependSlot">
                         <div class="input-group-text">
                             <i class="fas fa-user text-lightblue"></i>
