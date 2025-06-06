@@ -39,18 +39,29 @@ class SuperAdminController extends Controller
        return view('sadmin.dashboard',['avatarPath' => $avatarPath]);
     }
 
+    //public function getProvincias($departamentoId)
+    //{
+    //    $provincias = Provincia::where('departamento_id', $departamentoId)->get();
+    //    return response()->json($provincias);
+    //}
+
     public function getProvincias($departamentoId)
     {
-        $provincias = Provincia::where('departamento_id', $departamentoId)->get();
+        $provincias = Provincia::where('departamento_id', $departamentoId)->get('id_provincia','provincia');
         return response()->json($provincias);
     }
 
+    //public function getMunicipios($provinciaId)
+    //{
+    //    $municipios = Municipio::where('provincia_id', $provinciaId)->get();
+    //    return response()->json($municipios);
+    //}
+
     public function getMunicipios($provinciaId)
     {
-        $municipios = Municipio::where('provincia_id', $provinciaId)->get();
+        $municipios = Municipio::where('provincia_id', $provinciaId)->get('id_municipio','municipio');
         return response()->json($municipios);
     }
-
     //public function getUUDD($gguuId)
     //{
     //    $uudd = Undd::where('gguu_id', $gguuId)->get();
@@ -80,7 +91,6 @@ class SuperAdminController extends Controller
             $grado = ['grado' => DB::table('grados')->where('id_grado', DB::table('servidores')->where('persona_id',User::find($users[$i]->id)->persona_id)->first()->grado_id)->first()->grado];
             $id_grado = ['id_grado' => DB::table('servidores')->where('persona_id',User::find($users[$i]->id)->persona_id)->first()->grado_id];
             $id_especialidad = ['id_especialidad' => DB::table('servidores')->where('persona_id',User::find($users[$i]->id)->persona_id)->first()->especialidad_id];
-            
             $especialidad = ['especialidad' => DB::table('especialidades')->where('id_especialidad', DB::table('servidores')->where('persona_id',User::find($users[$i]->id)->persona_id)->first()->especialidad_id)->first()->especialidad];
             $p_apellido = ['primer_apellido' => DB::table('personas')->where('id_persona',User::find($users[$i]->id)->persona_id)->first()->primer_apellido];
             $s_apellido = ['segundo_apellido' => DB::table('personas')->where('id_persona',User::find($users[$i]->id)->persona_id)->first()->segundo_apellido];
@@ -91,6 +101,11 @@ class SuperAdminController extends Controller
             $nuudd = ['nuudd' => DB::table('uudds')->where('id_uudd',DB::table('servidores')->where('persona_id',User::find($users[$i]->id)->persona_id)->first()->uudd_id)->first()->uudd];
             $username = ['username' => User::find($users[$i]->id)->name];
             $rol = ['rol' => DB::table('roles')->where('id_rol',User::find($users[$i]->id)->rol_id)->first()->rol];
+            $id_genero = ['id_genero' => DB::table('personas')->where('id_persona',User::find($users[$i]->id)->persona_id)->first()->genero_id];
+            $carnet_identidad = ['carnet_identidad' => DB::table('personas')->where('id_persona',User::find($users[$i]->id)->persona_id)->first()->carnet_identidad];
+            $id_condicion = ['id_condicion' => DB::table('personas')->where('id_persona',User::find($users[$i]->id)->persona_id)->first()->condicion_id];
+            $celular = ['celular' => DB::table('personas')->where('id_persona',User::find($users[$i]->id)->persona_id)->first()->celular];
+            
             $personaId = User::find($users[$i]->id)->persona_id;
             // Obtener todos los roles disponibles en el sistema
             $rolesTotales = Rol::pluck('id_rol')->toArray(); // [1,2,3]
@@ -102,8 +117,11 @@ class SuperAdminController extends Controller
             $rolesDisponibles = Rol::whereIn('id_rol', $rolesDisponiblesIds)->get()->pluck('rol', 'id_rol'); // [3 => 'usuario']
             $gguu = ['gguu' => DB::table('gguus')->where('id_gguu',DB::table('uudds')->where('id_uudd', DB::table('servidores')->where('persona_id', DB::table('personas')->where('id_persona',User::find($users[$i]->id)->persona_id)->first()->id_persona)->first()->uudd_id)->first()->gguu_id)->first()->id_gguu];
             $uudd = ['uudd' => DB::table('uudds')->where('id_uudd', DB::table('servidores')->where('persona_id', DB::table('personas')->where('id_persona',User::find($users[$i]->id)->persona_id)->first()->id_persona)->first()->uudd_id)->first()->id_uudd];
+            $id_municipio = ['id_municipio' => DB::table('personas')->where('id_persona',User::find($users[$i]->id)->persona_id)->first()->municipio_id];
+            $id_provincia = ['id_provincia' => DB::table('provincias')->where('id_provincia',DB::table('municipios')->where('id_municipio', DB::table('personas')->where('id_persona',User::find($users[$i]->id)->persona_id)->first()->municipio_id)->first()->provincia_id)->first()->id_provincia];
+            $id_departamento = ['id_departamento' => DB::table('departamentos')->where('id_departamento',DB::table('provincias')->where('id_provincia',DB::table('municipios')->where('id_municipio', DB::table('personas')->where('id_persona',User::find($users[$i]->id)->persona_id)->first()->municipio_id)->first()->provincia_id)->first()->departamento_id)->first()->id_departamento];
             $activo = ['activo' => User::find($users[$i]->id)->activo];
-            $datos[$i] = Arr::collapse([$id,$avatar,$id_grado,$id_especialidad,$grado,$especialidad,$p_apellido,$s_apellido,$apellidos,$nombres,$nuudd,$username,$rol,$activo,$id_persona,['roles_disponibles' => $rolesDisponibles],$uudd,$gguu]);
+            $datos[$i] = Arr::collapse([$id,$avatar,$id_grado,$id_especialidad,$grado,$especialidad,$p_apellido,$s_apellido,$apellidos,$nombres,$nuudd,$username,$rol,$activo,$id_persona,$id_genero,$carnet_identidad,$id_condicion,$celular,['roles_disponibles' => $rolesDisponibles],$uudd,$gguu,$id_departamento,$id_provincia,$id_municipio]);
             $info[$i] = $datos[$i];
             
         }

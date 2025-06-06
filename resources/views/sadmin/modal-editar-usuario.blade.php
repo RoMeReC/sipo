@@ -109,7 +109,7 @@
                         </div>
                     </x-slot>
                 </x-adminlte-input>
-                <x-adminlte-select name="genero" label="GENERO:" value="{{ old('genero') }}" label-class="text-lightblue" fgroup-class="col-md-6 {{ $errors->has('genero') ? 'has-error' : '' }}" disable-feedback required>
+                <x-adminlte-select id="id_genero" name="genero" label="GENERO:" value="{{ old('genero') }}" label-class="text-lightblue" fgroup-class="col-md-6 {{ $errors->has('genero') ? 'has-error' : '' }}" disable-feedback required>
                     <x-slot name="prependSlot">
                         <div class="input-group-text">
                             <i class="fas fa-male text-lightblue"></i><i class="fas fa-female text-lightblue"></i>                                    
@@ -124,14 +124,14 @@
         </div>
         <div class="container">
             <div class="row">
-                <x-adminlte-input name="carnet_identidad" value="{{ old('carnet_identidad') }}" label="CARNET DE IDENTIDAD:" placeholder="{{ 'Registre el Carnet sin lugar de Expedición y sin espacios' }}" label-class="text-lightblue" fgroup-class="col-md-6 {{ $errors->has('carnet_identidad') ? 'has-error' : '' }}" disable-feedback required>
+                <x-adminlte-input id="id_carnet_identidad" name="carnet_identidad" value="{{ old('carnet_identidad') }}" label="CARNET DE IDENTIDAD:" placeholder="{{ 'Registre el Carnet sin lugar de Expedición y sin espacios' }}" label-class="text-lightblue" fgroup-class="col-md-6 {{ $errors->has('carnet_identidad') ? 'has-error' : '' }}" disable-feedback required>
                     <x-slot name="prependSlot">
                         <div class="input-group-text">
                             <i class="fas fa-address-card text-lightblue"></i>
                         </div>
                     </x-slot>
                 </x-adminlte-input>
-                <x-adminlte-select name="condicion" value="{{ old('condicion') }}" label="ESTADO CIVIL:" label-class="text-lightblue" fgroup-class="col-md-6 {{ $errors->has('condicion') ? 'has-error' : '' }}" disable-feedback required>
+                <x-adminlte-select id="id_condicion" name="condicion" value="{{ old('condicion') }}" label="ESTADO CIVIL:" label-class="text-lightblue" fgroup-class="col-md-6 {{ $errors->has('condicion') ? 'has-error' : '' }}" disable-feedback required>
                     <x-slot name="prependSlot">
                         <div class="input-group-text">
                             <i class="fas fa-check text-lightblue"></i>
@@ -146,7 +146,7 @@
         </div>
         <div class="container">
             <div class="row">
-                <x-adminlte-input name="celular" value="{{ old('celular') }}" label="CELULAR:" placeholder="{{ 'Registre el número de Celular' }}" label-class="text-lightblue" fgroup-class="col-md-6 {{ $errors->has('celular') ? 'has-error' : '' }}" disable-feedback required>
+                <x-adminlte-input id="id_celular" name="celular" value="{{ old('celular') }}" label="CELULAR:" placeholder="{{ 'Registre el número de Celular' }}" label-class="text-lightblue" fgroup-class="col-md-6 {{ $errors->has('celular') ? 'has-error' : '' }}" disable-feedback required>
                     <x-slot name="prependSlot">
                         <div class="input-group-text">
                             <i class="fas fa-phone text-lightblue"></i>
@@ -158,7 +158,7 @@
         <p><strong>LUGAR Y FECHA DE NACIMIENTO</strong></p>
         <div class="container">
             <div class="row">
-                <x-adminlte-select name="departamento" value="{{ old('departamento') }}" label="DEPARTAMENTO:" label-class="text-lightblue" fgroup-class="col-md-6 {{ $errors->has('departamento') ? 'has-error' : '' }}" disable-feedback required>
+                <x-adminlte-select id="id_departamento" name="departamento" value="{{ old('departamento') }}" label="DEPARTAMENTO:" label-class="text-lightblue" fgroup-class="col-md-6 {{ $errors->has('departamento') ? 'has-error' : '' }}" disable-feedback required>
                     <x-slot name="prependSlot">
                         <div class="input-group-text">
                             <i class="fas fa-map-marked-alt text-lightblue"></i>
@@ -169,7 +169,7 @@
                             <option value="{{ $departamento->id_departamento }}">{{ $departamento->descripcion_departamento }}</option>
                         @endforeach
                 </x-adminlte-select>
-                <x-adminlte-select id="provincia" value="{{ old('provincia') }}" name="provincia" label="PROVINCIA:" label-class="text-lightblue" fgroup-class="col-md-6 {{ $errors->has('provincia') ? 'has-error' : '' }}" disable-feedback required>
+                <x-adminlte-select id="id_provincia" value="{{ old('provincia') }}" name="provincia" label="PROVINCIA:" label-class="text-lightblue" fgroup-class="col-md-6 {{ $errors->has('provincia') ? 'has-error' : '' }}" disable-feedback required>
                     <x-slot name="prependSlot">
                         <div class="input-group-text">
                             <i class="fas fa-map-marked-alt text-lightblue"></i>
@@ -181,7 +181,7 @@
         </div>
         <div class="container">
             <div class="row">
-                <x-adminlte-select id="municipio" value="{{ old('municipio') }}" name="municipio" label="MUNICIPIO:" label-class="text-lightblue" fgroup-class="col-md-6 {{ $errors->has('municipio') ? 'has-error' : '' }}" disable-feedback required>
+                <x-adminlte-select id="id_municipio" value="{{ old('municipio') }}" name="municipio" label="MUNICIPIO:" label-class="text-lightblue" fgroup-class="col-md-6 {{ $errors->has('municipio') ? 'has-error' : '' }}" disable-feedback required>
                     <x-slot name="prependSlot">
                         <div class="input-group-text">
                             <i class="fas fa-map-marked-alt text-lightblue"></i>

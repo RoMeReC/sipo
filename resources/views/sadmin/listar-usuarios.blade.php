@@ -81,6 +81,11 @@
                                 data-nombres="{{ $inf['nombres']}}"
                                 data-primer_apellido="{{ $inf['primer_apellido']}}"
                                 data-segundo_apellido="{{ $inf['segundo_apellido']}}"
+                                data-id_genero="{{ $inf['id_genero']}}"
+                                data-carnet_identidad="{{ $inf['carnet_identidad']}}"
+                                data-id_condicion="{{ $inf['id_condicion']}}"
+                                data-celular="{{ $inf['celular']}}"
+
                                 title="Editar"><i class="fa fa-edit"></i></a>
                                 <a href="{{ route('sadmin.desactivar', $inf['id']) }}" class="btn btn-danger" title="Desactivar"><i class="fa fa-lock"></i></a>
                             @else
@@ -184,7 +189,15 @@
                 let nombres = $(this).data('nombres')
                 let primer_apellido = $(this).data('primer_apellido')
                 let segundo_apellido = $(this).data('segundo_apellido')
-                console.log('Datos:', { usuarioId, personaId, gguuId, uuddId, gradoId, especialidadId, nombres });
+                let id_genero = $(this).data('id_genero')
+                let carnet_identidad = $(this).data('carnet_identidad')
+                let id_condicion = $(this).data('id_condicion')
+                let celular = $(this).data('celular')
+                let municipioId = $(this).data('municipio');
+                let provinciaId = $(this).data('provincia');
+                let departamentoId = $(this).data('departamento');
+
+                console.log('Datos:', { usuarioId, personaId, gguuId, uuddId, gradoId, especialidadId, nombres, municipioId,provinciaId,departamentoId });
                 $('#id').val(usuarioId); 
                 $('#id_persona').val(personaId);
                 $('#avatar-preview').attr('src', avatar);
@@ -213,6 +226,33 @@
                 $('#id_nombres').val(nombres);
                 $('#id_primer_apellido').val(primer_apellido);
                 $('#id_segundo_apellido').val(segundo_apellido);
+                $('#id_genero').val(id_genero);
+                $('#id_carnet_identidad').val(carnet_identidad);
+                $('#id_condicion').val(id_condicion);
+                $('#id_celular').val(celular);
+                $('#id_departamento').val(departamentoId);
+                $('#id_provincia').val(provinciaId);
+                $('#id_municipio').val(municipioId);
+                // Vaciar y deshabilitar el select de MUNICIPIOS
+                $('#id_municipio').empty().append('<option value="">Cargando municipios...</option>').prop('disabled', true);
+                if (provinciaId) {
+                    // Cargar las MUNICIPIOS correspondientes a la GGUU seleccionada
+                    $.ajax({
+                        url: `/sadmin/municipios/${provinciaId}`,
+                        type: 'GET',
+                        success: function (data) {
+                            $('#id_municipio').empty().append('<option value="">Seleccione un municipio</option>');
+
+                            data.forEach(function (municipio) {
+                                let selected = municipio.id_municipio == municipioId ? 'selected' : '';
+                                $('#id_municipio').append(`<option value="${municipio.id_municipio}" ${selected}>${municipio.municipio}</option>`);
+                            });
+
+                            $('#id_municipio').prop('disabled', false);
+                        }
+                    });
+                }
+
                 $('#editar-usuario').modal('show');
             });
 
@@ -247,7 +287,34 @@
                 }
             });
         });
-        </script>
+    </script>
+        <script>
+        $(document).ready(function () {
+            $('#id_provincia').on('change', function () {
+                let privinciaId = $(this).val();
+                $('#id_municipio').empty().append('<option value="">Cargando municipios...</option>').prop('disabled', true);
+
+                if (privinciaId) {
+                    $.ajax({
+                        url: `/sadmin/municipios/${privinciaId}`,
+                        type: 'GET',
+                        success: function (data) {
+                            $('#id_municipio').empty().append('<option value="">Seleccione un Municipio</option>');
+                            data.forEach(function (municipio) {
+                                $('#id_municipio').append(`<option value="${municipio.id_municipio}">${municipio.municipio}</option>`);
+                            });
+                            $('#id_municipio').prop('disabled', false);
+                        },
+                        error: function () {
+                            $('#id_municipio').empty().append('<option value="">Error al cargar</option>').prop('disabled', true);
+                        }
+                    });
+                } else {
+                    $('#id_municipio').empty().append('<option value="">Seleccione un Municipio</option>').prop('disabled', true);
+                }
+            });
+        });
+    </script>
 
     <script>
         function cerrarMAgregarUsuario() {
