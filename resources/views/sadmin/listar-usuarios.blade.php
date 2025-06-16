@@ -73,6 +73,8 @@
                                 <a href="#" class="btn btn-warning btn-editar-usuario" 
                                 data-id_persona="{{ $inf['id_persona'] }}" 
                                 data-id="{{ $inf['id'] }}"
+                                data-id_rol="{{ $inf['id_rol'] }}"
+                                data-email="{{ $inf['email'] }}"
                                 data-avatar="{{ $inf['avatar'] }}"
                                 data-gguu="{{ $inf['gguu'] }}"
                                 data-uudd="{{ $inf['uudd'] }}"
@@ -85,7 +87,10 @@
                                 data-carnet_identidad="{{ $inf['carnet_identidad']}}"
                                 data-id_condicion="{{ $inf['id_condicion']}}"
                                 data-celular="{{ $inf['celular']}}"
-
+                                data-id_departamento="{{ $inf['id_departamento'] }}"
+                                data-id_provincia="{{ $inf['id_provincia'] }}"
+                                data-id_municipio="{{ $inf['id_municipio'] }}"
+                                data-fecha_nacimiento="{{ $inf['fecha_nacimiento']}}"    
                                 title="Editar"><i class="fa fa-edit"></i></a>
                                 <a href="{{ route('sadmin.desactivar', $inf['id']) }}" class="btn btn-danger" title="Desactivar"><i class="fa fa-lock"></i></a>
                             @else
@@ -158,6 +163,17 @@
     </script>
     <script>
         $(document).ready(function() {
+            $('#id_fecha_nacimiento').datepicker({
+                format: 'dd-mm-yyyy', // Formato de la fecha
+                autoclose: true,
+                todayHighlight: true,
+                orientation: 'bottom auto',
+                language: 'es', // Establece el idioma a español
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
             $('#nuevo-usuario').modal('hide');
 
             $('.btn-crear-usuario').click(function() {
@@ -180,6 +196,7 @@
             });
             $('.btn-editar-usuario').click(function() {
                 let usuarioId = $(this).data('id');
+                let email = $(this).data('email');
                 let personaId = $(this).data('id_persona');
                 let avatar = $(this).data('avatar');
                 let gguuId = $(this).data('gguu');
@@ -193,11 +210,14 @@
                 let carnet_identidad = $(this).data('carnet_identidad')
                 let id_condicion = $(this).data('id_condicion')
                 let celular = $(this).data('celular')
-                let municipioId = $(this).data('municipio');
-                let provinciaId = $(this).data('provincia');
-                let departamentoId = $(this).data('departamento');
+                let municipioId = $(this).data('id_municipio');
+                let provinciaId = $(this).data('id_provincia');
+                let departamentoId = $(this).data('id_departamento');
+                let fecha_nacimiento = $(this).data('fecha_nacimiento');
+                let emaileditar = $(this).data('email');
+                let rolId = $(this).data('id_rol');
 
-                console.log('Datos:', { usuarioId, personaId, gguuId, uuddId, gradoId, especialidadId, nombres, municipioId,provinciaId,departamentoId });
+                console.log('Datos:', { usuarioId, rolId, gguuId, uuddId, gradoId, especialidadId, nombres, municipioId,provinciaId,departamentoId });
                 $('#id').val(usuarioId); 
                 $('#id_persona').val(personaId);
                 $('#avatar-preview').attr('src', avatar);
@@ -232,26 +252,76 @@
                 $('#id_celular').val(celular);
                 $('#id_departamento').val(departamentoId);
                 $('#id_provincia').val(provinciaId);
-                $('#id_municipio').val(municipioId);
-                // Vaciar y deshabilitar el select de MUNICIPIOS
-                $('#id_municipio').empty().append('<option value="">Cargando municipios...</option>').prop('disabled', true);
-                if (provinciaId) {
-                    // Cargar las MUNICIPIOS correspondientes a la GGUU seleccionada
-                    $.ajax({
-                        url: `/sadmin/municipios/${provinciaId}`,
-                        type: 'GET',
-                        success: function (data) {
-                            $('#id_municipio').empty().append('<option value="">Seleccione un municipio</option>');
+                //$('#id_municipio').val(municipioId);
 
-                            data.forEach(function (municipio) {
-                                let selected = municipio.id_municipio == municipioId ? 'selected' : '';
-                                $('#id_municipio').append(`<option value="${municipio.id_municipio}" ${selected}>${municipio.municipio}</option>`);
-                            });
+                $('#id_provincia').empty().append('<option value="">Cargando provincias...</option>').prop('disabled', true);
+                    if (departamentoId) {
+                        // Cargar las PROVINCIAS correspondientes al DEPARTAMENTO seleccionada
+                        $.ajax({
+                            url: `/sadmin/provincias/${departamentoId}`,
+                            type: 'GET',
+                            success: function (data) {
+                                $('#id_provincia').empty().append('<option value="">Seleccione una provincia</option>');
 
-                            $('#id_municipio').prop('disabled', false);
-                        }
-                    });
-                }
+                                data.forEach(function (provincia) {
+                                    let selected = provincia.id_provincia == provinciaId ? 'selected' : '';
+                                    $('#id_provincia').append(`<option value="${provincia.id_provincia}" ${selected}>${provincia.provincia}</option>`);
+                                });
+
+                                $('#id_provincia').prop('disabled', false);
+                            }
+                        });
+                    }
+                    // Vaciar y deshabilitar el select de MUNICIPIOS
+                    $('#id_municipio').empty().append('<option value="">Cargando municipios...</option>').prop('disabled', true);
+                    if (provinciaId) {
+                        // Cargar las MUNICIPIOS correspondientes a la GGUU seleccionada
+                        $.ajax({
+                            url: `/sadmin/municipios/${provinciaId}`,
+                            type: 'GET',
+                            success: function (data) {
+                                $('#id_municipio').empty().append('<option value="">Seleccione un municipio</option>');
+
+                                data.forEach(function (municipio) {
+                                    let selected = municipio.id_municipio == municipioId ? 'selected' : '';
+                                    $('#id_municipio').append(`<option value="${municipio.id_municipio}" ${selected}>${municipio.municipio}</option>`);
+                                });
+
+                                $('#id_municipio').prop('disabled', false);
+                            }
+                        });
+                    }
+
+                // Vaciar y deshabilitar el select de PROVINCIAS
+                // Cargar uudd al seleccionar una gguu
+                $('#id_departamento').on('change', function () {
+                    let departamentoId = $(this).val();
+
+                    // Reinicia provincia y municipio cuando cambia el departamento
+                    provinciaId = '';
+                    municipioId = '';
+
+                    $('#id_provincia').empty().append('<option value="">Cargando provincias...</option>').prop('disabled', true);
+                    $('#id_municipio').empty().append('<option value="">Seleccione un municipio</option>').prop('disabled', true);
+
+                    if (departamentoId) {
+                        $.ajax({
+                            url: `/sadmin/provincias/${departamentoId}`,
+                            type: 'GET',
+                            success: function (data) {
+                                $('#id_provincia').empty().append('<option value="">Seleccione una provincia</option>');
+                                data.forEach(function (provincia) {
+                                    $('#id_provincia').append(`<option value="${provincia.id_provincia}">${provincia.provincia}</option>`);
+                                });
+
+                                $('#id_provincia').prop('disabled', false);
+                            }
+                        });
+                    }
+                });
+                $('#id_fecha_nacimiento').val(fecha_nacimiento);
+                $('#email-editar').val(emaileditar);
+                $('#id_rol').val(rolId);
 
                 $('#editar-usuario').modal('show');
             });

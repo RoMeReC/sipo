@@ -189,7 +189,7 @@
                     </x-slot>
                     <option value="">Seleccione un Municipio</option>
                 </x-adminlte-select>
-                <x-adminlte-input id="datepicker" value="{{ old('fecha_nacimiento') }}" name="fecha_nacimiento" label="FECHA DE NACIMIENTO:" placeholder="{{ 'Seleccione una fecha del Calendario' }}" label-class="text-lightblue" fgroup-class="col-md-6 {{ $errors->has('fecha_nacimiento') ? 'has-error' : '' }}" disable-feedback required>
+                <x-adminlte-input id="id_fecha_nacimiento" value="{{ old('fecha_nacimiento') }}" name="fecha_nacimiento" label="FECHA DE NACIMIENTO:" placeholder="{{ 'Seleccione una fecha del Calendario' }}" label-class="text-lightblue" fgroup-class="col-md-6 {{ $errors->has('fecha_nacimiento') ? 'has-error' : '' }}" disable-feedback required>
                     <x-slot name="prependSlot">
                         <div class="input-group-text">
                             <i class="fas fa-calendar text-lightblue"></i>
@@ -201,14 +201,14 @@
         <p><strong>DATOS DEL USUARIO</strong></p>
         <div class="container">
             <div class="row">
-                <x-adminlte-input name="email" value="{{ old('email') }}" label="CORREO ELECTRÓNICO:" placeholder="{{ 'Registre su correo electrónico' }}" label-class="text-lightblue" fgroup-class="col-md-6 {{ $errors->has('email') ? 'has-error' : '' }}" disable-feedback required>
+                <x-adminlte-input id="email-editar" name="email-editar" value="{{ old('email-editar') }}" label="CORREO ELECTRÓNICO:" placeholder="{{ 'Registre su correo electrónico' }}" label-class="text-lightblue" fgroup-class="col-md-6 {{ $errors->has('email-editar') ? 'has-error' : '' }}" disable-feedback required>
                     <x-slot name="prependSlot">
                         <div class="input-group-text">
                             <i class="fas fa-envelope text-lightblue"></i>
                         </div>
                     </x-slot>
                 </x-adminlte-input>
-                <x-adminlte-select name="rol" value="{{ old('rol') }}" label="ROL:" label-class="text-lightblue" fgroup-class="col-md-6 {{ $errors->has('rol') ? 'has-error' : '' }}" disable-feedback required>
+                <x-adminlte-select id="id_rol" name="rol" value="{{ old('rol') }}" label="ROL:" label-class="text-lightblue" fgroup-class="col-md-6 {{ $errors->has('rol') ? 'has-error' : '' }}" disable-feedback required>
                     <x-slot name="prependSlot">
                         <div class="input-group-text">
                             <i class="fas fa-user-tie text-lightblue"></i>

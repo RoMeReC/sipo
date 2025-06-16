@@ -47,7 +47,7 @@ class SuperAdminController extends Controller
 
     public function getProvincias($departamentoId)
     {
-        $provincias = Provincia::where('departamento_id', $departamentoId)->get('id_provincia','provincia');
+        $provincias = Provincia::where('departamento_id', $departamentoId)->get();
         return response()->json($provincias);
     }
 
@@ -59,7 +59,7 @@ class SuperAdminController extends Controller
 
     public function getMunicipios($provinciaId)
     {
-        $municipios = Municipio::where('provincia_id', $provinciaId)->get('id_municipio','municipio');
+        $municipios = Municipio::where('provincia_id', $provinciaId)->get();
         return response()->json($municipios);
     }
     //public function getUUDD($gguuId)
@@ -86,6 +86,8 @@ class SuperAdminController extends Controller
         for($i=0;$i<$cont;$i++)
         {
             $id = ['id' =>User::find($users[$i]->id)->id];
+            $email = ['email' =>User::find($users[$i]->id)->email];
+            $id_rol = ['id_rol' =>User::find($users[$i]->id)->rol_id];
             $id_persona = ['id_persona' => User::find($users[$i]->id)->persona_id];
             $avatar = ['avatar' => DB::table('avatares')->where('id_avatar',DB::table('personas')->where('id_persona',User::find($users[$i]->id)->persona_id)->first()->avatar_id)->first()->path_picture];
             $grado = ['grado' => DB::table('grados')->where('id_grado', DB::table('servidores')->where('persona_id',User::find($users[$i]->id)->persona_id)->first()->grado_id)->first()->grado];
@@ -103,6 +105,8 @@ class SuperAdminController extends Controller
             $rol = ['rol' => DB::table('roles')->where('id_rol',User::find($users[$i]->id)->rol_id)->first()->rol];
             $id_genero = ['id_genero' => DB::table('personas')->where('id_persona',User::find($users[$i]->id)->persona_id)->first()->genero_id];
             $carnet_identidad = ['carnet_identidad' => DB::table('personas')->where('id_persona',User::find($users[$i]->id)->persona_id)->first()->carnet_identidad];
+            $fecha_nacimiento = ['fecha_nacimiento' => DB::table('personas')->where('id_persona',User::find($users[$i]->id)->persona_id)->first()->fecha_nacimiento];
+
             $id_condicion = ['id_condicion' => DB::table('personas')->where('id_persona',User::find($users[$i]->id)->persona_id)->first()->condicion_id];
             $celular = ['celular' => DB::table('personas')->where('id_persona',User::find($users[$i]->id)->persona_id)->first()->celular];
             
@@ -121,7 +125,7 @@ class SuperAdminController extends Controller
             $id_provincia = ['id_provincia' => DB::table('provincias')->where('id_provincia',DB::table('municipios')->where('id_municipio', DB::table('personas')->where('id_persona',User::find($users[$i]->id)->persona_id)->first()->municipio_id)->first()->provincia_id)->first()->id_provincia];
             $id_departamento = ['id_departamento' => DB::table('departamentos')->where('id_departamento',DB::table('provincias')->where('id_provincia',DB::table('municipios')->where('id_municipio', DB::table('personas')->where('id_persona',User::find($users[$i]->id)->persona_id)->first()->municipio_id)->first()->provincia_id)->first()->departamento_id)->first()->id_departamento];
             $activo = ['activo' => User::find($users[$i]->id)->activo];
-            $datos[$i] = Arr::collapse([$id,$avatar,$id_grado,$id_especialidad,$grado,$especialidad,$p_apellido,$s_apellido,$apellidos,$nombres,$nuudd,$username,$rol,$activo,$id_persona,$id_genero,$carnet_identidad,$id_condicion,$celular,['roles_disponibles' => $rolesDisponibles],$uudd,$gguu,$id_departamento,$id_provincia,$id_municipio]);
+            $datos[$i] = Arr::collapse([$id,$email,$id_rol,$avatar,$id_grado,$id_especialidad,$grado,$especialidad,$p_apellido,$s_apellido,$apellidos,$nombres,$nuudd,$username,$rol,$activo,$id_persona,$id_genero,$carnet_identidad,$fecha_nacimiento,$id_condicion,$celular,['roles_disponibles' => $rolesDisponibles],$uudd,$gguu,$id_departamento,$id_provincia,$id_municipio]);
             $info[$i] = $datos[$i];
             
         }

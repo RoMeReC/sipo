@@ -158,7 +158,7 @@
         <p><strong>LUGAR Y FECHA DE NACIMIENTO</strong></p>
         <div class="container">
             <div class="row">
-                <x-adminlte-select name="departamento" value="{{ old('departamento') }}" label="DEPARTAMENTO:" label-class="text-lightblue" fgroup-class="col-md-6 {{ $errors->has('departamento') ? 'has-error' : '' }}" disable-feedback required>
+                <x-adminlte-select id="departamento-nuevo" name="departamento" value="{{ old('departamento') }}" label="DEPARTAMENTO:" label-class="text-lightblue" fgroup-class="col-md-6 {{ $errors->has('departamento') ? 'has-error' : '' }}" disable-feedback required>
                     <x-slot name="prependSlot">
                         <div class="input-group-text">
                             <i class="fas fa-map-marked-alt text-lightblue"></i>
@@ -169,7 +169,7 @@
                             <option value="{{ $departamento->id_departamento }}">{{ $departamento->descripcion_departamento }}</option>
                         @endforeach
                 </x-adminlte-select>
-                <x-adminlte-select id="provincia" value="{{ old('provincia') }}" name="provincia" label="PROVINCIA:" label-class="text-lightblue" fgroup-class="col-md-6 {{ $errors->has('provincia') ? 'has-error' : '' }}" disable-feedback required>
+                <x-adminlte-select id="provincia-nuevo" value="{{ old('provincia') }}" name="provincia" label="PROVINCIA:" label-class="text-lightblue" fgroup-class="col-md-6 {{ $errors->has('provincia') ? 'has-error' : '' }}" disable-feedback required>
                     <x-slot name="prependSlot">
                         <div class="input-group-text">
                             <i class="fas fa-map-marked-alt text-lightblue"></i>
@@ -181,7 +181,7 @@
         </div>
         <div class="container">
             <div class="row">
-                <x-adminlte-select id="municipio" value="{{ old('municipio') }}" name="municipio" label="MUNICIPIO:" label-class="text-lightblue" fgroup-class="col-md-6 {{ $errors->has('municipio') ? 'has-error' : '' }}" disable-feedback required>
+                <x-adminlte-select id="municipio-nuevo" value="{{ old('municipio') }}" name="municipio" label="MUNICIPIO:" label-class="text-lightblue" fgroup-class="col-md-6 {{ $errors->has('municipio') ? 'has-error' : '' }}" disable-feedback required>
                     <x-slot name="prependSlot">
                         <div class="input-group-text">
                             <i class="fas fa-map-marked-alt text-lightblue"></i>
