@@ -17,14 +17,14 @@ class AvatarSeeder extends Seeder
     {
         DB::table('avatares')->insert([
             'picture' => 'avatar-hombre.png',
-            'path_picture' => 'images/avatar/avatar-hombre.png',
+            'path_picture' => '/images/avatar/avatar-hombre.png',
             'auth_user' => 1,
             'created_at'=>\Carbon\Carbon::now(),
             'updated_at'=>\Carbon\Carbon::now(),
         ]);
         DB::table('avatares')->insert([
             'picture' => 'avatar-mujer.png',
-            'path_picture' => 'images/avatar/avatar-mujer.png',
+            'path_picture' => '/images/avatar/avatar-mujer.png',
             'auth_user' => 1,
             'created_at'=>\Carbon\Carbon::now(),
             'updated_at'=>\Carbon\Carbon::now(),
