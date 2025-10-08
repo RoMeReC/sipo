@@ -90,7 +90,8 @@
                                 data-id_departamento="{{ $inf['id_departamento'] }}"
                                 data-id_provincia="{{ $inf['id_provincia'] }}"
                                 data-id_municipio="{{ $inf['id_municipio'] }}"
-                                data-fecha_nacimiento="{{ $inf['fecha_nacimiento']}}"    
+                                data-fecha_nacimiento="{{ $inf['fecha_nacimiento']}}"
+                                data-permisos='@json($inf["permisos_asignados"])'    
                                 title="Editar"><i class="fa fa-edit"></i></a>
                                 <a href="{{ route('sadmin.desactivar', $inf['id']) }}" class="btn btn-danger" title="Desactivar"><i class="fa fa-lock"></i></a>
                             @else
@@ -216,9 +217,10 @@
                 let fecha_nacimiento = $(this).data('fecha_nacimiento');
                 let emaileditar = $(this).data('email');
                 let rolId = $(this).data('id_rol');
+                let permisosUsuario = $(this).data('permisos');
 
                 console.log('Datos:', { usuarioId, rolId, gguuId, uuddId, gradoId, especialidadId, nombres, municipioId,provinciaId,departamentoId });
-                $('#id').val(usuarioId); 
+                $('#id-user').val(usuarioId); 
                 $('#id_persona').val(personaId);
                 $('#avatar-preview').attr('src', avatar);
                 $('#gguu').val(gguuId);
@@ -322,6 +324,17 @@
                 $('#id_fecha_nacimiento').val(fecha_nacimiento);
                 $('#email-editar').val(emaileditar);
                 $('#id_rol').val(rolId);
+
+                // Desmarcar todos primero
+                $('.permiso-checkbox').prop('checked', false);
+
+                // Marcar los que coincidan
+                if (Array.isArray(permisosUsuario)) 
+                {
+                    permisosUsuario.forEach(function (permisoId) {
+                        $('.permiso-checkbox[value="${permisoId}"]').prop('checked', true);
+                    });
+                }
 
                 $('#editar-usuario').modal('show');
             });

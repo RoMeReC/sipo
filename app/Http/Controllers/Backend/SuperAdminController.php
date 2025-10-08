@@ -119,13 +119,15 @@ class SuperAdminController extends Controller
             $rolesDisponiblesIds = array_values(array_diff($rolesTotales, $rolesAsignados)); // [3]
             // Opcional: Obtener los nombres de los roles disponibles
             $rolesDisponibles = Rol::whereIn('id_rol', $rolesDisponiblesIds)->get()->pluck('rol', 'id_rol'); // [3 => 'usuario']
+            $permisosAsignados = PUsuario::where('usuario_id', $id)->pluck('permiso_id')->toArray(); // [1,2]
+
             $gguu = ['gguu' => DB::table('gguus')->where('id_gguu',DB::table('uudds')->where('id_uudd', DB::table('servidores')->where('persona_id', DB::table('personas')->where('id_persona',User::find($users[$i]->id)->persona_id)->first()->id_persona)->first()->uudd_id)->first()->gguu_id)->first()->id_gguu];
             $uudd = ['uudd' => DB::table('uudds')->where('id_uudd', DB::table('servidores')->where('persona_id', DB::table('personas')->where('id_persona',User::find($users[$i]->id)->persona_id)->first()->id_persona)->first()->uudd_id)->first()->id_uudd];
             $id_municipio = ['id_municipio' => DB::table('personas')->where('id_persona',User::find($users[$i]->id)->persona_id)->first()->municipio_id];
             $id_provincia = ['id_provincia' => DB::table('provincias')->where('id_provincia',DB::table('municipios')->where('id_municipio', DB::table('personas')->where('id_persona',User::find($users[$i]->id)->persona_id)->first()->municipio_id)->first()->provincia_id)->first()->id_provincia];
             $id_departamento = ['id_departamento' => DB::table('departamentos')->where('id_departamento',DB::table('provincias')->where('id_provincia',DB::table('municipios')->where('id_municipio', DB::table('personas')->where('id_persona',User::find($users[$i]->id)->persona_id)->first()->municipio_id)->first()->provincia_id)->first()->departamento_id)->first()->id_departamento];
             $activo = ['activo' => User::find($users[$i]->id)->activo];
-            $datos[$i] = Arr::collapse([$id,$email,$id_rol,$avatar,$id_grado,$id_especialidad,$grado,$especialidad,$p_apellido,$s_apellido,$apellidos,$nombres,$nuudd,$username,$rol,$activo,$id_persona,$id_genero,$carnet_identidad,$fecha_nacimiento,$id_condicion,$celular,['roles_disponibles' => $rolesDisponibles],$uudd,$gguu,$id_departamento,$id_provincia,$id_municipio]);
+            $datos[$i] = Arr::collapse([$id,$email,$id_rol,$avatar,$id_grado,$id_especialidad,$grado,$especialidad,$p_apellido,$s_apellido,$apellidos,$nombres,$nuudd,$username,$rol,$activo,$id_persona,$id_genero,$carnet_identidad,$fecha_nacimiento,$id_condicion,$celular,['roles_disponibles' => $rolesDisponibles],$uudd,$gguu,$id_departamento,$id_provincia,$id_municipio,['permisos_asignados' => $permisosAsignados]]);
             $info[$i] = $datos[$i];
             
         }
@@ -337,10 +339,32 @@ class SuperAdminController extends Controller
     }
     public function editar_usuario(Request $request)
     {
-        dd($request);
+        //dd($request);
+        $user = Auth::user();
+        $persona = Persona::find(Auth::user()->persona_id);
+        if (!$user) 
+        {
+            return response()->json(['error' => 'Usuario no autenticado'], 401);
+        }
         $request->validate([
             'gguu' => 'required|exists:gguus,id_gguu',
             'uudd' => 'required|exists:uudds,id_uudd',
+            'grado' => ['required'],
+            'especialidad' => ['required'],
+            'nombres' => ['required','nombres', 'max:30'],
+            'primer_apellido' => ['required','nombres', 'max:25'],
+            'segundo_apellido' => ['required','nombres', 'max:25'],
+            'genero' => ['required'],
+            'carnet_identidad' => ['required','alpha_dash:ascii','max:15'],
+            'condicion' => ['required'],
+            'celular' => ['required', 'celular','max:8'],
+            'departamento' => ['required'],
+            'provincia' => ['required'],
+            'municipio' => ['required'],
+            'fecha_nacimiento' => ['required', 'date'],
+            'email-editar' => ['required', 'email'],
+            'rol' => ['required'],
         ]);
+        dd($request);
     }
 }
