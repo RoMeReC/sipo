@@ -340,9 +340,9 @@ class SuperAdminController extends Controller
     public function editar_usuario(Request $request)
     {
         //dd($request);
-        $user = Auth::user();
+        $user_auth = Auth::user();
         $persona = Persona::find(Auth::user()->persona_id);
-        if (!$user) 
+        if (!$user_auth) 
         {
             return response()->json(['error' => 'Usuario no autenticado'], 401);
         }
@@ -365,6 +365,8 @@ class SuperAdminController extends Controller
             'email-editar' => ['required', 'email'],
             'rol' => ['required'],
         ]);
-        dd($request);
+        //dd(intval($request->id_user));
+        $user = DB::table('users')->find(intval($request->id_user));
+        dd($user);
     }
 }
