@@ -25,7 +25,7 @@
     <form id="formEditarUsuario" action="{{route('sadmin.editar-usuario')}}" method="post" class="needs-validation" enctype="multipart/form-data">
     @csrf
     <h3><strong class="text-lightblue">DATOS PERSONALES</strong></h3>
-        <input type="hidden" id="id-user" name="id-user" value="{{ old('id-user') }}">
+        <input type="hidden" id="id_user" name="id_user" value="{{ old('id_user') }}">
         <div class="container">
             <div class="row">
                 <div class="col-4" style="text-align: center">

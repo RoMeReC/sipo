@@ -220,7 +220,7 @@
                 let permisosUsuario = $(this).data('permisos');
 
                 console.log('Datos:', { usuarioId, rolId, gguuId, uuddId, gradoId, especialidadId, nombres, municipioId,provinciaId,departamentoId });
-                $('#id-user').val(usuarioId); 
+                $('#id_user').val(usuarioId); 
                 $('#id_persona').val(personaId);
                 $('#avatar-preview').attr('src', avatar);
                 $('#gguu').val(gguuId);
