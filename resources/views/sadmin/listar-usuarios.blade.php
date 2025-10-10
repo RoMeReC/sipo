@@ -13,6 +13,15 @@
     @elseif(session('info'))
         <div class="alert alert-info">{{ session('info') }}</div>
     @endif
+    {{-- MENSAJE DE ERROR --}}
+    @if(session('danger'))
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <strong><i class="fas fa-exclamation-triangle"></i> Atención:</strong> {{ session('danger') }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Cerrar">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    @endif
     @if ($errors->any())
         @foreach ($errors->all() as $error)
             <ul class="alert alert-danger">{{ $error }}</ul>
@@ -322,8 +331,8 @@
                     }
                 });
                 $('#id_fecha_nacimiento').val(fecha_nacimiento);
-                $('#email-editar').val(emaileditar);
-                $('#id_rol').val(rolId);
+                $('#email_editar').val(emaileditar);
+                //$('#id_rol').val(rolId);
 
                 // Desmarcar todos primero
                 $('.permiso-checkbox').prop('checked', false);

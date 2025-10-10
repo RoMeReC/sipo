@@ -202,24 +202,13 @@
         <p><strong>DATOS DEL USUARIO</strong></p>
         <div class="container">
             <div class="row">
-                <x-adminlte-input id="email-editar" name="email-editar" value="{{ old('email-editar') }}" label="CORREO ELECTRÓNICO:" placeholder="{{ 'Registre su correo electrónico' }}" label-class="text-lightblue" fgroup-class="col-md-6 {{ $errors->has('email-editar') ? 'has-error' : '' }}" disable-feedback required>
+                <x-adminlte-input id="email_editar" name="email_editar" value="{{ old('email_editar') }}" label="CORREO ELECTRÓNICO:" placeholder="{{ 'Registre su correo electrónico' }}" label-class="text-lightblue" fgroup-class="col-md-6 {{ $errors->has('email_editar') ? 'has-error' : '' }}" disable-feedback required>
                     <x-slot name="prependSlot">
                         <div class="input-group-text">
                             <i class="fas fa-envelope text-lightblue"></i>
                         </div>
                     </x-slot>
                 </x-adminlte-input>
-                <x-adminlte-select id="id_rol" name="rol" value="{{ old('rol') }}" label="ROL:" label-class="text-lightblue" fgroup-class="col-md-6 {{ $errors->has('rol') ? 'has-error' : '' }}" disable-feedback required>
-                    <x-slot name="prependSlot">
-                        <div class="input-group-text">
-                            <i class="fas fa-user-tie text-lightblue"></i>
-                        </div>
-                    </x-slot>
-                    <option value="">Seleccione un Rol</option>
-                        @foreach($roles as $rol)
-                            <option value="{{ $rol->id_rol }}">{{ $rol->rol }}</option>
-                        @endforeach
-                </x-adminlte-select>
             </div>
         </div>
         <div class="container">

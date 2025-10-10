@@ -339,34 +339,60 @@ class SuperAdminController extends Controller
     }
     public function editar_usuario(Request $request)
     {
-        //dd($request);
         $user_auth = Auth::user();
-        $persona = Persona::find(Auth::user()->persona_id);
-        if (!$user_auth) 
-        {
+
+        if (!$user_auth) {
             return response()->json(['error' => 'Usuario no autenticado'], 401);
         }
+
         $request->validate([
             'gguu' => 'required|exists:gguus,id_gguu',
             'uudd' => 'required|exists:uudds,id_uudd',
             'grado' => ['required'],
             'especialidad' => ['required'],
-            'nombres' => ['required','nombres', 'max:30'],
-            'primer_apellido' => ['required','nombres', 'max:25'],
-            'segundo_apellido' => ['required','nombres', 'max:25'],
+            'nombres' => ['required', 'max:30'],
+            'primer_apellido' => ['required', 'max:25'],
+            'segundo_apellido' => ['required', 'max:25'],
             'genero' => ['required'],
-            'carnet_identidad' => ['required','alpha_dash:ascii','max:15'],
+            'carnet_identidad' => ['required', 'alpha_dash:ascii', 'max:15'],
             'condicion' => ['required'],
-            'celular' => ['required', 'celular','max:8'],
+            'celular' => ['required', 'max:8'],
             'departamento' => ['required'],
             'provincia' => ['required'],
             'municipio' => ['required'],
             'fecha_nacimiento' => ['required', 'date'],
-            'email-editar' => ['required', 'email'],
-            'rol' => ['required'],
+            'email_editar' => ['required', 'email']
         ]);
-        //dd(intval($request->id_user));
-        $user = DB::table('users')->find(intval($request->id_user));
-        dd($user);
+
+        // Se obtiene el usuario actual mediante Eloquent
+        $user = User::find(intval($request->id_user));
+
+        if (!$user) {
+            return redirect()->back()->with('danger', 'Usuario no encontrado.');
+        }
+
+        // Se verifica si cambió el correo electrónico
+        if ($user->email !== $request->email_editar) {
+            // Se verifica si el nuevo correo ya pertenece a otra persona distinta
+            $email_existente = User::where('email', $request->email_editar)
+                ->where('persona_id', '!=', $user->persona_id)
+                ->exists();
+
+            if ($email_existente) {
+                return redirect()->back()->with('danger', 'El correo electrónico ya está asociado a otra persona.');
+            }
+
+            // Se actualiza el correo en todos los usuarios de la misma persona
+            User::where('persona_id', $user->persona_id)
+                ->update(['email' => $request->email_editar]);
+
+            // Se actualiza el objeto actual en memoria (por coherencia)
+            //$user->email = $request->email_editar;
+        }
+
+        // Aquí podrías actualizar otros datos del usuario si los editas
+        // $user->save(); // No es necesario si solo se actualizó el correo arriba
+
+        return redirect()->back()->with('success', 'Correo electrónico actualizado para todos los usuarios de la misma persona.');
     }
 }
