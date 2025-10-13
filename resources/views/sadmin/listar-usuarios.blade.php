@@ -227,6 +227,7 @@
                 let emaileditar = $(this).data('email');
                 let rolId = $(this).data('id_rol');
                 let permisosUsuario = $(this).data('permisos');
+                console.log('Permisos del usuario:', permisosUsuario); // Para verificar que llegan bien
 
                 console.log('Datos:', { usuarioId, rolId, gguuId, uuddId, gradoId, especialidadId, nombres, municipioId,provinciaId,departamentoId });
                 $('#id_user').val(usuarioId); 
@@ -337,11 +338,11 @@
                 // Desmarcar todos primero
                 $('.permiso-checkbox').prop('checked', false);
 
-                // Marcar los que coincidan
-                if (Array.isArray(permisosUsuario)) 
-                {
-                    permisosUsuario.forEach(function (permisoId) {
-                        $('.permiso-checkbox[value="${permisoId}"]').prop('checked', true);
+                // Verifica si es un array y marca los checks
+                if (Array.isArray(permisosUsuario)) {
+                    permisosUsuario.forEach(function(permisoId) {
+                        // ✅ Aquí usamos backticks para interpolar correctamente
+                        $(`.permiso-checkbox[value="${permisoId}"]`).prop('checked', true);
                     });
                 }
 

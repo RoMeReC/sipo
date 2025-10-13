@@ -339,6 +339,7 @@ class SuperAdminController extends Controller
     }
     public function editar_usuario(Request $request)
     {
+        dd($request);
         $user_auth = Auth::user();
 
         if (!$user_auth) {
