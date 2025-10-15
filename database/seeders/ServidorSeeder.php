@@ -20,6 +20,7 @@ class ServidorSeeder extends Seeder
             'grado_id' => 4,
             'especialidad_id' => 21,
             'uudd_id' => 1,
+            'auth_user' => 1,
             'created_at'=>\Carbon\Carbon::now(),
             'updated_at'=>\Carbon\Carbon::now(),
         ]);

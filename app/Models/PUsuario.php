@@ -16,4 +16,5 @@ class PUsuario extends Model
         'permiso_id',
         'activo',
     ];
+
 }

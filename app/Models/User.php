@@ -60,4 +60,5 @@ class User extends Authenticatable
         // Fallback por si falta persona o avatar
         return asset('images/avatar/avatar-hombre.png'); // o avatar-mujer.png según lógica adicional
     }
+
 }

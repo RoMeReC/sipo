@@ -404,19 +404,43 @@ class SuperAdminController extends Controller
                 ->update(['carnet_identidad' => $request->carnet_identidad]);
         }
         Persona::where('id_persona', $persona->id_persona)
-                ->update(['nombres' => $request->nombres, 
-                'primer_apellido' => $request->primer_apellido, 
-                'segundo_apellido' => $request->segundo_apellido, 
-                'fecha_nacimiento' => $request->fecha_nacimiento, 
-                'celular' => $request->celular, 
-                'condicion_id' => intval($request->condicion), 
-                'genero_id' => intval($request->genero), 
-                'municipio_id' => intval($request->municipio),
-                'auth_user' => $user_auth->id,
-                //'updated_at' => 
+                ->update([
+                    'nombres' => $request->nombres, 
+                    'primer_apellido' => $request->primer_apellido, 
+                    'segundo_apellido' => $request->segundo_apellido, 
+                    'fecha_nacimiento' => $request->fecha_nacimiento, 
+                    'celular' => $request->celular, 
+                    'condicion_id' => intval($request->condicion), 
+                    'genero_id' => intval($request->genero), 
+                    'municipio_id' => intval($request->municipio),
+                    'auth_user' => $user_auth->id,
+                    'updated_at' => \Carbon\Carbon::now()
             ]);
-        // Aquí podrías actualizar otros datos del usuario si los editas
-        // $user->save(); // No es necesario si solo se actualizó el correo arriba
+        Servidor::where('persona_id',$persona->id_persona)
+                 ->update([
+                    'grado_id'=> $request->grado,
+                    'especialidad_id' => $request->especialidad,
+                    'uudd_id' => $request->uudd,
+                    'auth_user' => $user_auth->id,
+                    'updated_at' => \Carbon\Carbon::now()
+                 ]);
+        
+        $userId = $request->id_user;
+        $permisosSeleccionados = $request->input('permisos', []); // puede venir vacío
+        $authUserId = Auth::id(); // usuario que realiza la edición
+
+        // 1️⃣ Eliminar los permisos anteriores (soft delete si usas SoftDeletes)
+        PUsuario::where('usuario_id', $userId)->delete();
+
+        // 2️⃣ Insertar los nuevos permisos seleccionados
+        foreach ($permisosSeleccionados as $permisoId) {
+            PUsuario::create([
+                'usuario_id' => $userId,
+                'permiso_id' => $permisoId,
+                'auth_user'  => $authUserId,
+                'activo'     => true,
+            ]);
+        }
 
         return redirect()->back()->with('success', 'Datos actualizados para todos los usuarios de la misma persona.');
     }

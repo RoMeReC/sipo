@@ -17,6 +17,7 @@ return new class extends Migration
             $table->unsignedBigInteger('grado_id');
             $table->unsignedBigInteger('especialidad_id');
             $table->unsignedBigInteger('uudd_id');
+            $table->integer('auth_user');
             $table->timestamps();
             $table->softDeletes();
 
