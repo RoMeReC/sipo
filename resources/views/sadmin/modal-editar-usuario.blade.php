@@ -26,6 +26,7 @@
     @csrf
     <h3><strong class="text-lightblue">DATOS PERSONALES</strong></h3>
         <input type="hidden" id="id_user" name="id_user" value="{{ old('id_user') }}">
+        <input type="hidden" id="id_persona_editar" name="id_persona_editar" value="{{ old('id_persona_editar') }}">
         <div class="container">
             <div class="row">
                 <div class="col-4" style="text-align: center">

@@ -80,7 +80,7 @@
                                     </a>
                                 @endif
                                 <a href="#" class="btn btn-warning btn-editar-usuario" 
-                                data-id_persona="{{ $inf['id_persona'] }}" 
+                                data-id_persona_editar="{{ $inf['id_persona'] }}" 
                                 data-id="{{ $inf['id'] }}"
                                 data-id_rol="{{ $inf['id_rol'] }}"
                                 data-email="{{ $inf['email'] }}"
@@ -207,7 +207,7 @@
             $('.btn-editar-usuario').click(function() {
                 let usuarioId = $(this).data('id');
                 let email = $(this).data('email');
-                let personaId = $(this).data('id_persona');
+                let personaId_editar = $(this).data('id_persona_editar');
                 let avatar = $(this).data('avatar');
                 let gguuId = $(this).data('gguu');
                 let uuddId = $(this).data('uudd');
@@ -231,7 +231,7 @@
 
                 console.log('Datos:', { usuarioId, rolId, gguuId, uuddId, gradoId, especialidadId, nombres, municipioId,provinciaId,departamentoId });
                 $('#id_user').val(usuarioId); 
-                $('#id_persona').val(personaId);
+                $('#id_persona_editar').val(personaId_editar);
                 $('#avatar-preview').attr('src', avatar);
                 $('#gguu').val(gguuId);
                 // Vaciar y deshabilitar el select de UUDD

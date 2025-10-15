@@ -127,7 +127,7 @@ class SuperAdminController extends Controller
             $id_provincia = ['id_provincia' => DB::table('provincias')->where('id_provincia',DB::table('municipios')->where('id_municipio', DB::table('personas')->where('id_persona',User::find($users[$i]->id)->persona_id)->first()->municipio_id)->first()->provincia_id)->first()->id_provincia];
             $id_departamento = ['id_departamento' => DB::table('departamentos')->where('id_departamento',DB::table('provincias')->where('id_provincia',DB::table('municipios')->where('id_municipio', DB::table('personas')->where('id_persona',User::find($users[$i]->id)->persona_id)->first()->municipio_id)->first()->provincia_id)->first()->departamento_id)->first()->id_departamento];
             $activo = ['activo' => User::find($users[$i]->id)->activo];
-            $datos[$i] = Arr::collapse([$id,$email,$id_rol,$avatar,$id_grado,$id_especialidad,$grado,$especialidad,$p_apellido,$s_apellido,$apellidos,$nombres,$nuudd,$username,$rol,$activo,$id_persona,$id_genero,$carnet_identidad,$fecha_nacimiento,$id_condicion,$celular,['roles_disponibles' => $rolesDisponibles],$uudd,$gguu,$id_departamento,$id_provincia,$id_municipio,['permisos_asignados' => $permisosAsignados]]);
+            $datos[$i] = Arr::collapse([$id,$id_persona,$email,$id_rol,$avatar,$id_grado,$id_especialidad,$grado,$especialidad,$p_apellido,$s_apellido,$apellidos,$nombres,$nuudd,$username,$rol,$activo,$id_persona,$id_genero,$carnet_identidad,$fecha_nacimiento,$id_condicion,$celular,['roles_disponibles' => $rolesDisponibles],$uudd,$gguu,$id_departamento,$id_provincia,$id_municipio,['permisos_asignados' => $permisosAsignados]]);
             $info[$i] = $datos[$i];
             
         }
@@ -339,9 +339,9 @@ class SuperAdminController extends Controller
     }
     public function editar_usuario(Request $request)
     {
-        dd($request);
+        //dd($request);
         $user_auth = Auth::user();
-
+        //dd($user_auth->id);
         if (!$user_auth) {
             return response()->json(['error' => 'Usuario no autenticado'], 401);
         }
@@ -378,22 +378,46 @@ class SuperAdminController extends Controller
             $email_existente = User::where('email', $request->email_editar)
                 ->where('persona_id', '!=', $user->persona_id)
                 ->exists();
-
             if ($email_existente) {
                 return redirect()->back()->with('danger', 'El correo electrónico ya está asociado a otra persona.');
             }
-
             // Se actualiza el correo en todos los usuarios de la misma persona
             User::where('persona_id', $user->persona_id)
                 ->update(['email' => $request->email_editar]);
-
             // Se actualiza el objeto actual en memoria (por coherencia)
             //$user->email = $request->email_editar;
         }
-
+        $persona = Persona::find(intval($request->id_persona_editar));
+        // Se verifica si cambió el carnet de identidad
+        if ($persona->carnet_identidad !== $request->carnet_identidad) 
+        {
+            // Se verifica si el nuevo carnet ya pertenece a otra persona distinta
+            $carnet_existente = Persona::where('carnet_identidad', $request->carnet_identidad)
+            ->where('id_persona', '!=', $persona->id_persona)
+            ->exists();
+            if ($carnet_existente) 
+            {
+                return redirect()->back()->with('danger', 'El Carnet de Identidad ya está asociado a otra persona.');
+            }
+            // Se actualiza el correo en todos los usuarios de la misma persona
+            Persona::where('id_persona', $persona->id_persona)
+                ->update(['carnet_identidad' => $request->carnet_identidad]);
+        }
+        Persona::where('id_persona', $persona->id_persona)
+                ->update(['nombres' => $request->nombres, 
+                'primer_apellido' => $request->primer_apellido, 
+                'segundo_apellido' => $request->segundo_apellido, 
+                'fecha_nacimiento' => $request->fecha_nacimiento, 
+                'celular' => $request->celular, 
+                'condicion_id' => intval($request->condicion), 
+                'genero_id' => intval($request->genero), 
+                'municipio_id' => intval($request->municipio),
+                'auth_user' => $user_auth->id,
+                //'updated_at' => 
+            ]);
         // Aquí podrías actualizar otros datos del usuario si los editas
         // $user->save(); // No es necesario si solo se actualizó el correo arriba
 
-        return redirect()->back()->with('success', 'Correo electrónico actualizado para todos los usuarios de la misma persona.');
+        return redirect()->back()->with('success', 'Datos actualizados para todos los usuarios de la misma persona.');
     }
 }
