@@ -39,34 +39,17 @@ class SuperAdminController extends Controller
        return view('sadmin.dashboard',['avatarPath' => $avatarPath]);
     }
 
-    //public function getProvincias($departamentoId)
-    //{
-    //    $provincias = Provincia::where('departamento_id', $departamentoId)->get();
-    //    return response()->json($provincias);
-    //}
-
     public function getProvincias($departamentoId)
     {
         $provincias = Provincia::where('departamento_id', $departamentoId)->get();
         return response()->json($provincias);
     }
 
-    //public function getMunicipios($provinciaId)
-    //{
-    //    $municipios = Municipio::where('provincia_id', $provinciaId)->get();
-    //    return response()->json($municipios);
-    //}
-
     public function getMunicipios($provinciaId)
     {
         $municipios = Municipio::where('provincia_id', $provinciaId)->get();
         return response()->json($municipios);
     }
-    //public function getUUDD($gguuId)
-    //{
-    //    $uudd = Undd::where('gguu_id', $gguuId)->get();
-    //    return response()->json($uudd);
-    //}
 
     public function getUUDD($gguuId)
     {
@@ -286,7 +269,7 @@ class SuperAdminController extends Controller
         $user->activo = false;
         $user->save();
 
-        return redirect()->back()->with('success', 'Usuario desactivado correctamente.');
+        return redirect()->back()->with('info', 'Usuario desactivado correctamente.');
     }
 
     public function agregar_usuario(Request $request)
@@ -388,6 +371,19 @@ class SuperAdminController extends Controller
             //$user->email = $request->email_editar;
         }
         $persona = Persona::find(intval($request->id_persona_editar));
+
+        if ($request->hasFile('picture')) 
+        {
+            $avatar = new Avatar();
+            $foto = $request->file('picture');
+            $nombre_foto = $persona->carnet_identidad . '_' . $foto->getClientOriginalName();
+            $foto->move(public_path('images/avatar'), $nombre_foto);
+            $avatar->picture = $nombre_foto;
+            $avatar->path_picture = '/images/avatar/' . $nombre_foto;
+            $avatar->auth_user = $user->id;
+            $avatar->save();
+        }
+        $lastAvatar = Avatar::latest('id_avatar')->first();
         // Se verifica si cambió el carnet de identidad
         if ($persona->carnet_identidad !== $request->carnet_identidad) 
         {
@@ -414,6 +410,7 @@ class SuperAdminController extends Controller
                     'genero_id' => intval($request->genero), 
                     'municipio_id' => intval($request->municipio),
                     'auth_user' => $user_auth->id,
+                    'avatar_id' => $lastAvatar->id_avatar,
                     'updated_at' => \Carbon\Carbon::now()
             ]);
         Servidor::where('persona_id',$persona->id_persona)
@@ -426,9 +423,10 @@ class SuperAdminController extends Controller
                  ]);
         
         $userId = $request->id_user;
+        //dd($userId);
         $permisosSeleccionados = $request->input('permisos', []); // puede venir vacío
         $authUserId = Auth::id(); // usuario que realiza la edición
-
+                 //dd($authUserId);
         // 1️⃣ Eliminar los permisos anteriores (soft delete si usas SoftDeletes)
         PUsuario::where('usuario_id', $userId)->delete();
 
@@ -442,6 +440,6 @@ class SuperAdminController extends Controller
             ]);
         }
 
-        return redirect()->back()->with('success', 'Datos actualizados para todos los usuarios de la misma persona.');
+        return redirect()->back()->with('success', 'Datos actualizados satisfactoriamente.');
     }
 }

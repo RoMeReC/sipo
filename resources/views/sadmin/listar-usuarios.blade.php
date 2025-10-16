@@ -9,13 +9,13 @@
 
 @section('content')
     @if(session('success'))
-        <div class="alert alert-success">{{ session('success') }}</div>
+        <div id="alerta-success" class="alert alert-success alert-dismissible fade show" role="alert">{{ session('success') }}</div>
     @elseif(session('info'))
-        <div class="alert alert-info">{{ session('info') }}</div>
+        <div id="alerta-infor" class="alert alert-info alert-dismissible fade show" role="alert">{{ session('info') }}</div>
     @endif
     {{-- MENSAJE DE ERROR --}}
     @if(session('danger'))
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <div id="alerta-danger" class="alert alert-danger alert-dismissible fade show" role="alert">
             <strong><i class="fas fa-exclamation-triangle"></i> Atención:</strong> {{ session('danger') }}
             <button type="button" class="close" data-dismiss="alert" aria-label="Cerrar">
                 <span aria-hidden="true">&times;</span>
@@ -160,6 +160,7 @@
     <script src="/scripts/seleccionar-uudd.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.es.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         $(document).ready(function() {
             $('#datepicker').datepicker({
@@ -181,6 +182,17 @@
                 language: 'es', // Establece el idioma a español
             });
         });
+    </script>
+    <script>
+        // Esperar unos segundos y ocultar la alerta automáticamente
+        setTimeout(function() {
+            let alerta = document.getElementById('alerta-success');
+            if (alerta) {
+                alerta.classList.remove('show');
+                alerta.classList.add('fade');
+                alerta.style.display = 'none';
+            }
+        }, 5000); // 3 segundos
     </script>
     <script>
         $(document).ready(function() {

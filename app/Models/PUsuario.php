@@ -14,6 +14,7 @@ class PUsuario extends Model
     protected $fillable = [
         'usuario_id',
         'permiso_id',
+        'auth_user',
         'activo',
     ];
 
