@@ -250,6 +250,7 @@ class SuperAdminController extends Controller
         $nuevo_servidor->grado_id = $request->grado;
         $nuevo_servidor->especialidad_id = $request->especialidad;
         $nuevo_servidor->uudd_id = $request->uudd;
+        $nuevo_servidor->auth_user = $user->id;
         $nuevo_servidor->save();
         return redirect()->back()->with('success', 'Usuario creado correctamente.');
     }
@@ -427,10 +428,10 @@ class SuperAdminController extends Controller
         $permisosSeleccionados = $request->input('permisos', []); // puede venir vacío
         $authUserId = Auth::id(); // usuario que realiza la edición
                  //dd($authUserId);
-        // 1️⃣ Eliminar los permisos anteriores (soft delete si usas SoftDeletes)
+        // Eliminar los permisos anteriores (soft delete si usas SoftDeletes)
         PUsuario::where('usuario_id', $userId)->delete();
 
-        // 2️⃣ Insertar los nuevos permisos seleccionados
+        // Insertar los nuevos permisos seleccionados
         foreach ($permisosSeleccionados as $permisoId) {
             PUsuario::create([
                 'usuario_id' => $userId,
