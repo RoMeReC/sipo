@@ -28,7 +28,7 @@
         @endforeach
     @endif
     <div class="card">
-        {{-- <a href="{{ route('sadmin.users.create') }}" class="btn btn-primary">Nuevo Usuario</a> --}}
+        {{-- <a href="{{ route('admin.users.create') }}" class="btn btn-primary">Nuevo Usuario</a> --}}
         <div class="container">
             <button class="btn btn-primary" title="Nuevo Usuario" data-toggle="modal" data-target="#nuevo-usuario"><i class="fa fa-user-plus"></i>&nbsp;&nbsp;Nuevo Usuario</button>
         </div>
@@ -102,9 +102,9 @@
                                 data-fecha_nacimiento="{{ $inf['fecha_nacimiento']}}"
                                 data-permisos='@json($inf["permisos_asignados"])'    
                                 title="Editar"><i class="fa fa-edit"></i></a>
-                                <a href="{{ route('sadmin.desactivar', $inf['id']) }}" class="btn btn-danger" title="Desactivar"><i class="fa fa-lock"></i></a>
+                                <a href="{{ route('admin.desactivar', $inf['id']) }}" class="btn btn-danger" title="Desactivar"><i class="fa fa-lock"></i></a>
                             @else
-                                <a href="{{ route('sadmin.activar', $inf['id']) }}" class="btn btn-info" title="Activar"><i class="fa fa-unlock"></i></a>
+                                <a href="{{ route('admin.activar', $inf['id']) }}" class="btn btn-info" title="Activar"><i class="fa fa-unlock"></i></a>
                             @endif
                         </td>
                     </tr>
@@ -114,7 +114,7 @@
             </tbody>
         </table>
     </div>
-    @include('sadmin.modal-nuevo-usuario')
+    @include('admin.modal-nuevo-usuario')
     <!-- Abre la ventana modal, si hay errores -->
     @if(session('danger') || $errors->any())
     <script>
@@ -123,8 +123,8 @@
         });
     </script>
     @endif
-    @include('sadmin.modal-agregar-usuario')
-    @include('sadmin.modal-editar-usuario')
+    @include('admin.modal-agregar-usuario')
+    @include('admin.modal-editar-usuario')
 @stop
 
 @section('css')
@@ -156,8 +156,8 @@
     
     <script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
     <script src="/scripts/cambiar-idioma-datatable.js"></script>
-    <script src="/scripts/sadmin/seleccionar-municipio.js"></script>
-    <script src="/scripts/sadmin/seleccionar-uudd.js"></script>
+    <script src="/scripts/admin/seleccionar-municipio.js"></script>
+    <script src="/scripts/admin/seleccionar-uudd.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.es.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -200,7 +200,7 @@
 
             $('.btn-crear-usuario').click(function() {
                 let usuarioId = $(this).data('id');
-                let rolesDisponibles = $(this).data('roles'); // Extrae los roles del botón
+                //let rolesDisponibles = $(this).data('roles'); // Extrae los roles del botón
                 $('#id').val(usuarioId); // Asigna el ID a tu input oculto
                 let personaId = $(this).data('id_persona');
                 $('#id_persona').val(personaId); // Asigna el ID a tu input oculto
@@ -210,9 +210,9 @@
                 select.append('<option value="">Seleccione el rol de usuario</option>');
 
                 // Llenar dinámicamente el select con los roles disponibles
-                $.each(rolesDisponibles, function(id, nombre) {
+                /*$.each(rolesDisponibles, function(id, nombre) {
                     select.append('<option value="' + id + '">' + nombre + '</option>');
-                });
+                });*/
 
                 $('#agregar-usuario').modal('show');
             });
@@ -251,7 +251,7 @@
                 if (gguuId) {
                     // Cargar las UUDD correspondientes a la GGUU seleccionada
                     $.ajax({
-                        url: `/sadmin/uudds/${gguuId}`,
+                        url: `/admin/uudds/${gguuId}`,
                         type: 'GET',
                         success: function (data) {
                             $('#uudd').empty().append('<option value="">Seleccione una Unidad Dependiente</option>');
@@ -282,7 +282,7 @@
                     if (departamentoId) {
                         // Cargar las PROVINCIAS correspondientes al DEPARTAMENTO seleccionada
                         $.ajax({
-                            url: `/sadmin/provincias/${departamentoId}`,
+                            url: `/admin/provincias/${departamentoId}`,
                             type: 'GET',
                             success: function (data) {
                                 $('#id_provincia').empty().append('<option value="">Seleccione una provincia</option>');
@@ -301,7 +301,7 @@
                     if (provinciaId) {
                         // Cargar las MUNICIPIOS correspondientes a la GGUU seleccionada
                         $.ajax({
-                            url: `/sadmin/municipios/${provinciaId}`,
+                            url: `/admin/municipios/${provinciaId}`,
                             type: 'GET',
                             success: function (data) {
                                 $('#id_municipio').empty().append('<option value="">Seleccione un municipio</option>');
@@ -330,7 +330,7 @@
 
                     if (departamentoId) {
                         $.ajax({
-                            url: `/sadmin/provincias/${departamentoId}`,
+                            url: `/admin/provincias/${departamentoId}`,
                             type: 'GET',
                             success: function (data) {
                                 $('#id_provincia').empty().append('<option value="">Seleccione una provincia</option>');
@@ -374,7 +374,7 @@
 
                 if (gguuId) {
                     $.ajax({
-                        url: `/sadmin/uudds/${gguuId}`,
+                        url: `/admin/uudds/${gguuId}`,
                         type: 'GET',
                         success: function (data) {
                             $('#uudd').empty().append('<option value="">Seleccione una Unidad Dependiente</option>');
@@ -401,7 +401,7 @@
 
                 if (privinciaId) {
                     $.ajax({
-                        url: `/sadmin/municipios/${privinciaId}`,
+                        url: `/admin/municipios/${privinciaId}`,
                         type: 'GET',
                         success: function (data) {
                             $('#id_municipio').empty().append('<option value="">Seleccione un Municipio</option>');

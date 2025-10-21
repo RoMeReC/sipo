@@ -46,6 +46,15 @@ Route::middleware(['auth'])->group(function () {
     // Rutas para usuarios con rol_id:2 (administradores)
     Route::middleware(['rol_id:2'])->group(function () {
         Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+        Route::get('/admin/listar-usuarios', [AdminController::class, 'listar_usuarios'])->name('admin.listar-usuarios');
+        Route::get('/admin/provincias/{departamentoId}', [AdminController::class, 'getProvincias']);
+        Route::get('/admin/municipios/{provinciaId}', [AdminController::class, 'getMunicipios']);
+        Route::get('/admin/uudds/{gguuId}', [AdminController::class, 'getUUDD']);
+        Route::post('/admin/nuevo-usuario', [AdminController::class, 'nuevo_usuario'])->name('admin.nuevo-usuario');
+        Route::post('/admin/agregar-usuario', [AdminController::class, 'agregar_usuario'])->name('admin.agregar-usuario');
+        Route::post('/admin/editar-usuario', [AdminController::class, 'editar_usuario'])->name('admin.editar-usuario');
+        Route::get('/admin/{id}/activar', [AdminController::class, 'activar'])->name('admin.activar');
+        Route::get('/admin/{id}/desactivar', [AdminController::class, 'desactivar'])->name('admin.desactivar');
     });
     // Rutas para usuarios con rol_id:3 (usuarios)
     Route::middleware(['rol_id:3'])->group(function () {
