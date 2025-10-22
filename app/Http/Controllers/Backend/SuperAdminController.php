@@ -427,18 +427,38 @@ class SuperAdminController extends Controller
         //dd($userId);
         $permisosSeleccionados = $request->input('permisos', []); // puede venir vacío
         $authUserId = Auth::id(); // usuario que realiza la edición
-                 //dd($authUserId);
-        // Eliminar los permisos anteriores (soft delete si usas SoftDeletes)
-        PUsuario::where('usuario_id', $userId)->delete();
 
-        // Insertar los nuevos permisos seleccionados
-        foreach ($permisosSeleccionados as $permisoId) {
-            PUsuario::create([
-                'usuario_id' => $userId,
-                'permiso_id' => $permisoId,
-                'auth_user'  => $authUserId,
-                'activo'     => true,
+        // 1Desactivar los permisos actualmente activos del usuario
+        PUsuario::where('usuario_id', $userId)
+            ->where('activo', true)
+            ->update([
+                'activo' => false,
+                'auth_user' => $authUserId,
+                'updated_at' => now(),
             ]);
+
+        // Activar o crear los permisos seleccionados
+        foreach ($permisosSeleccionados as $permisoId) {
+            $permisoExistente = PUsuario::where('usuario_id', $userId)
+                ->where('permiso_id', $permisoId)
+                ->first();
+
+            if ($permisoExistente) {
+                // Si existe, lo reactivamos y actualizamos su auditoría
+                $permisoExistente->update([
+                    'activo' => true,
+                    'auth_user' => $authUserId,
+                    'updated_at' => now(),
+                ]);
+            } else {
+                // Si no existe, lo creamos nuevo
+                PUsuario::create([
+                    'usuario_id' => $userId,
+                    'permiso_id' => $permisoId,
+                    'auth_user'  => $authUserId,
+                    'activo'     => true,
+                ]);
+            }
         }
 
         return redirect()->back()->with('success', 'Datos actualizados satisfactoriamente.');

@@ -104,7 +104,7 @@ class AdminController extends Controller
             //dd($rolesDisponiblesIds);
             // Opcional: Obtener los nombres de los roles disponibles
             $rolesDisponibles = Rol::whereIn('id_rol', $rolesDisponiblesIds)->where('id_rol', '<>', 2)->get()->pluck('rol', 'id_rol'); // [3 => 'usuario']
-            $permisosAsignados = PUsuario::where('usuario_id', $id)->pluck('permiso_id')->toArray(); // [1,2]
+            $permisosAsignados = PUsuario::where('usuario_id', $id)->where('activo', true)->pluck('permiso_id')->toArray(); // [1,2]
 
             $gguu = ['gguu' => DB::table('gguus')->where('id_gguu',DB::table('uudds')->where('id_uudd', DB::table('servidores')->where('persona_id', DB::table('personas')->where('id_persona',User::find($users[$i]->id)->persona_id)->first()->id_persona)->first()->uudd_id)->first()->gguu_id)->first()->id_gguu];
             $uudd = ['uudd' => DB::table('uudds')->where('id_uudd', DB::table('servidores')->where('persona_id', DB::table('personas')->where('id_persona',User::find($users[$i]->id)->persona_id)->first()->id_persona)->first()->uudd_id)->first()->id_uudd];
@@ -305,5 +305,147 @@ class AdminController extends Controller
             }
         }
         return redirect()->back()->with('success', 'Usuario agregado correctamente.');
+    }
+
+    public function editar_usuario(Request $request)
+    {
+        //dd($request);
+        $user_auth = Auth::user();
+        //dd($user_auth->id);
+        if (!$user_auth) {
+            return response()->json(['error' => 'Usuario no autenticado'], 401);
+        }
+
+        $request->validate([
+            'gguu' => 'required|exists:gguus,id_gguu',
+            'uudd' => 'required|exists:uudds,id_uudd',
+            'grado' => ['required'],
+            'especialidad' => ['required'],
+            'nombres' => ['required', 'max:30'],
+            'primer_apellido' => ['required', 'max:25'],
+            'segundo_apellido' => ['required', 'max:25'],
+            'genero' => ['required'],
+            'carnet_identidad' => ['required', 'alpha_dash:ascii', 'max:15'],
+            'condicion' => ['required'],
+            'celular' => ['required', 'max:8'],
+            'departamento' => ['required'],
+            'provincia' => ['required'],
+            'municipio' => ['required'],
+            'fecha_nacimiento' => ['required', 'date'],
+            'email_editar' => ['required', 'email']
+        ]);
+
+        // Se obtiene el usuario actual mediante Eloquent
+        $user = User::find(intval($request->id_user));
+
+        if (!$user) {
+            return redirect()->back()->with('danger', 'Usuario no encontrado.');
+        }
+
+        // Se verifica si cambió el correo electrónico
+        if ($user->email !== $request->email_editar) {
+            // Se verifica si el nuevo correo ya pertenece a otra persona distinta
+            $email_existente = User::where('email', $request->email_editar)
+                ->where('persona_id', '!=', $user->persona_id)
+                ->exists();
+            if ($email_existente) {
+                return redirect()->back()->with('danger', 'El correo electrónico ya está asociado a otra persona.');
+            }
+            // Se actualiza el correo en todos los usuarios de la misma persona
+            User::where('persona_id', $user->persona_id)
+                ->update(['email' => $request->email_editar]);
+            // Se actualiza el objeto actual en memoria (por coherencia)
+            //$user->email = $request->email_editar;
+        }
+        $persona = Persona::find(intval($request->id_persona_editar));
+
+        if ($request->hasFile('picture')) 
+        {
+            $avatar = new Avatar();
+            $foto = $request->file('picture');
+            $nombre_foto = $persona->carnet_identidad . '_' . $foto->getClientOriginalName();
+            $foto->move(public_path('images/avatar'), $nombre_foto);
+            $avatar->picture = $nombre_foto;
+            $avatar->path_picture = '/images/avatar/' . $nombre_foto;
+            $avatar->auth_user = $user->id;
+            $avatar->save();
+        }
+        $lastAvatar = Avatar::latest('id_avatar')->first();
+        // Se verifica si cambió el carnet de identidad
+        if ($persona->carnet_identidad !== $request->carnet_identidad) 
+        {
+            // Se verifica si el nuevo carnet ya pertenece a otra persona distinta
+            $carnet_existente = Persona::where('carnet_identidad', $request->carnet_identidad)
+            ->where('id_persona', '!=', $persona->id_persona)
+            ->exists();
+            if ($carnet_existente) 
+            {
+                return redirect()->back()->with('danger', 'El Carnet de Identidad ya está asociado a otra persona.');
+            }
+            // Se actualiza el correo en todos los usuarios de la misma persona
+            Persona::where('id_persona', $persona->id_persona)
+                ->update(['carnet_identidad' => $request->carnet_identidad]);
+        }
+        Persona::where('id_persona', $persona->id_persona)
+                ->update([
+                    'nombres' => $request->nombres, 
+                    'primer_apellido' => $request->primer_apellido, 
+                    'segundo_apellido' => $request->segundo_apellido, 
+                    'fecha_nacimiento' => $request->fecha_nacimiento, 
+                    'celular' => $request->celular, 
+                    'condicion_id' => intval($request->condicion), 
+                    'genero_id' => intval($request->genero), 
+                    'municipio_id' => intval($request->municipio),
+                    'auth_user' => $user_auth->id,
+                    'avatar_id' => $lastAvatar->id_avatar,
+                    'updated_at' => \Carbon\Carbon::now()
+            ]);
+        Servidor::where('persona_id',$persona->id_persona)
+                 ->update([
+                    'grado_id'=> $request->grado,
+                    'especialidad_id' => $request->especialidad,
+                    'uudd_id' => $request->uudd,
+                    'auth_user' => $user_auth->id,
+                    'updated_at' => \Carbon\Carbon::now()
+                 ]);
+        
+        $userId = $request->id_user;
+        //dd($userId);
+        $permisosSeleccionados = $request->input('permisos', []); // puede venir vacío
+        $authUserId = Auth::id(); // usuario que realiza la edición
+
+        // 1Desactivar los permisos actualmente activos del usuario
+        PUsuario::where('usuario_id', $userId)
+            ->where('activo', true)
+            ->update([
+                'activo' => false,
+                'auth_user' => $authUserId,
+                'updated_at' => now(),
+            ]);
+
+        // Activar o crear los permisos seleccionados
+        foreach ($permisosSeleccionados as $permisoId) {
+            $permisoExistente = PUsuario::where('usuario_id', $userId)
+                ->where('permiso_id', $permisoId)
+                ->first();
+
+            if ($permisoExistente) {
+                // Si existe, lo reactivamos y actualizamos su auditoría
+                $permisoExistente->update([
+                    'activo' => true,
+                    'auth_user' => $authUserId,
+                    'updated_at' => now(),
+                ]);
+            } else {
+                // Si no existe, lo creamos nuevo
+                PUsuario::create([
+                    'usuario_id' => $userId,
+                    'permiso_id' => $permisoId,
+                    'auth_user'  => $authUserId,
+                    'activo'     => true,
+                ]);
+            }
+        }
+        return redirect()->back()->with('success', 'Datos actualizados satisfactoriamente.');
     }
 }
