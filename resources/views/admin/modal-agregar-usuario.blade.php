@@ -22,7 +22,7 @@
         </div>
     @endif
     <br><br>
-    <form id="formAgregarUsuario" action="{{route('sadmin.agregar-usuario')}}" method="post" class="needs-validation">
+    <form id="formAgregarUsuario" action="{{route('admin.agregar-usuario')}}" method="post" class="needs-validation">
         @csrf
         <input type="hidden" name="id_persona" id="id_persona"><input type="hidden" name="id" id="id">
         <div class="container">

@@ -8,7 +8,7 @@ $(document).ready(function () {
 
         if (departamentoId) {
             $.ajax({
-                url: `/admin/provincias/${departamentoId}`,
+                url: `/sadmin/provincias/${departamentoId}`,
                 type: 'GET',
                 
                 success: function (data) {
@@ -30,7 +30,7 @@ $(document).ready(function () {
 
         if (provinciaId) {
             $.ajax({
-                url: `/admin/municipios/${provinciaId}`,
+                url: `/sadmin/municipios/${provinciaId}`,
                 type: 'GET',
                 success: function (data) {
                     $('#municipio-nuevo').prop('disabled', false);

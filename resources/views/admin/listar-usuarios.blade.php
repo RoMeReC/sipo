@@ -67,45 +67,49 @@
                             @endif
                         </td>
                         <td>
-                            @if($inf['activo'])
-                                @if(count($inf['roles_disponibles']) > 0)
-                                    <a href="#" class="btn btn-success btn-crear-usuario" 
-                                        data-id_persona="{{ $inf['id_persona'] }}" 
-                                        data-id="{{ $inf['id'] }}" 
-                                        @isset($inf["roles_disponibles"])
-                                            data-roles='@json($inf["roles_disponibles"])'
-                                        @endisset
-                                        title="Agregar un nuevo usuario">
-                                        <i class="fa fa-user-plus"></i>
-                                    </a>
+                            
+                                @if($inf['activo'])
+                                    @if(count($inf['roles_disponibles']) > 0)
+                                        <a href="#" class="btn btn-success btn-crear-usuario" 
+                                            data-id_persona="{{ $inf['id_persona'] }}" 
+                                            data-id="{{ $inf['id'] }}" 
+                                            @isset($inf["roles_disponibles"])
+                                                data-roles='@json($inf["roles_disponibles"])'
+                                            @endisset
+                                            title="Agregar un nuevo usuario">
+                                            <i class="fa fa-user-plus"></i>
+                                        </a>
+                                    @endif
+                                    @if($inf['id_rol'] === 3)
+                                        <a href="#" class="btn btn-warning btn-editar-usuario" 
+                                        data-id_persona_editar="{{ $inf['id_persona'] }}" 
+                                        data-id="{{ $inf['id'] }}"
+                                        data-id_rol="{{ $inf['id_rol'] }}"
+                                        data-email="{{ $inf['email'] }}"
+                                        data-avatar="{{ $inf['avatar'] }}"
+                                        data-gguu="{{ $inf['gguu'] }}"
+                                        data-uudd="{{ $inf['uudd'] }}"
+                                        data-id_grado="{{ $inf['id_grado']}}"    
+                                        data-id_especialidad="{{ $inf['id_especialidad']}}"
+                                        data-nombres="{{ $inf['nombres']}}"
+                                        data-primer_apellido="{{ $inf['primer_apellido']}}"
+                                        data-segundo_apellido="{{ $inf['segundo_apellido']}}"
+                                        data-id_genero="{{ $inf['id_genero']}}"
+                                        data-carnet_identidad="{{ $inf['carnet_identidad']}}"
+                                        data-id_condicion="{{ $inf['id_condicion']}}"
+                                        data-celular="{{ $inf['celular']}}"
+                                        data-id_departamento="{{ $inf['id_departamento'] }}"
+                                        data-id_provincia="{{ $inf['id_provincia'] }}"
+                                        data-id_municipio="{{ $inf['id_municipio'] }}"
+                                        data-fecha_nacimiento="{{ $inf['fecha_nacimiento']}}"
+                                        data-permisos='@json($inf["permisos_asignados"])'    
+                                        title="Editar"><i class="fa fa-edit"></i></a>
+                                        <a href="{{ route('admin.desactivar', $inf['id']) }}" class="btn btn-danger" title="Desactivar"><i class="fa fa-lock"></i></a>
+                                    @endif
+                                @else
+                                    <a href="{{ route('admin.activar', $inf['id']) }}" class="btn btn-info" title="Activar"><i class="fa fa-unlock"></i></a>
                                 @endif
-                                <a href="#" class="btn btn-warning btn-editar-usuario" 
-                                data-id_persona_editar="{{ $inf['id_persona'] }}" 
-                                data-id="{{ $inf['id'] }}"
-                                data-id_rol="{{ $inf['id_rol'] }}"
-                                data-email="{{ $inf['email'] }}"
-                                data-avatar="{{ $inf['avatar'] }}"
-                                data-gguu="{{ $inf['gguu'] }}"
-                                data-uudd="{{ $inf['uudd'] }}"
-                                data-id_grado="{{ $inf['id_grado']}}"    
-                                data-id_especialidad="{{ $inf['id_especialidad']}}"
-                                data-nombres="{{ $inf['nombres']}}"
-                                data-primer_apellido="{{ $inf['primer_apellido']}}"
-                                data-segundo_apellido="{{ $inf['segundo_apellido']}}"
-                                data-id_genero="{{ $inf['id_genero']}}"
-                                data-carnet_identidad="{{ $inf['carnet_identidad']}}"
-                                data-id_condicion="{{ $inf['id_condicion']}}"
-                                data-celular="{{ $inf['celular']}}"
-                                data-id_departamento="{{ $inf['id_departamento'] }}"
-                                data-id_provincia="{{ $inf['id_provincia'] }}"
-                                data-id_municipio="{{ $inf['id_municipio'] }}"
-                                data-fecha_nacimiento="{{ $inf['fecha_nacimiento']}}"
-                                data-permisos='@json($inf["permisos_asignados"])'    
-                                title="Editar"><i class="fa fa-edit"></i></a>
-                                <a href="{{ route('admin.desactivar', $inf['id']) }}" class="btn btn-danger" title="Desactivar"><i class="fa fa-lock"></i></a>
-                            @else
-                                <a href="{{ route('admin.activar', $inf['id']) }}" class="btn btn-info" title="Activar"><i class="fa fa-unlock"></i></a>
-                            @endif
+                            
                         </td>
                     </tr>
                     <?php $n = $n+1;?>
@@ -197,10 +201,10 @@
     <script>
         $(document).ready(function() {
             $('#nuevo-usuario').modal('hide');
-
+            //Aquí se agrega un nuevo usuario
             $('.btn-crear-usuario').click(function() {
                 let usuarioId = $(this).data('id');
-                //let rolesDisponibles = $(this).data('roles'); // Extrae los roles del botón
+                let rolesDisponibles = $(this).data('roles'); // Extrae los roles del botón
                 $('#id').val(usuarioId); // Asigna el ID a tu input oculto
                 let personaId = $(this).data('id_persona');
                 $('#id_persona').val(personaId); // Asigna el ID a tu input oculto
@@ -210,9 +214,9 @@
                 select.append('<option value="">Seleccione el rol de usuario</option>');
 
                 // Llenar dinámicamente el select con los roles disponibles
-                /*$.each(rolesDisponibles, function(id, nombre) {
+                $.each(rolesDisponibles, function(id, nombre) {
                     select.append('<option value="' + id + '">' + nombre + '</option>');
-                });*/
+                });
 
                 $('#agregar-usuario').modal('show');
             });

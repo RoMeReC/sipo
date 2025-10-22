@@ -6,7 +6,7 @@ $(document).ready(function () {
 
         if (gguuId) {
             $.ajax({
-                url: `/sadmin/uudds/${gguuId}`,
+                url: `/admin/uudds/${gguuId}`,
                 type: 'GET',
                 
                 success: function (data) {
