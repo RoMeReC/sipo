@@ -30,25 +30,62 @@
     <div class="card">
         {{-- <a href="{{ route('sadmin.users.create') }}" class="btn btn-primary">Nuevo Usuario</a> --}}
         <div class="container">
-            <button class="btn btn-primary" title="Nuevo Usuario" data-toggle="modal" data-target="#"><i class="fa fa-user-plus"></i>&nbsp;&nbsp;Nuevo Tipo de Usuario</button>
+            <button class="btn btn-primary" title="Nuevo Rol" data-toggle="modal" data-target="#nuevo-rol"><i class="fa fa-user-plus"></i>&nbsp;&nbsp;Nuevo Tipo de Usuario</button>
         </div>
         
 
-        <table id="lista-usuarios" class="hover" style="width:100%">
+        <table id="lista-tipos-usuario" class="hover" style="width:100%">
             <thead>
                 <tr>
                     <th>Nro</th>
-                    <th>Grado</th>
-                    <th>Apellidos</th>
+                    <th>Tipo de Usuario</th>
+                    <th>Descripción</th>
+                    <th>Estado</th>
+                    <th>Opciones</th>
                 </tr>
             </thead>
             <tbody>
                 <?php $n = 1;?>
-
-                
+                    @foreach ($roles as $rol)
+                        <tr>
+                            <td>{{ $n }}</td>
+                            <td>{{ $rol['rol'] }}</td>
+                            <td>{{ $rol['descripcion'] }}</td>
+                            <td>
+                                @if($rol['activo'])
+                                    <span class="badge bg-primary">Activo</span>
+                                @else
+                                    <span class="badge bg-danger">Inactivo</span>
+                                @endif
+                            </td>
+                            <td>
+                                @if($rol['activo'])
+                                    <a href="#editar-rol" class="btn btn-warning btn-editar-rol" 
+                                    data-id_rol="{{ $rol['id_rol'] }}"
+                                    data-rol="{{ $rol['rol'] }}"
+                                    data-descripcion="{{ $rol['descripcion'] }}"
+                                    title="Editar Rol"><i class="fa fa-edit"></i></a></style>
+                                    <a href="{{ route('sadmin.desactivar_rol', $rol['id_rol']) }}" class="btn btn-danger" title="Desactivar"><i class="fa fa-lock"></i></a>
+                                @else
+                                    <a href="{{ route('sadmin.activar_rol', $rol['id_rol']) }}" class="btn btn-info" title="Activar"><i class="fa fa-unlock"></i></a>
+                                @endif
+                            </td>
+                        </tr>    
+                    <?php $n = $n+1;?>
+                    @endforeach
             </tbody>
         </table>
     </div>
+    @include('sadmin.modal-nuevo-rol')
+    <!-- Abre la ventana modal, si hay errores -->
+    @if(session('danger') || $errors->any())
+        <script>
+            $(document).ready(function() {
+                $('#nuevo-rol').modal('show');
+            });
+        </script>
+    @endif
+    @include('sadmin.modal-editar-rol')
 @stop
 
 @section('css')
@@ -79,10 +116,41 @@
     {{-- <script src="https://code.jquery.com/jquery-3.7.1.js"></script> --}}
     
     <script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
-    <script src="/scripts/cambiar-idioma-datatable.js"></script>
+    <script src="/scripts/sadmin/cambiar-idioma-datatable_tu.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.es.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-@stop
+    <script>
+        // Esperar unos segundos y ocultar la alerta automáticamente
+        setTimeout(function() {
+            let alerta = document.getElementById('alerta-success');
+            if (alerta) {
+                alerta.classList.remove('show');
+                alerta.classList.add('fade');
+                alerta.style.display = 'none';
+            }
+        }, 5000); // 3 segundos
+    </script>
+    <script>
+        $(document).ready(function() {
+            $('#nuevo-rol').modal('hide');
+            $('.btn-editar-usuario').click(function() {
+                let rolId = $(this).data('id_rol');
+                let rol = $(this).data('rol');
+                let descripcion = $(this).data('descripcion');
 
+                $('#id_rol_editar').val(rolId); 
+                $('#rol').val(rol);
+                $('#descripcion').val(descripcion);
+                
+                $('#editar-rol').modal('show');
+            });
+
+            $('#agregar-rol').on('shown.bs.modal', function () {
+                $(this).removeAttr('aria-hidden');
+            });
+        });
+    </script>
+
+@stop
 

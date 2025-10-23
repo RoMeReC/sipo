@@ -15,6 +15,8 @@ return new class extends Migration
             $table->increments('id_rol');
             $table->string('rol');
             $table->string('descripcion');
+            $table->boolean('activo');
+            $table->integer('auth_user');
             $table->timestamps();
             $table->softDeletes();
 

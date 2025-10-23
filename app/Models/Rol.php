@@ -14,5 +14,7 @@ class Rol extends Model
     protected $fillable = [
         'rol',
         'descripcion',
+        'activo',
+        'auth_user'
     ];
 }

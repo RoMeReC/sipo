@@ -471,4 +471,84 @@ class SuperAdminController extends Controller
         //dd($roles);
         return view('sadmin.listar-tipos-usuario', ['roles' => $roles]);
     }
+
+    public function activar_rol($id)
+    {
+        $rol = Rol::findOrFail($id);
+        $rol->activo = true;
+        $rol->save();
+
+        return redirect()->back()->with('success', 'Rol activado correctamente.');
+    }
+
+    public function desactivar_rol($id)
+    {
+        $rol = Rol::findOrFail($id);
+        $rol->activo = false;
+        $rol->save();
+
+        return redirect()->back()->with('info', 'Rol desactivado correctamente.');
+    }
+
+    public function nuevo_rol(Request $request)
+    {
+        //dd($request);
+        $user = Auth::user();
+        if (!$user) 
+        {
+            return response()->json(['error' => 'Usuario no autenticado'], 401);
+        }
+        $request->validate([
+            'rol' => ['required'],
+            'descripcion' => ['required'],
+        ]);
+        $nuevo_rol = new Rol();
+        $nuevo_rol->rol = $request->rol;
+        $nuevo_rol->descripcion = $request->descripcion;
+        $nuevo_rol->activo = true;
+        $nuevo_rol->auth_user = $user->id;
+        $nuevo_rol->save();
+        return redirect()->back()->with('success', 'Rol creado correctamente.');
+    }
+
+    public function editar_rol(Request $request)
+    {
+        //dd($request);
+        $user_auth = Auth::user();
+        if (!$user_auth) {
+            return response()->json(['error' => 'Usuario no autenticado'], 401);
+        }
+        $request->validate([
+                    'rol' => ['required'],
+                    'descripcion' => ['required'],
+                ]);
+        // Se obtiene el usuario actual mediante Eloquent
+        $rol= Rol::find(intval($request->id_rol_editar));
+
+        if (!$rol) {
+            return redirect()->back()->with('danger', 'Rol no encontrado.');
+        }
+
+        // Se verifica si cambió el correo electrónico
+        if ($rol->rol !== $request->rol) {
+            // Se verifica si el nuevo correo ya pertenece a otra persona distinta
+            $rol_existente = Rol::where('rol', $request->rol)
+                ->exists();
+            if ($rol_existente) {
+                return redirect()->back()->with('danger', 'El rol registrado, ya existe en nuestra base de datos.');
+            }
+            // Se actualiza el correo en todos los usuarios de la misma persona
+            rol::where('id_rol', $rol->id_rol)
+                ->update([
+                    'rol' => $request->rol,
+                    'descripcion' => $request->descripcion,
+                    'auth_user' => $user_auth->id,
+                    'updated_at' => \Carbon\Carbon::now()
+                ]);
+            // Se actualiza el objeto actual en memoria (por coherencia)
+            //$user->email = $request->email_editar;
+        }
+
+        return redirect()->back()->with('success', 'Datos actualizados satisfactoriamente.');
+    }
 }

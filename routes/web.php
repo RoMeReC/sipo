@@ -42,6 +42,11 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/sadmin/{id}/activar', [SuperAdminController::class, 'activar'])->name('sadmin.activar');
         Route::get('/sadmin/{id}/desactivar', [SuperAdminController::class, 'desactivar'])->name('sadmin.desactivar');
         Route::get('/sadmin/listar-tipos-usuario', [SuperAdminController::class, 'listar_tipos_usuario'])->name('sadmin.listar-tipo-usuario');
+        Route::get('/sadmin/{id}/activar_rol', [SuperAdminController::class, 'activar_rol'])->name('sadmin.activar_rol');
+        Route::get('/sadmin/{id}/desactivar_rol', [SuperAdminController::class, 'desactivar_rol'])->name('sadmin.desactivar_rol');
+        Route::post('/sadmin/nuevo-rol', [SuperAdminController::class, 'nuevo_rol'])->name('sadmin.nuevo-rol');
+        Route::post('/sadmin/editar-rol', [SuperAdminController::class, 'editar_rol'])->name('sadmin.editar-rol');
+
     });
     // Rutas para usuarios con rol_id:2 (administradores)
     Route::middleware(['rol_id:2'])->group(function () {
