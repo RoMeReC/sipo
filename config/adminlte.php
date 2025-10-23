@@ -15,7 +15,7 @@ return [
     */
 
     'title' => '',
-    'title_prefix' => 'BVirtual | ',
+    'title_prefix' => 'SisGeDoc | ',
     'title_postfix' => '',
 
     /*
@@ -63,7 +63,7 @@ return [
     |
     */
 
-    'logo' => '<b>Biblioteca</b>VIRTUAL',
+    'logo' => '<b>S</b>is<b>G</b>e<b>D</b>oc',
     'logo_img' => 'vendor/adminlte/dist/img/AdminLTELogo.png',
     'logo_img_class' => 'brand-image img-circle elevation-3',
     'logo_img_xl' => null,
@@ -345,6 +345,23 @@ return [
             'url' => 'sadmin/listar-usuarios',
             'icon' => 'fas fa-fw fa-users',
             'can' => 'is-superadministrador',
+        ],
+        [
+            'text' => 'Agregar',
+            'icon' => 'fas fa fa-plus-square',
+            'can' => 'is-superadministrador',
+            'submenu' => [
+                [
+                    'text' => 'Tipo de Usuario',
+                    'url' => 'sadmin/listar-tipos-usuario',
+                    'icon' => 'fas fa-fw fa-user-plus',
+                ],
+                [
+                    'text' => 'Tipo de Documento',
+                    'url' => 'perfil',
+                    'icon' => 'fas fa-solid fa-paperclip',
+                ],
+            ],
         ],
         [
             'text' => 'profile',

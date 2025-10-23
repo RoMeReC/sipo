@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'BibliotecaVirtual'),
+    'name' => env('APP_NAME', 'SisGeDoc'),
 
     /*
     |--------------------------------------------------------------------------

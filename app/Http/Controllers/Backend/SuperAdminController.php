@@ -463,4 +463,12 @@ class SuperAdminController extends Controller
 
         return redirect()->back()->with('success', 'Datos actualizados satisfactoriamente.');
     }
+
+    public function listar_tipos_usuario()
+    {
+        $user = Auth::user();
+        $roles = Rol::where('id_rol', '>=', 3)->get();
+        //dd($roles);
+        return view('sadmin.listar-tipos-usuario', ['roles' => $roles]);
+    }
 }

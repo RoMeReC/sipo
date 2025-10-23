@@ -7,6 +7,6 @@
 @stop
 
 @section('content')
-<p>Bienvenido a la Biblioteca Virtual del <b>Quinto Distrito Naval "SANTA CRUZ"</b>.</p>
-<img src="{{asset('images/Biblioteca.jpg')}}" alt="" width="100%">
+<p>Bienvenido al Sistema de Gestión Documental del <b>Quinto Distrito Naval "SANTA CRUZ"</b>.</p>
+<img src="{{asset('images/SisGeDo.png')}}" alt="" width="100%">
 @stop

@@ -31,6 +31,6 @@
 {{-- Footer personalizado --}}
 @section('footer')
     <footer style="text-align: right; padding: 1rem;">
-        Biblioteca Virtual del <b>Quinto Distrito Naval "SANTA CRUZ"</b> - @RoMeReC-2025
+        Sistema de Gestión Documental del <b>Quinto Distrito Naval "SANTA CRUZ"</b> - @RoMeReC-2025
     </footer>
 @stop
