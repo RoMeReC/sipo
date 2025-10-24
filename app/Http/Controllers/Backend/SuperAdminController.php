@@ -519,20 +519,20 @@ class SuperAdminController extends Controller
             return response()->json(['error' => 'Usuario no autenticado'], 401);
         }
         $request->validate([
-                    'rol' => ['required'],
-                    'descripcion' => ['required'],
+                    'rolEditar' => ['required'],
+                    'descripcionEditar' => ['required'],
                 ]);
         // Se obtiene el usuario actual mediante Eloquent
-        $rol= Rol::find(intval($request->id_rol_editar));
+        $rol= Rol::find(intval($request->id_rolEditar));
 
         if (!$rol) {
             return redirect()->back()->with('danger', 'Rol no encontrado.');
         }
-
+        //d($request->rolEditar);
         // Se verifica si cambió el correo electrónico
-        if ($rol->rol !== $request->rol) {
+        if ($rol->rol !== $request->rolEditar || $rol->descripcion !== $request->descripcionEditar) {
             // Se verifica si el nuevo correo ya pertenece a otra persona distinta
-            $rol_existente = Rol::where('rol', $request->rol)
+            $rol_existente = Rol::where('rol', $request->rolEditar)
                 ->exists();
             if ($rol_existente) {
                 return redirect()->back()->with('danger', 'El rol registrado, ya existe en nuestra base de datos.');
@@ -540,15 +540,14 @@ class SuperAdminController extends Controller
             // Se actualiza el correo en todos los usuarios de la misma persona
             rol::where('id_rol', $rol->id_rol)
                 ->update([
-                    'rol' => $request->rol,
-                    'descripcion' => $request->descripcion,
+                    'rol' => $request->rolEditar,
+                    'descripcion' => $request->descripcionEditar,
                     'auth_user' => $user_auth->id,
                     'updated_at' => \Carbon\Carbon::now()
                 ]);
-            // Se actualiza el objeto actual en memoria (por coherencia)
-            //$user->email = $request->email_editar;
+            return redirect()->back()->with('success', 'Datos actualizados satisfactoriamente.');
         }
 
-        return redirect()->back()->with('success', 'Datos actualizados satisfactoriamente.');
+        return redirect()->back()->with('info', 'No realizó cambios en el sistema');
     }
 }

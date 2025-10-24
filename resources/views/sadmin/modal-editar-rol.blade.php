@@ -23,10 +23,10 @@
     @endif
     <form id="formEditarRol" action="{{route('sadmin.editar-rol')}}" method="post" class="needs-validation">
     @csrf
-        <input type="hidden" id="id_rol_editar" name="id_rol_editar" value="{{ old('id_rol_editar') }}">
+        <input type="hidden" id="id_rolEditar" name="id_rolEditar" value="{{ old('id_rolEditar') }}">
         <div class="container">
             <div class="row">
-                <x-adminlte-input name="rol" value="{{ old('rol') }}" label="ROL:" placeholder="{{ 'Registre el Rol' }}" label-class="text-lightblue" fgroup-class="col-md-6 {{ $errors->has('rol') ? 'has-error' : '' }}" disable-feedback required>
+                <x-adminlte-input id="rolEditar" name="rolEditar" value="{{ old('rolEditar') }}" label="ROL:" placeholder="{{ 'Registre el Rol' }}" label-class="text-lightblue" fgroup-class="col-md-6 {{ $errors->has('rolEditar') ? 'has-error' : '' }}" disable-feedback required>
                     <x-slot name="prependSlot">
                         <div class="input-group-text">
                             <i class="fas fa-user-plus text-lightblue"></i>
@@ -37,7 +37,7 @@
         </div>
         <div class="container">
             <div class="row">
-                <x-adminlte-input name="descripcion" value="{{ old('descripcion') }}" label="DESCRIPCIÓN:" placeholder="{{ 'Registre la descripción del Rol' }}" label-class="text-lightblue" fgroup-class="col-md-6 {{ $errors->has('descripcion') ? 'has-error' : '' }}" disable-feedback required>
+                <x-adminlte-input id="descripcionEditar" name="descripcionEditar" value="{{ old('descripcionEditar') }}" label="DESCRIPCIÓN:" placeholder="{{ 'Registre la descripción del Rol' }}" label-class="text-lightblue" fgroup-class="col-md-6 {{ $errors->has('descripcionEditar') ? 'has-error' : '' }}" disable-feedback required>
                     <x-slot name="prependSlot">
                         <div class="input-group-text">
                             <i class="fas fa-cubes text-lightblue"></i>

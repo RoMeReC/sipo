@@ -60,11 +60,11 @@
                             </td>
                             <td>
                                 @if($rol['activo'])
-                                    <a href="#editar-rol" class="btn btn-warning btn-editar-rol" 
-                                    data-id_rol="{{ $rol['id_rol'] }}"
-                                    data-rol="{{ $rol['rol'] }}"
-                                    data-descripcion="{{ $rol['descripcion'] }}"
-                                    title="Editar Rol"><i class="fa fa-edit"></i></a></style>
+                                    <a href="#" class="btn btn-warning btn-editar-rol" 
+                                    data-id-rol-editar="{{ $rol['id_rol'] }}"
+                                    data-rol-editar="{{ $rol['rol'] }}"
+                                    data-descripcion-editar="{{ $rol['descripcion'] }}"
+                                    title="Editar Rol"><i class="fa fa-edit"></i></a>
                                     <a href="{{ route('sadmin.desactivar_rol', $rol['id_rol']) }}" class="btn btn-danger" title="Desactivar"><i class="fa fa-lock"></i></a>
                                 @else
                                     <a href="{{ route('sadmin.activar_rol', $rol['id_rol']) }}" class="btn btn-info" title="Activar"><i class="fa fa-unlock"></i></a>
@@ -134,14 +134,15 @@
     <script>
         $(document).ready(function() {
             $('#nuevo-rol').modal('hide');
-            $('.btn-editar-usuario').click(function() {
-                let rolId = $(this).data('id_rol');
-                let rol = $(this).data('rol');
-                let descripcion = $(this).data('descripcion');
+            $('.btn-editar-rol').click(function() {
+                let rolId = $(this).data('idRolEditar');
+                let rolEditar = $(this).data('rolEditar');
+                let descripcionEditar = $(this).data('descripcionEditar');
 
-                $('#id_rol_editar').val(rolId); 
-                $('#rol').val(rol);
-                $('#descripcion').val(descripcion);
+                console.log('Datos:', { rolId, rolEditar, descripcionEditar });
+                $('#id_rolEditar').val(rolId); 
+                $('#rolEditar').val(rolEditar);
+                $('#descripcionEditar').val(descripcionEditar);
                 
                 $('#editar-rol').modal('show');
             });
