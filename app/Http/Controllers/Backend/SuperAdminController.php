@@ -63,7 +63,7 @@ class SuperAdminController extends Controller
         $avatarPath = DB::table('avatares')
         ->where('id_avatar', DB::table('personas')->where('id_persona', $user->persona_id)->first()->avatar_id)
         ->value('path_picture');
-        $users = User::all();
+        $users = User::orderBy('id','asc')->get();
         $info=[];
         $cont = count($users);
         for($i=0;$i<$cont;$i++)
@@ -219,9 +219,9 @@ class SuperAdminController extends Controller
             $nuevo_usuario->name = "adm".strtolower($nombres).strtolower(str_replace(" ", "", $request->primer_apellido)).strtolower(Str::substr($request->segundo_apellido,0,1));        
 
         }
-        elseif(intval($request->rol)==3)
+        elseif(intval($request->rol)>=3)
         {
-            $nuevo_usuario->name = strtolower($nombres).strtolower(str_replace(" ", "", $request->primer_apellido)).strtolower(Str::substr($request->segundo_apellido,0,1));        
+            $nuevo_usuario->name = strtolower($nombres).strtolower(str_replace(" ", "", $request->primer_apellido)).strtolower(Str::substr($request->segundo_apellido,0,1)).$request->rol_usuario;        
 
         }
         $nuevo_usuario->email = $request->email;
@@ -294,9 +294,9 @@ class SuperAdminController extends Controller
         {
             $nuevo_usuario->name = "adm".strtolower($nombres).strtolower(str_replace(" ", "", $persona->primer_apellido)).strtolower(Str::substr($persona->segundo_apellido,0,1));        
         }
-        elseif(intval($request->rol_usuario)==3)
+        elseif(intval($request->rol_usuario)>=3)
         {
-            $nuevo_usuario->name = strtolower($nombres).strtolower(str_replace(" ", "", $persona->primer_apellido)).strtolower(Str::substr($persona->segundo_apellido,0,1));        
+            $nuevo_usuario->name = strtolower($nombres).strtolower(str_replace(" ", "", $persona->primer_apellido)).strtolower(Str::substr($persona->segundo_apellido,0,1)).$request->rol_usuario;        
         }
         $nuevo_usuario->email = $usuario->email;
         $nuevo_usuario->password = Hash::make('AB'.$nuevo_usuario->name);
@@ -383,9 +383,14 @@ class SuperAdminController extends Controller
             $avatar->path_picture = '/images/avatar/' . $nombre_foto;
             $avatar->auth_user = $user->id;
             $avatar->save();
+            $lastAvatar = Avatar::latest('id_avatar')->first();
         }
-        $lastAvatar = Avatar::latest('id_avatar')->first();
-        // Se verifica si cambió el carnet de identidad
+        else
+        {
+            $lastAvatar = Avatar::find($persona->avatar_id);
+        }
+        //dd($lastAvatar);
+            // Se verifica si cambió el carnet de identidad
         if ($persona->carnet_identidad !== $request->carnet_identidad) 
         {
             // Se verifica si el nuevo carnet ya pertenece a otra persona distinta
@@ -467,7 +472,7 @@ class SuperAdminController extends Controller
     public function listar_tipos_usuario()
     {
         $user = Auth::user();
-        $roles = Rol::where('id_rol', '>=', 3)->get();
+        $roles = Rol::where('id_rol', '>=', 3)->orderby('id_rol')->get();
         //dd($roles);
         return view('sadmin.listar-tipos-usuario', ['roles' => $roles]);
     }
@@ -531,11 +536,21 @@ class SuperAdminController extends Controller
         //d($request->rolEditar);
         // Se verifica si cambió el correo electrónico
         if ($rol->rol !== $request->rolEditar || $rol->descripcion !== $request->descripcionEditar) {
-            // Se verifica si el nuevo correo ya pertenece a otra persona distinta
-            $rol_existente = Rol::where('rol', $request->rolEditar)
-                ->exists();
-            if ($rol_existente) {
-                return redirect()->back()->with('danger', 'El rol registrado, ya existe en nuestra base de datos.');
+            if ($rol->rol !== $request->rolEditar) {
+                // Se verifica si el nuevo correo ya pertenece a otra persona distinta
+                $rol_existente = Rol::where('rol', $request->rolEditar)
+                    ->exists();
+                if ($rol_existente) {
+                    return redirect()->back()->with('danger', 'El rol registrado, ya existe en nuestra base de datos.');
+                }
+            }
+            if ($rol->descripcion !== $request->descripcionEditar) {
+                // Se verifica si el nuevo correo ya pertenece a otra persona distinta
+                $descripcion_existente = Rol::where('descripcion', $request->descripcionEditar)
+                    ->exists();
+                if ($descripcion_existente) {
+                    return redirect()->back()->with('danger', 'La descripción registrada, ya existe en nuestra base de datos.');
+                }
             }
             // Se actualiza el correo en todos los usuarios de la misma persona
             rol::where('id_rol', $rol->id_rol)

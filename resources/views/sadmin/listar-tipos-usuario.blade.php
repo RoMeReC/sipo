@@ -134,7 +134,7 @@
     <script>
         $(document).ready(function() {
             $('#nuevo-rol').modal('hide');
-            $('.btn-editar-rol').click(function() {
+            $(document).on('click', '.btn-editar-rol', function() {
                 let rolId = $(this).data('idRolEditar');
                 let rolEditar = $(this).data('rolEditar');
                 let descripcionEditar = $(this).data('descripcionEditar');

@@ -1,5 +1,5 @@
 $(document).ready(function(){
-    $('#lista-usuarios').DataTable({
+    $('#a-lista-usuarios').DataTable({
         "language":{
             "search": "Buscar",
             "lengthMenu": "Mostrar _MENU_ registros por página",

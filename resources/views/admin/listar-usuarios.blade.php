@@ -34,7 +34,7 @@
         </div>
         
 
-        <table id="lista-usuarios" class="hover" style="width:100%">
+        <table id="a-lista-usuarios" class="hover" style="width:100%">
             <thead>
                 <tr>
                     <th>Nro</th>
@@ -159,7 +159,7 @@
     {{-- <script src="https://code.jquery.com/jquery-3.7.1.js"></script> --}}
     
     <script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
-    <script src="/scripts/cambiar-idioma-datatable.js"></script>
+    <script src="/scripts/admin/cambiar-idioma-datatable-alu.js"></script>
     <script src="/scripts/admin/seleccionar-municipio.js"></script>
     <script src="/scripts/admin/seleccionar-uudd.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
@@ -220,7 +220,7 @@
 
                 $('#agregar-usuario').modal('show');
             });
-            $('.btn-editar-usuario').click(function() {
+            $(document).on('click', '.btn-editar-usuario', function() {
                 let usuarioId = $(this).data('id');
                 let email = $(this).data('email');
                 let personaId_editar = $(this).data('id_persona_editar');
