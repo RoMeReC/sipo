@@ -112,7 +112,7 @@
     <!-- Bootstrap 4.6 JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
     <!-- AdminLTE JS -->
-    <script src="{{ asset('vendor/adminlte/dist/js/adminlte.min.js') }}"></script>
+    {{-- <script src="{{ asset('vendor/adminlte/dist/js/adminlte.min.js') }}"></script> --}}
     {{-- <script src="https://code.jquery.com/jquery-3.7.1.js"></script> --}}
     
     <script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>

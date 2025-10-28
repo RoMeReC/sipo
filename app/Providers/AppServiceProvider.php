@@ -42,7 +42,7 @@ class AppServiceProvider extends ServiceProvider
         });
 
         Gate::define('is-usuario', function ($user) {
-            return $user->rol_id === 3;
+            return $user->rol_id >= 3;
         });
 
         Validator::extend('nombres', function ($attribute, $value, $parameters, $validator) {
