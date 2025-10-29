@@ -358,7 +358,7 @@ return [
                 ],
                 [
                     'text' => 'Tipo de Documento',
-                    'url' => 'perfil',
+                    'url' => 'sadmin/listar-tipo-documento',
                     'icon' => 'fas fa-solid fa-paperclip',
                 ],
             ],

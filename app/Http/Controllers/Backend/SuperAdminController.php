@@ -20,6 +20,7 @@ use App\Models\Gguu;
 use App\Models\Avatar;
 use App\Models\PUsuario;
 use App\Models\Undd;
+use App\Models\TipoDocumento;
 use Faker\Provider\ar_EG\Person;
 use Illuminate\Foundation\Auth\User as AuthUser;
 use Illuminate\Support\Facades\Auth;
@@ -556,6 +557,103 @@ class SuperAdminController extends Controller
             rol::where('id_rol', $rol->id_rol)
                 ->update([
                     'rol' => $request->rolEditar,
+                    'descripcion' => $request->descripcionEditar,
+                    'auth_user' => $user_auth->id,
+                    'updated_at' => \Carbon\Carbon::now()
+                ]);
+            return redirect()->back()->with('success', 'Datos actualizados satisfactoriamente.');
+        }
+
+        return redirect()->back()->with('info', 'No realizó cambios en el sistema');
+    }
+
+    public function listar_tipo_documento()
+    {
+        $user = Auth::user();
+        $tipo_documento = TipoDocumento::all();
+        //dd($tipo_documento);
+        return view('sadmin.listar-tipo-documento', ['tipo_documento' => $tipo_documento]);
+    }
+
+    public function activar_documento($id)
+    {
+        $tipo_documento = TipoDocumento::findOrFail($id);
+        $tipo_documento->activo = true;
+        $tipo_documento->save();
+
+        return redirect()->back()->with('success', 'Tipo de Documento activado correctamente.');
+    }
+
+    public function desactivar_documento($id)
+    {
+        $tipo_documento = TipoDocumento::findOrFail($id);
+        $tipo_documento->activo = false;
+        $tipo_documento->save();
+
+        return redirect()->back()->with('info', 'Tipo de Documento desactivado correctamente.');
+    }
+
+    public function nuevo_documento(Request $request)
+    {
+        //dd($request);
+        $user = Auth::user();
+        if (!$user) 
+        {
+            return response()->json(['error' => 'Usuario no autenticado'], 401);
+        }
+        $request->validate([
+            'tipo_documento' => ['required'],
+            'descripcion' => ['required'],
+        ]);
+        $nuevo_tipo_documento = new TipoDocumento();
+        $nuevo_tipo_documento->rol = $request->tipo_documento;
+        $nuevo_tipo_documento->descripcion = $request->descripcion;
+        $nuevo_tipo_documento->activo = true;
+        $nuevo_tipo_documento->auth_user = $user->id;
+        $nuevo_tipo_documento->save();
+        return redirect()->back()->with('success', 'Tipo de Documento creado correctamente.');
+    }
+
+    public function editar_documento(Request $request)
+    {
+        //dd($request);
+        $user_auth = Auth::user();
+        if (!$user_auth) {
+            return response()->json(['error' => 'Usuario no autenticado'], 401);
+        }
+        $request->validate([
+                    'tipoDocumentoEditar' => ['required'],
+                    'descripcionEditar' => ['required'],
+                ]);
+        // Se obtiene el usuario actual mediante Eloquent
+        $tipo_documento= TipoDocumento::find(intval($request->id_tipo_documentoEditar));
+
+        if (!$tipo_documento) {
+            return redirect()->back()->with('danger', 'Tipo de Documento no encontrado.');
+        }
+        //d($request->rolEditar);
+        // Se verifica si cambió el correo electrónico
+        if ($tipo_documento->tipo_documento !== $request->rolEditar || $tipo_documento->descripcion !== $request->descripcionEditar) {
+            if ($tipo_documento->tipo_documento !== $request->rolEditar) {
+                // Se verifica si el nuevo correo ya pertenece a otra persona distinta
+                $tipo_documento_existente = TipoDocumento::where('tipo_documento', $request->tipoDocumentoEditar)
+                    ->exists();
+                if ($tipo_documento_existente) {
+                    return redirect()->back()->with('danger', 'El Tipo de Documento registrado, ya existe en nuestra base de datos.');
+                }
+            }
+            if ($tipo_documento->descripcion !== $request->descripcionEditar) {
+                // Se verifica si el nuevo correo ya pertenece a otra persona distinta
+                $descripcion_existente = TipoDocumento::where('descripcion', $request->descripcionEditar)
+                    ->exists();
+                if ($descripcion_existente) {
+                    return redirect()->back()->with('danger', 'La descripción registrada, ya existe en nuestra base de datos.');
+                }
+            }
+            // Se actualiza el correo en todos los usuarios de la misma persona
+            rol::where('id_tipo_documento', $tipo_documento->id_tipo_documento)
+                ->update([
+                    'tipo_documento' => $request->tipoDocumentoEditar,
                     'descripcion' => $request->descripcionEditar,
                     'auth_user' => $user_auth->id,
                     'updated_at' => \Carbon\Carbon::now()

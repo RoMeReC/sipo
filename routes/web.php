@@ -46,7 +46,11 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/sadmin/{id}/desactivar_rol', [SuperAdminController::class, 'desactivar_rol'])->name('sadmin.desactivar_rol');
         Route::post('/sadmin/nuevo-rol', [SuperAdminController::class, 'nuevo_rol'])->name('sadmin.nuevo-rol');
         Route::post('/sadmin/editar-rol', [SuperAdminController::class, 'editar_rol'])->name('sadmin.editar-rol');
-
+        Route::get('/sadmin/listar-tipo-documento', [SuperAdminController::class, 'listar_tipo_documento'])->name('sadmin.listar-tipo-documento');
+        Route::get('/sadmin/{id}/activar_tipo_documento', [SuperAdminController::class, 'activar_tipo_documento'])->name('sadmin.activar_tipo_documento');
+        Route::get('/sadmin/{id}/desactivar_tipo_documento', [SuperAdminController::class, 'desactivar_tipo_documento'])->name('sadmin.desactivar_tipo_documento');
+        Route::post('/sadmin/nuevo-tipo-documento', [SuperAdminController::class, 'nuevo_tipo_documento'])->name('sadmin.nuevo-tipo-documento');
+        Route::post('/sadmin/editar-tipo-documento', [SuperAdminController::class, 'editar_tipo_documento'])->name('sadmin.editar-tipo-documento');
     });
     // Rutas para usuarios con rol_id:2 (administradores)
     Route::middleware(['rol_id:2'])->group(function () {

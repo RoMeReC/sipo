@@ -29,6 +29,7 @@ class DatabaseSeeder extends Seeder
             ServidorSeeder::class,
             UserSeeder::class,
             PUsuarioSeeder::class,
+            TipoDocumentoSeeder::class,
         ]);
     }
 }
