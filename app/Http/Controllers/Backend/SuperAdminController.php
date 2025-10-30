@@ -570,12 +570,12 @@ class SuperAdminController extends Controller
     public function listar_tipo_documento()
     {
         $user = Auth::user();
-        $tipo_documento = TipoDocumento::all();
+        $tipo_documento = TipoDocumento::orderBy('id_tipo_documento','asc')->get();
         //dd($tipo_documento);
         return view('sadmin.listar-tipo-documento', ['tipo_documento' => $tipo_documento]);
     }
 
-    public function activar_documento($id)
+    public function activar_tipo_documento($id)
     {
         $tipo_documento = TipoDocumento::findOrFail($id);
         $tipo_documento->activo = true;
@@ -584,7 +584,7 @@ class SuperAdminController extends Controller
         return redirect()->back()->with('success', 'Tipo de Documento activado correctamente.');
     }
 
-    public function desactivar_documento($id)
+    public function desactivar_tipo_documento($id)
     {
         $tipo_documento = TipoDocumento::findOrFail($id);
         $tipo_documento->activo = false;
@@ -593,7 +593,7 @@ class SuperAdminController extends Controller
         return redirect()->back()->with('info', 'Tipo de Documento desactivado correctamente.');
     }
 
-    public function nuevo_documento(Request $request)
+    public function nuevo_tipo_documento(Request $request)
     {
         //dd($request);
         $user = Auth::user();
@@ -606,7 +606,7 @@ class SuperAdminController extends Controller
             'descripcion' => ['required'],
         ]);
         $nuevo_tipo_documento = new TipoDocumento();
-        $nuevo_tipo_documento->rol = $request->tipo_documento;
+        $nuevo_tipo_documento->tipo_documento = $request->tipo_documento;
         $nuevo_tipo_documento->descripcion = $request->descripcion;
         $nuevo_tipo_documento->activo = true;
         $nuevo_tipo_documento->auth_user = $user->id;
@@ -614,7 +614,7 @@ class SuperAdminController extends Controller
         return redirect()->back()->with('success', 'Tipo de Documento creado correctamente.');
     }
 
-    public function editar_documento(Request $request)
+    public function editar_tipo_documento(Request $request)
     {
         //dd($request);
         $user_auth = Auth::user();
@@ -622,7 +622,7 @@ class SuperAdminController extends Controller
             return response()->json(['error' => 'Usuario no autenticado'], 401);
         }
         $request->validate([
-                    'tipoDocumentoEditar' => ['required'],
+                    'tipo_documentoEditar' => ['required'],
                     'descripcionEditar' => ['required'],
                 ]);
         // Se obtiene el usuario actual mediante Eloquent
@@ -633,10 +633,10 @@ class SuperAdminController extends Controller
         }
         //d($request->rolEditar);
         // Se verifica si cambió el correo electrónico
-        if ($tipo_documento->tipo_documento !== $request->rolEditar || $tipo_documento->descripcion !== $request->descripcionEditar) {
-            if ($tipo_documento->tipo_documento !== $request->rolEditar) {
+        if ($tipo_documento->tipo_documento !== $request->tipo_documentoEditar || $tipo_documento->descripcion !== $request->descripcionEditar) {
+            if ($tipo_documento->tipo_documento !== $request->tipo_documentoEditar) {
                 // Se verifica si el nuevo correo ya pertenece a otra persona distinta
-                $tipo_documento_existente = TipoDocumento::where('tipo_documento', $request->tipoDocumentoEditar)
+                $tipo_documento_existente = TipoDocumento::where('tipo_documento', $request->tipo_documentoEditar)
                     ->exists();
                 if ($tipo_documento_existente) {
                     return redirect()->back()->with('danger', 'El Tipo de Documento registrado, ya existe en nuestra base de datos.');
@@ -651,9 +651,9 @@ class SuperAdminController extends Controller
                 }
             }
             // Se actualiza el correo en todos los usuarios de la misma persona
-            rol::where('id_tipo_documento', $tipo_documento->id_tipo_documento)
+            TipoDocumento::where('id_tipo_documento', $tipo_documento->id_tipo_documento)
                 ->update([
-                    'tipo_documento' => $request->tipoDocumentoEditar,
+                    'tipo_documento' => $request->tipo_documentoEditar,
                     'descripcion' => $request->descripcionEditar,
                     'auth_user' => $user_auth->id,
                     'updated_at' => \Carbon\Carbon::now()

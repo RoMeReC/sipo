@@ -1,5 +1,5 @@
 $(document).ready(function(){
-    $('#sa-lista-tipo-documentos').DataTable({
+    $('#sa-lista-tipo-documento').DataTable({
         "language":{
             "search": "Buscar",
             "lengthMenu": "Mostrar _MENU_ registros por página",

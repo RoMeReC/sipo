@@ -61,10 +61,10 @@
                             <td>
                                 @if($tdoc['activo'])
                                     <a href="#" class="btn btn-warning btn-editar-tipo-documento" 
-                                    data-id-rol-editar="{{ $tdoc['id_tipo_documento'] }}"
-                                    data-rol-editar="{{ $tdoc['tipo_documento'] }}"
+                                    data-id-tipo-documento-editar="{{ $tdoc['id_tipo_documento'] }}"
+                                    data-tipo-documento-editar="{{ $tdoc['tipo_documento'] }}"
                                     data-descripcion-editar="{{ $tdoc['descripcion'] }}"
-                                    title="Editar Rol"><i class="fa fa-edit"></i></a>
+                                    title="Editar Tipo de Documento"><i class="fa fa-edit"></i></a>
                                     <a href="{{ route('sadmin.desactivar_tipo_documento', $tdoc['id_tipo_documento']) }}" class="btn btn-danger" title="Desactivar"><i class="fa fa-lock"></i></a>
                                 @else
                                     <a href="{{ route('sadmin.activar_tipo_documento', $tdoc['id_tipo_documento']) }}" class="btn btn-info" title="Activar"><i class="fa fa-unlock"></i></a>
@@ -81,7 +81,7 @@
     @if(session('danger') || $errors->any())
         <script>
             $(document).ready(function() {
-                $('#nuevo-rol').modal('show');
+                $('#nuevo-tipo-documento').modal('show');
             });
         </script>
     @endif
@@ -116,7 +116,7 @@
     {{-- <script src="https://code.jquery.com/jquery-3.7.1.js"></script> --}}
     
     <script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
-    <script src="/scripts/sadmin/cambiar-idioma-datatable_tu.js"></script>
+    <script src="/scripts/sadmin/cambiar-idioma-datatable-saltd.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.es.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -134,9 +134,9 @@
     <script>
         $(document).ready(function() {
             $('#nuevo-tipo-documento').modal('hide');
-            $(document).on('click', '.btn-editar-rol', function() {
-                let tipoDocumentoId = $(this).data('idRolEditar');
-                let tipoDocumentoEditar = $(this).data('rolEditar');
+            $(document).on('click', '.btn-editar-tipo-documento', function() {
+                let tipoDocumentoId = $(this).data('idTipoDocumentoEditar');
+                let tipoDocumentoEditar = $(this).data('tipoDocumentoEditar');
                 let descripcionEditar = $(this).data('descripcionEditar');
 
                 console.log('Datos:', { tipoDocumentoId, tipoDocumentoEditar, descripcionEditar });
