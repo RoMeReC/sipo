@@ -25,8 +25,25 @@ class Persona extends Model
         'municipio_id',
     ];
 
+    //Referencias
     public function avatar()
     {
         return $this->belongsTo(Avatar::class, 'avatar_id', 'id_avatar');
     }
+
+    public function condicion()
+    {
+        return $this->belongsTo(Condicion::class, 'condicion_id', 'id_condicion');
+    }
+
+    public function genero()
+    {
+        return $this->belongsTo(Genero::class, 'genero_id', 'id_genero');
+    }
+
+    public function municipio()
+    {
+        return $this->belongsTo(Municipio::class, 'municipio_id', 'id_municipio');
+    }
+
 }

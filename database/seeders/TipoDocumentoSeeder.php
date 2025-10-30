@@ -47,5 +47,13 @@ class TipoDocumentoSeeder extends Seeder
             'created_at'=>\Carbon\Carbon::now(),
             'updated_at'=>\Carbon\Carbon::now(),
         ]);
+        DB::table('tipo_documentos')->insert([
+            'tipo_documento' => 'CARTA',
+            'descripcion' => 'Documento formal dirigido a una persona en particular de forma física',
+            'activo' => true,
+            'auth_user' => 1,
+            'created_at'=>\Carbon\Carbon::now(),
+            'updated_at'=>\Carbon\Carbon::now(),
+        ]);
     }
 }
