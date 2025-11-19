@@ -36,7 +36,8 @@
                 <img src="{{ auth()->user()->avatar_path }}" class="user-image img-circle elevation-2" width="70%">
                 @endif
                 <p class="@if(!config('adminlte.usermenu_image')) mt-0 @endif">
-                    {{ Auth::user()->name }}
+                    {{ Auth::user()->roles->rol }}
+
                     @if(config('adminlte.usermenu_desc'))
                         <small>{{ Auth::user()->adminlte_desc() }}</small>
                     @endif
