@@ -17,6 +17,8 @@ return new class extends Migration
             $table->string('primer_apellido');
             $table->string('segundo_apellido');
             $table->string('carnet_identidad')->unique();
+            $table->enum('genero', ['Masculino', 'Femenino'])->default('Masculino');
+            $table->enum('condicion', ['Soltero(a)', 'Casado(a)', 'Divorciado(a)', 'Viudo(a)'])->default('Soltero(a)');
             $table->date('fecha_nacimiento');
             $table->integer('celular');
             $table->integer('auth_user');
@@ -25,8 +27,7 @@ return new class extends Migration
             $table->softDeletes();
 
             $table->foreignId('avatar_id')->references('id_avatar')->on('avatares');
-            $table->foreignId('condicion_id')->references('id_condicion')->on('condiciones');
-            $table->foreignId('genero_id')->references('id_genero')->on('generos');
+            $table->foreignId('profesion_id')->references('id_profesion')->on('profesiones');
             $table->foreignId('municipio_id')->references('id_municipio')->on('municipios');
         });
     }

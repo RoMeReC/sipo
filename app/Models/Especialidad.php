@@ -6,13 +6,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 
-class Especialidad extends Model
+class Profesion extends Model
 {
     use HasFactory, Notifiable;
-    protected $table = 'especialidades';
-    protected $primaryKey = 'id_especialidad';
+    protected $table = 'profesiones';
+    protected $primaryKey = 'id_profesion';
     protected $fillable = [
-        'especialidad',
-        'descripcion_especialidad',
+        'profesion',
+        'descripcion_profesion',
     ];
 }

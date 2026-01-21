@@ -31,6 +31,6 @@
 {{-- Footer personalizado --}}
 @section('footer')
     <footer style="text-align: right; padding: 1rem;">
-        Sistema de Gestión Documental del <b>Quinto Distrito Naval "SANTA CRUZ"</b> - @RoMeReC-2025
+        Sistema de Información de Procesos para la Optimización de la <b>Granja Avícola "SEÑOR SANTIAGO"</b> - @RoMeReC-2026
     </footer>
 @stop

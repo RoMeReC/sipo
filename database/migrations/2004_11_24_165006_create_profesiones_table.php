@@ -11,15 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('uudds', function (Blueprint $table) {
-            $table->increments('id_uudd');
-            $table->string('uudd');
-            $table->string('descripcion_uudd');
-            $table->unsignedBigInteger('gguu_id');
+        Schema::create('profesiones', function (Blueprint $table) {
+            $table->increments('id_profesion');
+            $table->string('profesion');
+            $table->string('descripcion_profesion');
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreign('gguu_id')->references('id_gguu')->on('gguus');
         });
     }
 
@@ -28,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('uudds');
+        Schema::dropIfExists('profesiones');
     }
 };
