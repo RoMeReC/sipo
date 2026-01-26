@@ -50,6 +50,12 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Persona::class, 'persona_id', 'id_persona');
     }
+
+    public function rol()
+    {
+        return $this->belongsTo(Rol::class, 'rol_id', 'id_rol');
+    }
+    
     public function getAvatarPathAttribute()
     {
         // Si existe relación persona y tiene avatar, devuelve la ruta

@@ -36,7 +36,9 @@
                 <img src="{{ auth()->user()->avatar_path }}" class="user-image img-circle elevation-2" width="70%">
                 @endif
                 <p class="@if(!config('adminlte.usermenu_image')) mt-0 @endif">
-                    {{ Auth::user()->roles->rol }}
+                    {{ Auth::user()->persona?->nombres }}
+                    {{ Auth::user()->persona?->primer_apellido }}
+                    {{ Auth::user()->persona?->segundo_apellido }}
 
                     @if(config('adminlte.usermenu_desc'))
                         <small>{{ Auth::user()->adminlte_desc() }}</small>
@@ -60,7 +62,7 @@
         {{-- User menu footer --}}
         <li class="user-footer">
             @if($profile_url)
-                <a href="{{ $profile_url }}" class="nav-link btn btn-primary btn-flat d-inline-block text-white">
+                <a href="{{ $profile_url }}" class="nav-link btn btn-success btn-flat d-inline-block text-white">
                     <i class="fa fa-fw fa-user text-white"></i>
                     {{ __('adminlte::menu.profile') }}
                 </a>
